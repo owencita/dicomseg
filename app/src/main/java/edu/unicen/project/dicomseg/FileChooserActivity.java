@@ -1,9 +1,13 @@
 package edu.unicen.project.dicomseg;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,16 +28,22 @@ public class FileChooserActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_chooser);
 
+        final ListView listView = (ListView) findViewById(android.R.id.list);
+
         String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        Log.i(TAG, "Root Dir: " + externalStorage);
         dicomDir = new File(externalStorage + "/dicom/");
 
-        Log.i(TAG, "Dicom Dir: " + dicomDir.getAbsolutePath());
-        Log.i(TAG, "Dicom Dir exists: " + String.valueOf(dicomDir.exists()));
-        Log.i(TAG, "Dicom Dir is directory: " + String.valueOf(dicomDir.isDirectory()));
-        Log.i(TAG, "Dicom Dir can read: " + String.valueOf(dicomDir.canRead()));
-
         fill(dicomDir);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File dicom = (File) listView.getItemAtPosition(position);
+                Intent intent = new Intent(view.getContext(), DicomViewActivity.class);
+                intent.putExtra("dicom", dicom);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     private void fill(File f) {
@@ -60,6 +70,7 @@ public class FileChooserActivity extends ListActivity {
 
         adapter = new ListedFileArrayAdapter(FileChooserActivity.this, R.layout.content_file_chooser, dirs);
         this.setListAdapter(adapter);
+
     }
 
 }

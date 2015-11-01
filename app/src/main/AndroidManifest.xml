@@ -10,7 +10,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -20,13 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="edu.unicen.project.dicomseg.FileChooserActivity"
+        <activity
+            android:name=".FileChooserActivity"
             android:label="@string/title_activity_file_chooser"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-
+        <activity
+            android:name=".DicomViewActivity"
+            android:label="@string/title_activity_dicom_view"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
-
