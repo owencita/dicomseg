@@ -39,7 +39,7 @@ public class FileChooserActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File dicom = (File) listView.getItemAtPosition(position);
-                Intent intent = new Intent(view.getContext(), DicomViewActivity.class);
+                Intent intent = new Intent(view.getContext(), SelectDicomImageActivity.class);
                 intent.putExtra("dicom", dicom);
                 view.getContext().startActivity(intent);
             }

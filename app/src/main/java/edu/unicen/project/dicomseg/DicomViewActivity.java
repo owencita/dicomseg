@@ -6,18 +6,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.imebra.dicom.CodecFactory;
 import com.imebra.dicom.ColorTransformsFactory;
 import com.imebra.dicom.DataSet;
 import com.imebra.dicom.DrawBitmap;
 import com.imebra.dicom.Image;
 import com.imebra.dicom.ModalityVOILUT;
-import com.imebra.dicom.Stream;
-import com.imebra.dicom.StreamReader;
 import com.imebra.dicom.TransformsChain;
 import com.imebra.dicom.VOILUT;
 
-import java.io.File;
+import edu.unicen.project.dicomseg.app.DicomSegApp;
 
 public class DicomViewActivity extends Activity {
 
@@ -27,24 +24,12 @@ public class DicomViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dicom_view);
-        System.loadLibrary("imebra_lib");
-    }
 
-    public void onStart() {
-        super.onStart();
+        DataSet dataSet = DicomSegApp.getDataSet();
+        Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
 
-        File dicomFile = (File) getIntent().getSerializableExtra("dicom");
+        Image image = dataSet.getImage(imageNumber.intValue());
 
-        Stream stream = new Stream();
-        Log.i(TAG, "Dicom Dir: " + dicomFile.getAbsolutePath());
-        stream.openFileRead(dicomFile.getAbsolutePath());
-
-        // Build an internal representation of the Dicom file. Tags larger than 256 bytes
-        //  will be loaded on demand from the file
-        DataSet dataSet = CodecFactory.load(new StreamReader(stream), 256);
-
-        // Get the first image
-        Image image = dataSet.getImage(0);
         // Monochrome images may have a modality transform
         if (ColorTransformsFactory.isMonochrome(image.getColorSpace())) {
             ModalityVOILUT modalityVOILUT = new ModalityVOILUT(dataSet);

@@ -16,6 +16,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,6 +28,11 @@
         <activity
             android:name=".DicomViewActivity"
             android:label="@string/title_activity_dicom_view"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".SelectDicomImageActivity"
+            android:label="@string/title_activity_select_dicom_image"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
