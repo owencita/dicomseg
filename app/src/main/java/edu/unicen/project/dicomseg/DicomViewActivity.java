@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.imebra.dicom.CodecFactory;
 import com.imebra.dicom.ColorTransformsFactory;
 import com.imebra.dicom.DataSet;
+import com.imebra.dicom.DrawBitmap;
 import com.imebra.dicom.Image;
 import com.imebra.dicom.ModalityVOILUT;
 import com.imebra.dicom.Stream;
@@ -75,7 +76,7 @@ public class DicomViewActivity extends Activity {
         }
         // Let's use a DrawBitmap object to generate a buffer with the pixel data. We will
         // use that buffer to create an Android Bitmap
-        com.imebra.dicom.DrawBitmap drawBitmap = new com.imebra.dicom.DrawBitmap(image, transformsChain);
+        DrawBitmap drawBitmap = new DrawBitmap(image, transformsChain);
         int temporaryBuffer[] = new int[1]; // Temporary buffer. Just used to get the needed buffer size
         int bufferSize = drawBitmap.getBitmap(image.getSizeX(), image.getSizeY(), 0, 0, image.getSizeX(), image.getSizeY(), temporaryBuffer, 0);
         int buffer[] = new int[bufferSize]; // Ideally you want to reuse this in subsequent calls to getBitmap()
