@@ -1,9 +1,12 @@
 package edu.unicen.project.dicomseg;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.imebra.dicom.ColorTransformsFactory;
@@ -72,6 +75,15 @@ public class DicomViewActivity extends Activity {
         // Let's find the ImageView and se the image
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageBitmap(renderBitmap);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), NotesActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
 }
