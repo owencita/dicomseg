@@ -81,6 +81,7 @@ public class DicomViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NotesActivity.class);
+                intent.putExtra("fileName", (String) getIntent().getSerializableExtra("fileName"));
                 view.getContext().startActivity(intent);
             }
         });

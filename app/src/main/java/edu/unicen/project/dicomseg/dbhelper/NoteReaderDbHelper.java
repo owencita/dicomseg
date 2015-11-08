@@ -13,13 +13,12 @@ public class NoteReaderDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "NoteReader.db";
 
     private static final String TEXT_TYPE = " TEXT";
-    private static final String COMMA_SEP = ",";
+    private static final String COMMA_SEP = ", ";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DicomNoteContract.NoteEntry.TABLE_NAME + " (" +
-                    DicomNoteContract.NoteEntry._ID + " INTEGER PRIMARY KEY," +
-                    DicomNoteContract.NoteEntry.COLUMN_NAME_NOTE_ID + TEXT_TYPE + COMMA_SEP +
+                    DicomNoteContract.NoteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + TEXT_TYPE + COMMA_SEP +
-                    DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT + TEXT_TYPE + COMMA_SEP +
+                    DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT + TEXT_TYPE +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES =

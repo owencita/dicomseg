@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,7 +29,8 @@ public class SelectDicomImageActivity extends AppCompatActivity {
         File dicomFile = (File) getIntent().getSerializableExtra("dicom");
 
         Stream stream = new Stream();
-        stream.openFileRead(dicomFile.getAbsolutePath());
+        final String fileName = dicomFile.getAbsolutePath();
+        stream.openFileRead(fileName);
 
         // Build an internal representation of the Dicom file. Tags larger than 256 bytes
         //  will be loaded on demand from the file
@@ -46,7 +46,17 @@ public class SelectDicomImageActivity extends AppCompatActivity {
                 String imageNumber = editText.getText().toString();
                 Intent intent = new Intent(view.getContext(), DicomViewActivity.class);
                 intent.putExtra("imageNumber", new Integer(imageNumber));
+                intent.putExtra("fileName", fileName);
                 view.getContext().startActivity(intent);
+            }
+        });
+
+        final Button cancelButton = (Button) findViewById(R.id.cancelButton);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

@@ -20,5 +20,12 @@
         android:text="@string/button_ok"
         android:layout_marginTop="100dip"/>
 
+    <Button android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_cancel"
+        android:layout_marginTop="100dip"
+        android:layout_marginLeft="100dip"/>
+
 
 </android.support.design.widget.CoordinatorLayout>
