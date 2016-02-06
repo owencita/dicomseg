@@ -29,7 +29,7 @@ public class DicomViewActivity extends Activity {
         setContentView(R.layout.activity_dicom_view);
 
         DataSet dataSet = DicomSegApp.getDataSet();
-        Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
+        final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
 
         Image image = dataSet.getImage(imageNumber.intValue());
 
@@ -82,6 +82,7 @@ public class DicomViewActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NotesActivity.class);
                 intent.putExtra("fileName", (String) getIntent().getSerializableExtra("fileName"));
+                intent.putExtra("imageNumber", imageNumber);
                 view.getContext().startActivity(intent);
             }
         });

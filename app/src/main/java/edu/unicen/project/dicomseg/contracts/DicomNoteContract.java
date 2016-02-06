@@ -10,8 +10,8 @@ public class DicomNoteContract {
     public static abstract class NoteEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "note";
-        public static final String COLUMN_NAME_NOTE_ID = "noteid";
         public static final String COLUMN_NAME_FILE_NAME = "filename";
+        public static final String COLUMN_NAME_IMAGE_NUMBER = "imagenumber";
         public static final String COLUMN_NAME_TEXT = "text";
     }
 

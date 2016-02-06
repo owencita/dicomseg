@@ -30,14 +30,17 @@ public class NotesActivity extends AppCompatActivity {
                 DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT,
         };
 
+        final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
+
         Cursor cursor = db.query(
                 DicomNoteContract.NoteEntry.TABLE_NAME,  // The table to query
-                projection,                 // The columns to return
-                "filename = ?",             // The columns for the WHERE clause
-                new String[]{fileName},     // The values for the WHERE clause
-                null,                  // don't group the rows
-                null,                  // don't filter by row groups
-                null                   // no sort order
+                projection,     // The columns to return
+                DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                        DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?", // The columns for the WHERE clause
+                new String[] { fileName, Integer.toString(imageNumber) },     // The values for the WHERE clause
+                null,          // don't group the rows
+                null,          // don't filter by row groups
+                null           // no sort order
         );
 
         String noteText = "";
@@ -69,6 +72,7 @@ public class NotesActivity extends AppCompatActivity {
                     // Create a new map of values, where column names are the keys
                     ContentValues values = new ContentValues();
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME, fileName);
+                    values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER, imageNumber);
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT, text);
 
                     // Insert the new row, returning the primary key value of the new row
@@ -85,8 +89,9 @@ public class NotesActivity extends AppCompatActivity {
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT, editText.getText().toString());
 
                     // Which row to update, based on the ID
-                    String selection = DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " LIKE ?";
-                    String[] selectionArgs = { fileName };
+                    String selection = DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                            DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?";
+                    String[] selectionArgs = { fileName, Integer.toString(imageNumber) };
 
                     int count = db.update(
                             DicomNoteContract.NoteEntry.TABLE_NAME,
