@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_dicom_view"
-    tools:context="edu.unicen.project.dicomseg.DicomViewActivity">
+    tools:context="edu.unicen.project.dicomseg.activities.DicomViewActivity">
 
     <TextView android:text="Press + to add notes to this image"
         android:layout_width="wrap_content"

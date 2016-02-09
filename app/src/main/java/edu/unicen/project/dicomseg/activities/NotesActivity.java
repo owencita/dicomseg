@@ -1,4 +1,4 @@
-package edu.unicen.project.dicomseg;
+package edu.unicen.project.dicomseg.activities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
 import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
 

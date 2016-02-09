@@ -1,18 +1,45 @@
 package edu.unicen.project.dicomseg.dicom;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import com.imebra.dicom.CodecFactory;
 import com.imebra.dicom.ColorTransformsFactory;
 import com.imebra.dicom.DataSet;
 import com.imebra.dicom.DrawBitmap;
 import com.imebra.dicom.Image;
 import com.imebra.dicom.ModalityVOILUT;
+import com.imebra.dicom.Stream;
+import com.imebra.dicom.StreamReader;
 import com.imebra.dicom.TransformsChain;
 import com.imebra.dicom.VOILUT;
 
-import edu.unicen.project.dicomseg.app.DicomSegApp;
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import edu.unicen.project.dicomseg.app.DicomSegApp;
+import edu.unicen.project.dicomseg.models.Patient;
+
+/**
+ * Utils class to interact with Imebra Library
+ */
 public class DicomUtils {
+
+    private static final String TAG = "DicomUtils";
+
+    public static final DataSet getDataSet(File dicomFile) {
+        System.loadLibrary("imebra_lib");
+
+        Stream stream = new Stream();
+        String fileName = dicomFile.getAbsolutePath();
+        stream.openFileRead(fileName);
+
+        // Build an internal representation of the Dicom file. Tags larger than 256 bytes
+        //  will be loaded on demand from the file
+        return CodecFactory.load(new StreamReader(stream), 256);
+    }
 
     public static Bitmap getFrame(Integer imageNumber) {
         DataSet dataSet = DicomSegApp.getDataSet();
@@ -28,9 +55,6 @@ public class DicomUtils {
                 image = modalityImage;
             }
         }
-        // Just for fun: get the color space and the patient name
-        String colorSpace = image.getColorSpace();
-        String dataType = dataSet.getDataType(0x0010, 0, 0x0010);
 
         // Allocate a transforms chain: contains all the transforms to execute before displaying an image
         TransformsChain transformsChain = new TransformsChain();
@@ -60,9 +84,34 @@ public class DicomUtils {
         return renderBitmap;
     }
 
-    public String getPatientName() {
+    public static Patient getPatient() {
+        Patient patient = new Patient();
         DataSet dataSet = DicomSegApp.getDataSet();
-        String patientName = dataSet.getString(0x0010, 0, 0x0010, 0);
-        return patientName;
+
+        String id = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_ID, 0);
+        patient.setId(id);
+
+        String name = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_NAME, 0);
+        patient.setName(name);
+
+        String sex = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_SEX, 0);
+        patient.setSex(sex);
+
+        String birthDate = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_BIRTH_DATE, 0);
+        patient.setBirthDate(birthDate);
+
+        String age = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_AGE, 0);
+        if (!age.isEmpty()) {
+            patient.setAge(age);
+        }
+
+        Double weight = dataSet.getDouble(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_WEIGHT, 0);
+        patient.setWeight(weight);
+
+        String address = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_ADDRESS, 0);
+        patient.setAddress(address);
+
+        return patient;
     }
+
 }

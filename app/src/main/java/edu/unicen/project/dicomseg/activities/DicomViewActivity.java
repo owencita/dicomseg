@@ -1,4 +1,4 @@
-package edu.unicen.project.dicomseg;
+package edu.unicen.project.dicomseg.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.ImageView;
 
+import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 
 public class DicomViewActivity extends Activity {

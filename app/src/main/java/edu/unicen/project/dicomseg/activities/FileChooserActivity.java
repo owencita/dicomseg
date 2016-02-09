@@ -1,4 +1,4 @@
-package edu.unicen.project.dicomseg;
+package edu.unicen.project.dicomseg.activities;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.adapters.ListedFileArrayAdapter;
 
 public class FileChooserActivity extends ListActivity {
