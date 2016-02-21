@@ -15,9 +15,6 @@ import com.imebra.dicom.TransformsChain;
 import com.imebra.dicom.VOILUT;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import edu.unicen.project.dicomseg.app.DicomSegApp;
 import edu.unicen.project.dicomseg.models.Patient;
@@ -112,6 +109,16 @@ public class DicomUtils {
         patient.setAddress(address);
 
         return patient;
+    }
+
+    public static String getStudyUID() {
+        DataSet dataSet = DicomSegApp.getDataSet();
+        return dataSet.getString(DicomTags.STUDY_INFO_GROUP, 0, DicomTags.STUDY_INSTANCE_UID, 0);
+    }
+
+    public static String getSeriesUID() {
+        DataSet dataSet = DicomSegApp.getDataSet();
+        return dataSet.getString(DicomTags.STUDY_INFO_GROUP, 0, DicomTags.SERIES_INSTANCE_UID, 0);
     }
 
 }

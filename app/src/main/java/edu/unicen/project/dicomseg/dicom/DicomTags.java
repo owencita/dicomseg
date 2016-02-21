@@ -4,6 +4,7 @@ public class DicomTags {
 
     // Group numbers
     public static final int PATIENT_INFO_GROUP = 0x0010;
+    public static final int STUDY_INFO_GROUP = 0x0020;
 
     // Element numbers
     // (0010,0010) Patient's Name PN 1
@@ -20,5 +21,10 @@ public class DicomTags {
     public static final int PATIENT_WEIGHT = 0x1030;
     // (0010,1040) Patient's Address LO 1
     public static final int PATIENT_ADDRESS = 0x1040;
+
+    // (0020,000D) Unique identifier for the Study.
+    public static final int STUDY_INSTANCE_UID = 0x000D;
+    // (0020,000E) Unique identifier of the Series.
+    public static final int SERIES_INSTANCE_UID = 0x000E;
 
 }

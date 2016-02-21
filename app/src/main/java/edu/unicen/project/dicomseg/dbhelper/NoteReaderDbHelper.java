@@ -19,6 +19,8 @@ public class NoteReaderDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + DicomNoteContract.NoteEntry.TABLE_NAME + " (" +
                     DicomNoteContract.NoteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + TEXT_TYPE + COMMA_SEP +
+                    DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + TEXT_TYPE + COMMA_SEP +
+                    DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + TEXT_TYPE + COMMA_SEP +
                     DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + INT_TYPE + COMMA_SEP +
                     DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT + TEXT_TYPE +
                     " )";
@@ -35,8 +37,6 @@ public class NoteReaderDbHelper extends SQLiteOpenHelper {
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }

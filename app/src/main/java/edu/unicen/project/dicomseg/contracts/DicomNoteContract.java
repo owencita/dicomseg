@@ -11,6 +11,8 @@ public class DicomNoteContract {
 
         public static final String TABLE_NAME = "note";
         public static final String COLUMN_NAME_FILE_NAME = "filename";
+        public static final String COLUMN_NAME_STUDY_UID = "studyUID";
+        public static final String COLUMN_NAME_SERIES_UID = "seriesUID";
         public static final String COLUMN_NAME_IMAGE_NUMBER = "imagenumber";
         public static final String COLUMN_NAME_TEXT = "text";
     }

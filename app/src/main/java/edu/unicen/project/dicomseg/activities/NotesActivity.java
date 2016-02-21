@@ -12,6 +12,7 @@ import android.widget.EditText;
 import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
 import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
+import edu.unicen.project.dicomseg.dicom.DicomUtils;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -37,8 +38,12 @@ public class NotesActivity extends AppCompatActivity {
                 DicomNoteContract.NoteEntry.TABLE_NAME,  // The table to query
                 projection,     // The columns to return
                 DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                        DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + " = ? AND " +
+                        DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + " = ? AND " +
                         DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?", // The columns for the WHERE clause
-                new String[] { fileName, Integer.toString(imageNumber) },     // The values for the WHERE clause
+                new String[] { fileName, DicomUtils.getStudyUID(),
+                                         DicomUtils.getSeriesUID(),
+                                         Integer.toString(imageNumber)},     // The values for the WHERE clause
                 null,          // don't group the rows
                 null,          // don't filter by row groups
                 null           // no sort order
@@ -74,6 +79,8 @@ public class NotesActivity extends AppCompatActivity {
                     ContentValues values = new ContentValues();
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME, fileName);
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER, imageNumber);
+                    values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID, DicomUtils.getStudyUID());
+                    values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID, DicomUtils.getSeriesUID());
                     values.put(DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT, text);
 
                     // Insert the new row, returning the primary key value of the new row
@@ -91,9 +98,12 @@ public class NotesActivity extends AppCompatActivity {
 
                     // Which row to update, based on the ID
                     String selection = DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " = ? AND " +
-                            DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?";
-                    String[] selectionArgs = { fileName, Integer.toString(imageNumber) };
-
+                                       DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + " = ? AND " +
+                                       DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + " = ? AND " +
+                                       DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?";
+                    String[] selectionArgs = { fileName, Integer.toString(imageNumber),
+                                                         DicomUtils.getStudyUID(),
+                                                         DicomUtils.getSeriesUID() };
                     int count = db.update(
                             DicomNoteContract.NoteEntry.TABLE_NAME,
                             values,
