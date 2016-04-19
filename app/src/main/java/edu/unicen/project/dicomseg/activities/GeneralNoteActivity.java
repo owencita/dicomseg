@@ -14,7 +14,7 @@ import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
 import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 
-public class NotesActivity extends AppCompatActivity {
+public class GeneralNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +101,8 @@ public class NotesActivity extends AppCompatActivity {
                                        DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + " = ? AND " +
                                        DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + " = ? AND " +
                                        DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?";
-                    String[] selectionArgs = { fileName, Integer.toString(imageNumber),
-                                                         DicomUtils.getStudyUID(),
-                                                         DicomUtils.getSeriesUID() };
+                    String[] selectionArgs = { fileName, DicomUtils.getStudyUID(), DicomUtils.getSeriesUID(),
+                                               Integer.toString(imageNumber)};
                     int count = db.update(
                             DicomNoteContract.NoteEntry.TABLE_NAME,
                             values,
