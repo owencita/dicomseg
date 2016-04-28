@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 
@@ -62,16 +63,36 @@ public class DicomViewActivity extends Activity {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText("Tap the image point where you want to add a note");
 
-                // draw points where there is a note
+                // TODO: get all point notes and draw them (circle)
+                // TODO: scale circle accordingly (to the image)
+                //Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                //paint.setColor(Color.rgb(51,98,178));
+                //paint.setStyle(Paint.Style.FILL);
+                //canvas.drawCircle(coords[0], coords[1], 8, paint);
+                //v.invalidate();
 
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+                    public boolean onTouch(View view, MotionEvent event) {
                         if (gestureDetector.onTouchEvent(event)) {
-                            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                            paint.setColor(Color.RED);
-                            paint.setStyle(Paint.Style.FILL);
-                            canvas.drawCircle(event.getX(), event.getY(), 5, paint);
+
+                            final int index = event.getActionIndex();
+                            final float[] coords = new float[] { event.getX(index), event.getY(index) };
+                            Matrix matrix = new Matrix();
+                            imageView.getImageMatrix().invert(matrix);
+                            matrix.postTranslate(imageView.getScrollX(), imageView.getScrollY());
+                            matrix.mapPoints(coords);
+
+                            int x = (int) coords[0];
+                            int y = (int) coords[1];
+
+                            Intent intent = new Intent(view.getContext(), PointNoteActivity.class);
+                            intent.putExtra("fileName", (String) getIntent().getSerializableExtra("fileName"));
+                            intent.putExtra("imageNumber", imageNumber);
+                            intent.putExtra("x", x);
+                            intent.putExtra("y", y);
+                            view.getContext().startActivity(intent);
+
                             return true;
                         } else {
                             return false;
@@ -80,9 +101,6 @@ public class DicomViewActivity extends Activity {
                 });
             }
         });
-
-        //Intent intent = new Intent(view.getContext(), PointNoteActivity.class);
-        //view.getContext().startActivity(intent);
 
     }
 

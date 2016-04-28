@@ -9,7 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_notes" tools:context="edu.unicen.project.dicomseg.activities.GeneralNoteActivity">
 
-    <TextView android:text="Enter text note:"
+    <TextView android:text="Enter note text:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView" />

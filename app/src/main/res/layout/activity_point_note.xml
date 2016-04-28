@@ -17,9 +17,26 @@
 
     <include layout="@layout/content_point_note" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="fill_parent"
+        android:layout_height="300dip"
+        android:layout_marginTop="50dip"
+        android:scrollbars="vertical"
+        android:gravity="top"
+        android:inputType="text" />
+
+    <Button android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_ok"
+        android:layout_marginTop="360dip"/>
+
+    <Button android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_cancel"
+        android:layout_marginTop="360dip"
+        android:layout_marginLeft="100dip"/>
 
 </android.support.design.widget.CoordinatorLayout>

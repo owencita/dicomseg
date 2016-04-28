@@ -21,10 +21,10 @@ public class GeneralNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
-        final NoteReaderDbHelper mDbHelper = new NoteReaderDbHelper(getBaseContext());
-
         final String fileName = (String) getIntent().getSerializableExtra("fileName");
+        final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
 
+        final NoteReaderDbHelper mDbHelper = new NoteReaderDbHelper(getBaseContext());
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Define a projection that specifies which columns from the database will be returned
@@ -32,15 +32,13 @@ public class GeneralNoteActivity extends AppCompatActivity {
                 DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT,
         };
 
-        final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
-
         Cursor cursor = db.query(
                 DicomNoteContract.NoteEntry.TABLE_NAME,  // The table to query
                 projection,     // The columns to return
                 DicomNoteContract.NoteEntry.COLUMN_NAME_FILE_NAME + " = ? AND " +
-                        DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + " = ? AND " +
-                        DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + " = ? AND " +
-                        DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?", // The columns for the WHERE clause
+                DicomNoteContract.NoteEntry.COLUMN_NAME_STUDY_UID + " = ? AND " +
+                DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID + " = ? AND " +
+                DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER + " = ?", // The columns for the WHERE clause
                 new String[] { fileName, DicomUtils.getStudyUID(),
                                          DicomUtils.getSeriesUID(),
                                          Integer.toString(imageNumber)},     // The values for the WHERE clause
