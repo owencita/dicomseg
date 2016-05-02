@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import android.view.GestureDetector;
@@ -18,7 +19,10 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.List;
+
 import edu.unicen.project.dicomseg.R;
+import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
 
@@ -34,6 +38,8 @@ public class DicomViewActivity extends Activity {
 
         gestureDetector = new GestureDetector(this, new GestureListener());
 
+        final String fileName = (String) getIntent().getSerializableExtra("fileName");
+
         final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
         Bitmap renderBitmap = DicomUtils.getFrame(imageNumber);
 
@@ -48,7 +54,7 @@ public class DicomViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), GeneralNoteActivity.class);
-                intent.putExtra("fileName", (String) getIntent().getSerializableExtra("fileName"));
+                intent.putExtra("fileName", fileName);
                 intent.putExtra("imageNumber", imageNumber);
                 view.getContext().startActivity(intent);
             }
@@ -63,13 +69,18 @@ public class DicomViewActivity extends Activity {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText("Tap the image point where you want to add a note");
 
-                // TODO: get all point notes and draw them (circle)
-                // TODO: scale circle accordingly (to the image)
-                //Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                //paint.setColor(Color.rgb(51,98,178));
-                //paint.setStyle(Paint.Style.FILL);
-                //canvas.drawCircle(coords[0], coords[1], 8, paint);
-                //v.invalidate();
+                final NoteReaderDbHelper dbHelper = new NoteReaderDbHelper(getBaseContext());
+                List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
+
+                for (Point point: pointList) {
+                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    paint.setColor(Color.rgb(51, 98, 178));
+                    paint.setStyle(Paint.Style.FILL);
+                    // TODO: scale circle accordingly (to the image)
+                    canvas.drawCircle(point.x, point.y, 8, paint);
+                }
+
+                view.invalidate();
 
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -87,7 +98,7 @@ public class DicomViewActivity extends Activity {
                             int y = (int) coords[1];
 
                             Intent intent = new Intent(view.getContext(), PointNoteActivity.class);
-                            intent.putExtra("fileName", (String) getIntent().getSerializableExtra("fileName"));
+                            intent.putExtra("fileName", fileName);
                             intent.putExtra("imageNumber", imageNumber);
                             intent.putExtra("x", x);
                             intent.putExtra("y", y);
