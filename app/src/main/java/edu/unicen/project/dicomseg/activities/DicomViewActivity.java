@@ -1,6 +1,7 @@
 package edu.unicen.project.dicomseg.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,12 +10,19 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 
 import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -26,6 +34,8 @@ import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
+import edu.unicen.project.dicomseg.segmentation.SegmentationUtils;
+import edu.unicen.project.dicomseg.segmentation.SegmentationsConstants;
 
 public class DicomViewActivity extends Activity {
 
@@ -34,8 +44,7 @@ public class DicomViewActivity extends Activity {
 
     private Path mPath;
     private Paint mPaint;
-    private float mX, mY;
-    private final float TOUCH_TOLERANCE = 4;
+    private String selectedSegmentation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +87,7 @@ public class DicomViewActivity extends Activity {
                 final NoteReaderDbHelper dbHelper = new NoteReaderDbHelper(getBaseContext());
                 List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
 
-                for (Point point: pointList) {
+                for (Point point : pointList) {
                     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                     paint.setColor(Color.rgb(51, 98, 178));
                     paint.setStyle(Paint.Style.FILL);
@@ -120,20 +129,33 @@ public class DicomViewActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
-                menu.hideMenu(true);
+
+                hideMenu();
+
+                Intent intent = new Intent(view.getContext(), SelectSegmentationActivity.class);
+                startActivityForResult(intent, 1);
 
                 mPath = new Path();
+                mPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
 
-                mPaint = new Paint();
-                mPaint.setAntiAlias(true);
-                mPaint.setDither(true);
-                mPaint.setColor(Color.rgb(51, 98, 178));
-                mPaint.setStyle(Paint.Style.STROKE);
-                mPaint.setStrokeJoin(Paint.Join.ROUND);
-                mPaint.setStrokeCap(Paint.Cap.ROUND);
-                // TODO: scale stroke according to the image size
-                mPaint.setStrokeWidth(8);
+                Button doneButton = (Button) findViewById(R.id.done);
+                doneButton.setVisibility(View.VISIBLE);
+
+                doneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Button doneButton = (Button) findViewById(R.id.done);
+                        doneButton.setVisibility(View.GONE);
+
+                        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                        canvas.drawPath(mPath, mPaint);
+
+                        imageView.setOnTouchListener(null);
+                        // TODO: check for correct segmentation (mPath) according to <selectedSegmentation>
+                        // TODO: save mPath
+                        showMenu();
+                    }
+                });
 
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -143,48 +165,14 @@ public class DicomViewActivity extends Activity {
                         int x = (int) coords[0];
                         int y = (int) coords[1];
 
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                touch_start(x, y);
-                                view.invalidate();
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                touch_move(x, y);
-                                view.invalidate();
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                touch_up(canvas);
-                                view.invalidate();
-                                break;
-                        }
+                        SegmentationUtils.setPath(mPath, canvas, view, event, x, y);
+
+                        canvas.drawPath(mPath, mPaint);
                         return true;
                     }
                 });
             }
         });
-    }
-
-    private void touch_start(int x, int y) {
-        mPath.reset();
-        mPath.moveTo(x, y);
-        mX = x;
-        mY = y;
-    }
-
-    private void touch_move(int x, int y) {
-        float dx = Math.abs(x - mX);
-        float dy = Math.abs(y - mY);
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
-            mX = x;
-            mY = y;
-        }
-    }
-
-    private void touch_up(Canvas mCanvas) {
-        mPath.lineTo(mX, mY);
-        mCanvas.drawPath(mPath, mPaint);
-        mPath.reset();
     }
 
     private float[] getCoordsForCanvas(MotionEvent event, ImageView imageView) {
@@ -194,8 +182,34 @@ public class DicomViewActivity extends Activity {
         imageView.getImageMatrix().invert(matrix);
         matrix.postTranslate(imageView.getScrollX(), imageView.getScrollY());
         matrix.mapPoints(coords);
-
         return coords;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                selectedSegmentation = data.getStringExtra("result");
+            }
+        }
+    }
+
+    private void hideMenu() {
+        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu.hideMenu(true);
+        menu.setVisibility(View.GONE);
+        FloatingActionButton generalNoteButton = (FloatingActionButton) findViewById(R.id.menu_general_note);
+        generalNoteButton.setVisibility(View.GONE);
+        FloatingActionButton pointNoteButton = (FloatingActionButton) findViewById(R.id.menu_point_note);
+        pointNoteButton.setVisibility(View.GONE);
+        FloatingActionButton segmentImageButton = (FloatingActionButton) findViewById(R.id.menu_segment);
+        segmentImageButton.setVisibility(View.GONE);
+    }
+
+    private void showMenu() {
+        FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu.close(true);
+        menu.setVisibility(View.VISIBLE);
     }
 
 }

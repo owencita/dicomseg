@@ -45,6 +45,11 @@
             android:label="@string/title_activity_point_note"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".activities.SelectSegmentationActivity"
+            android:label="@string/title_activity_select_segmentation"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

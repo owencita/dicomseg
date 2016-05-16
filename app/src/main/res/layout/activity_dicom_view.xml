@@ -19,14 +19,6 @@
             android:id="@+id/imageView"/>
     </LinearLayout>
 
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_edit"/>
-
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
         android:layout_width="wrap_content"
@@ -38,7 +30,7 @@
         fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
         fab:menu_labels_textColor="#FFFFFF"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="Notes">
+        fab:menu_fab_label="">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_general_note"
@@ -65,5 +57,15 @@
             fab:fab_label="Segment Image" />
 
     </com.github.clans.fab.FloatingActionMenu>
+
+    <Button android:id="@+id/done"
+            android:text="@string/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="500dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:background="@drawable/buttons" />
 
 </android.support.design.widget.CoordinatorLayout>

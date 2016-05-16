@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="edu.unicen.project.dicomseg.activities.SelectSegmentation">
+
+    <include layout="@layout/content_select_segmentation" />
+
+    <LinearLayout android:id="@+id/select_seg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="vertical">
+
+        <Button android:id="@+id/ivusSeg"
+            android:text="@string/button_ivus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttons"/>
+
+        <Button android:id="@+id/seg2"
+            android:text="@string/button_seg2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttons"/>
+
+        <Button android:id="@+id/seg3"
+            android:text="@string/button_seg3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttons"/>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
