@@ -58,11 +58,16 @@ public class DicomViewActivity extends Activity {
         final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
         final Bitmap dicomFrame = DicomUtils.getFrame(imageNumber);
 
+        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setImageBitmap(dicomFrame);
+
         final Bitmap mutableBitmap = dicomFrame.copy(Bitmap.Config.ARGB_8888, true);
+        final ImageView mutableImageView = (ImageView) findViewById(R.id.mutableImageView);
+        mutableImageView.setImageBitmap(mutableBitmap);
         final Canvas canvas = new Canvas(mutableBitmap);
 
-        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageBitmap(mutableBitmap);
+        mutableImageView.bringToFront();
+        imageView.invalidate();
 
         FloatingActionButton generalNoteButton = (FloatingActionButton) findViewById(R.id.menu_general_note);
         generalNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +152,7 @@ public class DicomViewActivity extends Activity {
                         Button doneButton = (Button) findViewById(R.id.done);
                         doneButton.setVisibility(View.GONE);
 
-                        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                        canvas.drawPath(mPath, mPaint);
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         imageView.setOnTouchListener(null);
                         // TODO: check for correct segmentation (mPath) according to <selectedSegmentation>

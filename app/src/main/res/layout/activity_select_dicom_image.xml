@@ -83,7 +83,9 @@
             android:layout_height="wrap_content"
             android:text="@string/button_ok"
             android:layout_marginTop="270dip"
-            android:layout_toLeftOf="@+id/centerPoint"/>
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/centerPoint"
+            android:background="@drawable/buttons"/>
 
         <TextView
             android:id="@+id/centerPoint"
@@ -97,7 +99,8 @@
             android:layout_height="wrap_content"
             android:text="@string/button_cancel"
             android:layout_marginTop="270dip"
-            android:layout_toRightOf="@+id/centerPoint" />
+            android:layout_toRightOf="@+id/centerPoint"
+            android:background="@drawable/buttons"/>
 
     </RelativeLayout>
 
