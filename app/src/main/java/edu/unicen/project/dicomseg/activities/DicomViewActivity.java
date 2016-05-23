@@ -11,27 +11,26 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 
 import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.unicen.project.dicomseg.R;
-import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
+import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
 import edu.unicen.project.dicomseg.segmentation.SegmentationUtils;
@@ -41,10 +40,11 @@ public class DicomViewActivity extends Activity {
 
     private static final String TAG = "DicomViewActivity";
     private GestureDetector gestureDetector;
-
-    private Path mPath;
-    private Paint mPaint;
+    private DbHelper dbHelper;
+    private Path segPath;
+    private Paint segPaint;
     private String selectedSegmentation;
+    private List<Point> segmentation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class DicomViewActivity extends Activity {
         setContentView(R.layout.activity_dicom_view);
 
         gestureDetector = new GestureDetector(this, new GestureListener());
+        dbHelper = new DbHelper(getBaseContext());
 
         final String fileName = (String) getIntent().getSerializableExtra("fileName");
 
@@ -89,7 +90,6 @@ public class DicomViewActivity extends Activity {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText("Tap the image point where you want to add a note");
 
-                final NoteReaderDbHelper dbHelper = new NoteReaderDbHelper(getBaseContext());
                 List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
 
                 for (Point point : pointList) {
@@ -137,11 +137,15 @@ public class DicomViewActivity extends Activity {
 
                 hideMenu();
 
+                // TODO: show saved segmentations
+
                 Intent intent = new Intent(view.getContext(), SelectSegmentationActivity.class);
                 startActivityForResult(intent, 1);
 
-                mPath = new Path();
-                mPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                segPath = new Path();
+                segPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+
+                segmentation = new ArrayList<Point>();
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -155,8 +159,13 @@ public class DicomViewActivity extends Activity {
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         imageView.setOnTouchListener(null);
-                        // TODO: check for correct segmentation (mPath) according to <selectedSegmentation>
-                        // TODO: save mPath
+                        // TODO: check for correct segmentation (segPath) according to <selectedSegmentation>
+
+                        // save segmentation
+                        Gson gson = new Gson();
+                        String segmentationString = gson.toJson(segmentation);
+                        dbHelper.insertSegmentation(fileName, imageNumber, selectedSegmentation, segmentationString);
+
                         showMenu();
                     }
                 });
@@ -169,10 +178,48 @@ public class DicomViewActivity extends Activity {
                         int x = (int) coords[0];
                         int y = (int) coords[1];
 
-                        SegmentationUtils.setPath(mPath, canvas, view, event, x, y);
+                        SegmentationUtils.setPath(segPath, canvas, view, event, x, y);
 
-                        canvas.drawPath(mPath, mPaint);
+                        Point point = new Point();
+                        point.x = x;
+                        point.y = y;
+                        segmentation.add(point);
+
+                        canvas.drawPath(segPath, segPaint);
                         return true;
+                    }
+                });
+            }
+        });
+
+        FloatingActionButton showSegmentationImageButton = (FloatingActionButton) findViewById(R.id.menu_show_segment);
+        showSegmentationImageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                hideMenu();
+
+                String jsonPoints = dbHelper.getSegmentation(fileName, imageNumber);
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+                List<Point> segmentation = gson.fromJson(jsonPoints, type);
+
+                segPath = SegmentationUtils.setPath(segmentation, canvas);
+                segPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                canvas.drawPath(segPath, segPaint);
+                view.invalidate();
+
+                Button doneButton = (Button) findViewById(R.id.done);
+                doneButton.setVisibility(View.VISIBLE);
+
+                doneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Button doneButton = (Button) findViewById(R.id.done);
+                        doneButton.setVisibility(View.GONE);
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        showMenu();
                     }
                 });
             }

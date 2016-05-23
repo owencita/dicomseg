@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.github.clans:fab:1.6.3'
     compile files('libs/imebra_android_jni.jar')
+    compile 'com.google.code.gson:gson:2.6.2'
+
 }

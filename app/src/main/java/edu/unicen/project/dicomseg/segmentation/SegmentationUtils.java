@@ -4,8 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.List;
 
 public class SegmentationUtils {
 
@@ -41,6 +44,18 @@ public class SegmentationUtils {
                 view.invalidate();
                 break;
         }
+    }
+
+    public static Path setPath(List<Point> points, Canvas canvas) {
+        Path path = new Path();
+        Point first = points.get(0);
+        touch_start(path, first.x, first.y);
+        for (int i=1; i < points.size(); i++) {
+            Point point = points.get(i);
+            touch_move(path, point.x, point.y);
+        }
+        touch_up(path, canvas);
+        return path;
     }
 
     private static void touch_start(Path path, int x, int y) {

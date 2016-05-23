@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import edu.unicen.project.dicomseg.R;
-import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
+import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 
 public class GeneralNoteActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class GeneralNoteActivity extends AppCompatActivity {
         final String fileName = (String) getIntent().getSerializableExtra("fileName");
         final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
 
-        final NoteReaderDbHelper mDbHelper = new NoteReaderDbHelper(getBaseContext());
+        final DbHelper mDbHelper = new DbHelper(getBaseContext());
 
         String noteText = mDbHelper.getGeneralNote(fileName, imageNumber);
 

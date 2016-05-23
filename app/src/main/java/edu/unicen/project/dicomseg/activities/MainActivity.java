@@ -1,7 +1,6 @@
 package edu.unicen.project.dicomseg.activities;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import edu.unicen.project.dicomseg.R;
-import edu.unicen.project.dicomseg.dbhelper.NoteReaderDbHelper;
+import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Code to drop note table (uncomment when needed)
-        //getBaseContext().deleteDatabase(NoteReaderDbHelper.DATABASE_NAME);
+        //getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), FileChooserActivity.class);
                 view.getContext().startActivity(intent);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
     }
