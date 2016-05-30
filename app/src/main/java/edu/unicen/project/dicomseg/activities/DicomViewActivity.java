@@ -1,7 +1,6 @@
 package edu.unicen.project.dicomseg.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,13 +27,15 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
-import edu.unicen.project.dicomseg.segmentation.SegmentationUtils;
-import edu.unicen.project.dicomseg.segmentation.SegmentationsConstants;
+import edu.unicen.project.dicomseg.segmentation.Segmentation;
+import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
+import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class DicomViewActivity extends Activity {
 
@@ -42,9 +43,11 @@ public class DicomViewActivity extends Activity {
     private GestureDetector gestureDetector;
     private DbHelper dbHelper;
     private Path segPath;
+    private Path accumSegPath;
     private Paint segPaint;
-    private String selectedSegmentation;
-    private List<Point> segmentation;
+    private Segmentation segmentation = new Segmentation();
+    private Point inputStart;
+    private Point inputEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,15 +140,22 @@ public class DicomViewActivity extends Activity {
 
                 hideMenu();
 
+                inputStart = null;
+                inputEnd = null;
+                final AtomicBoolean previousPathAdded = new AtomicBoolean(false);
+
                 // TODO: show saved segmentations
 
                 Intent intent = new Intent(view.getContext(), SelectSegmentationActivity.class);
                 startActivityForResult(intent, 1);
 
+                accumSegPath = new Path();
                 segPath = new Path();
-                segPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
 
-                segmentation = new ArrayList<Point>();
+                segmentation.setPoints(new ArrayList<Point>());
+                segmentation.setImageWidth(dicomFrame.getWidth());
+                segmentation.setImageHeight(dicomFrame.getHeight());
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -159,14 +169,16 @@ public class DicomViewActivity extends Activity {
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         imageView.setOnTouchListener(null);
-                        // TODO: check for correct segmentation (segPath) according to <selectedSegmentation>
 
-                        // save segmentation
-                        Gson gson = new Gson();
-                        String segmentationString = gson.toJson(segmentation);
-                        dbHelper.insertSegmentation(fileName, imageNumber, selectedSegmentation, segmentationString);
+                        if (segmentation.isValid()) {
 
-                        showMenu();
+                            // save segmentation
+                            Gson gson = new Gson();
+                            String segmentationPointsString = gson.toJson(segmentation.getPoints());
+                            dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType().getValue(), segmentationPointsString);
+
+                            showMenu();
+                        }
                     }
                 });
 
@@ -178,14 +190,33 @@ public class DicomViewActivity extends Activity {
                         int x = (int) coords[0];
                         int y = (int) coords[1];
 
-                        SegmentationUtils.setPath(segPath, canvas, view, event, x, y);
+                        if (inputStart == null) {
+                            inputStart = new Point();
+                            inputStart.x = x;
+                            inputStart.y = y;
+                        }
 
-                        Point point = new Point();
-                        point.x = x;
-                        point.y = y;
-                        segmentation.add(point);
+                        // TODO: continous lines, ivus only? (check approach, possible refactor)
+                        if ((inputEnd == null)||SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y)) {
+                            // user never touched up or touched up previously
+                            inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                            Point point = new Point();
+                            point.x = x;
+                            point.y = y;
+                            segmentation.getPoints().add(point);
+                            canvas.drawPath(segPath, segPaint);
+                            previousPathAdded.set(false);
+                        } else {
+                            // user touched up
+                            if ((inputEnd != null) && !previousPathAdded.get()) {
+                                accumSegPath.addPath(segPath);
+                                segPath = new Path();
+                                previousPathAdded.set(true);
+                                TextView textView = (TextView) findViewById(R.id.textView);
+                                textView.setText(segmentation.onTouchUp());
+                            }
+                        }
 
-                        canvas.drawPath(segPath, segPaint);
                         return true;
                     }
                 });
@@ -201,14 +232,17 @@ public class DicomViewActivity extends Activity {
                 hideMenu();
 
                 String jsonPoints = dbHelper.getSegmentation(fileName, imageNumber);
-                Gson gson = new Gson();
-                Type type = new TypeToken<ArrayList<Point>>() {}.getType();
-                List<Point> segmentation = gson.fromJson(jsonPoints, type);
 
-                segPath = SegmentationUtils.setPath(segmentation, canvas);
-                segPaint = SegmentationUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
-                canvas.drawPath(segPath, segPaint);
-                view.invalidate();
+                if (jsonPoints != null) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+                    List<Point> points = gson.fromJson(jsonPoints, type);
+
+                    segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+                    segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                    canvas.drawPath(segPath, segPaint);
+                    view.invalidate();
+                }
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -240,7 +274,7 @@ public class DicomViewActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                selectedSegmentation = data.getStringExtra("result");
+                segmentation.setType((SegmentationType)data.getSerializableExtra("segmentationType"));
             }
         }
     }

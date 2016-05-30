@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import edu.unicen.project.dicomseg.R;
-import edu.unicen.project.dicomseg.segmentation.SegmentationsConstants;
+import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class SelectSegmentationActivity extends AppCompatActivity {
 
@@ -23,7 +23,7 @@ public class SelectSegmentationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", SegmentationsConstants.IVUS);
+                returnIntent.putExtra("segmentationType", SegmentationType.IVUS);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
