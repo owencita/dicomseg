@@ -8,5 +8,5 @@ public interface SegmentationValidator {
 
     Boolean validate(List<Point> points, int imageWidth, int imageHeight);
 
-    String onTouchUp();
+    List<String> errors();
 }

@@ -2,6 +2,7 @@ package edu.unicen.project.dicomseg.segmentation;
 
 import android.graphics.Point;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Segmentation {
@@ -9,7 +10,7 @@ public class Segmentation {
     private SegmentationType type;
     private int imageWidth;
     private int imageHeight;
-    private List<Point> points;
+    private List<Point> points = new ArrayList<Point>();
 
     public SegmentationType getType() {
         return type;
@@ -21,10 +22,6 @@ public class Segmentation {
 
     public List<Point> getPoints() {
         return points;
-    }
-
-    public void setPoints(List<Point> points) {
-        this.points = points;
     }
 
     public void setImageWidth(int imageWidth) {
@@ -39,8 +36,7 @@ public class Segmentation {
         return type.getValidator().validate(points, imageWidth, imageHeight);
     }
 
-    // TODO: maybe not needed for all seg types
-    public String onTouchUp() {
-        return type.getValidator().onTouchUp();
+    public List<String> errors() {
+        return type.getValidator().errors();
     }
 }

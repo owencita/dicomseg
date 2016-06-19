@@ -35,6 +35,7 @@ import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
+import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class DicomViewActivity extends Activity {
@@ -153,7 +154,7 @@ public class DicomViewActivity extends Activity {
                 segPath = new Path();
                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
 
-                segmentation.setPoints(new ArrayList<Point>());
+                segmentation = new Segmentation();
                 segmentation.setImageWidth(dicomFrame.getWidth());
                 segmentation.setImageHeight(dicomFrame.getHeight());
 
@@ -171,14 +172,19 @@ public class DicomViewActivity extends Activity {
                         imageView.setOnTouchListener(null);
 
                         if (segmentation.isValid()) {
-
                             // save segmentation
                             Gson gson = new Gson();
                             String segmentationPointsString = gson.toJson(segmentation.getPoints());
                             dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType().getValue(), segmentationPointsString);
-
-                            showMenu();
+                        } else {
+                            StringBuffer sb = new StringBuffer();
+                            for (String error: segmentation.errors()) {
+                                sb.append(error + "\n\r");
+                            }
+                            TextView textView = (TextView) findViewById(R.id.textView);
+                            textView.setText(sb.toString());
                         }
+                        showMenu();
                     }
                 });
 
@@ -196,7 +202,6 @@ public class DicomViewActivity extends Activity {
                             inputStart.y = y;
                         }
 
-                        // TODO: continous lines, ivus only? (check approach, possible refactor)
                         if ((inputEnd == null)||SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y)) {
                             // user never touched up or touched up previously
                             inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
@@ -211,12 +216,15 @@ public class DicomViewActivity extends Activity {
                             if ((inputEnd != null) && !previousPathAdded.get()) {
                                 accumSegPath.addPath(segPath);
                                 segPath = new Path();
+                                Point start = segmentation.getPoints().get(0);
+                                segPath.moveTo(start.x, start.y);
                                 previousPathAdded.set(true);
                                 TextView textView = (TextView) findViewById(R.id.textView);
-                                textView.setText(segmentation.onTouchUp());
+                                textView.setText(SegmentationMessages.CONTINUITY_ERROR);
                             }
                         }
 
+                        canvas.drawPath(segPath, segPaint);
                         return true;
                     }
                 });

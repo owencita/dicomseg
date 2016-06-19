@@ -1,46 +1,42 @@
 package edu.unicen.project.dicomseg.segmentation.validators;
 
 import android.graphics.Point;
-import android.graphics.PointF;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import edu.unicen.project.dicomseg.polar.CartesianToPolarCalculator;
-import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
+import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class IVUSValidator implements SegmentationValidator {
 
-    private static final int TOLERANCE = 1;
+    private static final int TOLERANCE = 5;
+    private static List<String> errors = new ArrayList<String>();
 
+    /**
+     * Validate IVUS segmentation:
+     *                              - closure
+     * @param points
+     * @param imageWidth
+     * @param imageHeight
+     * @return true if the segmentation is valid, false otherwise
+     */
     @Override
     public Boolean validate(List<Point> points, int imageWidth, int imageHeight) {
         if (!points.isEmpty()) {
-            for (int i=0; i < points.size(); i++) {
-                Point start = points.get(i);
-                Point end = null;
-                if (i != (points.size()-1)) {
-                    end = points.get(i+1);
-                }
-                List<Point> allPoints = SegmentationDrawingUtils.getPointsBetweenUpdates(start, end);
-                allPoints.add(0, start);
-                allPoints.add(allPoints.size(), end);
-
-                Point previous = allPoints.get(0);
-                for (int j=1; j< allPoints.size(); j++) {
-                    PointF previousPolarPoint = CartesianToPolarCalculator.getPolarPoint(previous, imageWidth, imageWidth);
-                    PointF polarPoint = CartesianToPolarCalculator.getPolarPoint(allPoints.get(j), imageWidth, imageWidth);
-                    if ((Math.abs(polarPoint.y - previousPolarPoint.y) > TOLERANCE)) {
-                        return Boolean.FALSE;
-                    }
-                    previous = allPoints.get(j);
-                }
+            Point start = points.get(0);
+            Point end = points.get(points.size()-1);
+            if ((Math.abs(start.x - end.x) > TOLERANCE)&&(Math.abs(start.y - end.y) > TOLERANCE)) {
+                errors.add(SegmentationMessages.CLOSURE_ERROR);
+                return Boolean.FALSE;
+            } else {
+                return Boolean.TRUE;
             }
         }
-        return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     @Override
-    public String onTouchUp() {
-        return "Ending or starting point must be matched to continue with segmentation";
+    public List<String> errors() {
+        return errors;
     }
 }
