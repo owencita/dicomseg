@@ -8,18 +8,21 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SegmentationDrawingUtils {
 
     private static final float TOUCH_TOLERANCE = 4;
     private static float mX, mY;
-    private static Paint paint = new Paint();
+    private static final Paint paint = new Paint();
+    private static final List<Integer> colors = Arrays.asList(SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN);
+    private static int COLOR_INDEX = 0;
 
-    public static Paint getPaint(int width, int height) {
+    public static Paint getPaint(int width, int height, int color) {
         paint.setAntiAlias(true);
         paint.setDither(true);
-        paint.setColor(Color.rgb(51, 98, 178));
+        paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
@@ -72,6 +75,20 @@ public class SegmentationDrawingUtils {
         } else {
             return false;
         }
+    }
+
+    public static int getColor() {
+        if (COLOR_INDEX < colors.size()) {
+            COLOR_INDEX++;
+            return COLOR_INDEX--;
+        } else {
+            resetColor();
+            return COLOR_INDEX;
+        }
+    }
+
+    public static void resetColor() {
+        COLOR_INDEX = 0;
     }
 
     private static void touch_start(Path path, int x, int y) {

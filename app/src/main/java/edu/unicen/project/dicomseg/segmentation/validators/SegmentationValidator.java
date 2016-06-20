@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SegmentationValidator {
 
-    Boolean validate(List<Point> points, int imageWidth, int imageHeight);
+    Boolean validate(List<Point> points, List<Point> toCompare, int imageWidth, int imageHeight);
 
     List<String> errors();
 }

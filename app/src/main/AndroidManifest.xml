@@ -50,6 +50,11 @@
             android:label="@string/title_activity_select_segmentation"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".activities.IVUSSegActivity"
+            android:label="@string/title_activity_ivusseg"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

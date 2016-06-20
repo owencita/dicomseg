@@ -34,6 +34,7 @@ import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
+import edu.unicen.project.dicomseg.segmentation.SegmentationColors;
 import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
@@ -98,7 +99,7 @@ public class DicomViewActivity extends Activity {
 
                 for (Point point : pointList) {
                     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                    paint.setColor(Color.rgb(51, 98, 178));
+                    paint.setColor(SegmentationColors.BLUE);
                     paint.setStyle(Paint.Style.FILL);
                     // TODO: scale circle accordingly (to the image, which is automatically scaled to fit screen)
                     canvas.drawCircle(point.x, point.y, 8, paint);
@@ -145,14 +146,12 @@ public class DicomViewActivity extends Activity {
                 inputEnd = null;
                 final AtomicBoolean previousPathAdded = new AtomicBoolean(false);
 
-                // TODO: show saved segmentations
-
                 Intent intent = new Intent(view.getContext(), SelectSegmentationActivity.class);
                 startActivityForResult(intent, 1);
 
                 accumSegPath = new Path();
                 segPath = new Path();
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
 
                 segmentation = new Segmentation();
                 segmentation.setImageWidth(dicomFrame.getWidth());
@@ -170,21 +169,22 @@ public class DicomViewActivity extends Activity {
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         imageView.setOnTouchListener(null);
+                        TextView textView = (TextView) findViewById(R.id.textView);
 
                         if (segmentation.isValid()) {
                             // save segmentation
                             Gson gson = new Gson();
                             String segmentationPointsString = gson.toJson(segmentation.getPoints());
                             dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType().getValue(), segmentationPointsString);
+                            textView.setText("");
+                            showMenu();
                         } else {
                             StringBuffer sb = new StringBuffer();
                             for (String error: segmentation.errors()) {
                                 sb.append(error + "\n\r");
                             }
-                            TextView textView = (TextView) findViewById(R.id.textView);
                             textView.setText(sb.toString());
                         }
-                        showMenu();
                     }
                 });
 
@@ -247,7 +247,7 @@ public class DicomViewActivity extends Activity {
                     List<Point> points = gson.fromJson(jsonPoints, type);
 
                     segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                    segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight());
+                    segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
                     canvas.drawPath(segPath, segPaint);
                     view.invalidate();
                 }

@@ -1,25 +1,31 @@
 package edu.unicen.project.dicomseg.segmentation;
 
-import edu.unicen.project.dicomseg.segmentation.validators.IVUSValidator;
+import java.util.Arrays;
+import java.util.List;
+
+import edu.unicen.project.dicomseg.segmentation.validators.ClosureValidator;
+import edu.unicen.project.dicomseg.segmentation.validators.ExteriorityValidator;
+import edu.unicen.project.dicomseg.segmentation.validators.InteriorityValidator;
 import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator;
 
 public enum SegmentationType {
 
-    IVUS("ivus", new IVUSValidator());
+    IVUS_LU("ivus-lu", Arrays.asList(new ClosureValidator(), new ExteriorityValidator())),
+    IVUS_MA("ivus-ma", Arrays.asList(new ClosureValidator(), new InteriorityValidator()));
 
     private String value;
-    private SegmentationValidator validator;
+    private List<SegmentationValidator> validators;
 
-    SegmentationType(String value, SegmentationValidator validator) {
+    SegmentationType(String value, List<SegmentationValidator> validators) {
         this.value = value;
-        this.validator = validator;
+        this.validators = validators;
     }
 
     public String getValue() {
         return value;
     }
 
-    public SegmentationValidator getValidator() {
-        return validator;
+    public List<SegmentationValidator> getValidators() {
+        return validators;
     }
 }

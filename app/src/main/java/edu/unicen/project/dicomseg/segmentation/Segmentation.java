@@ -5,12 +5,15 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator;
+
 public class Segmentation {
 
     private SegmentationType type;
     private int imageWidth;
     private int imageHeight;
     private List<Point> points = new ArrayList<Point>();
+    private Segmentation relatedSeg;
 
     public SegmentationType getType() {
         return type;
@@ -33,10 +36,19 @@ public class Segmentation {
     }
 
     public Boolean isValid() {
-        return type.getValidator().validate(points, imageWidth, imageHeight);
+        for (SegmentationValidator validator: type.getValidators()) {
+            if (!validator.validate(points, relatedSeg.getPoints(), imageWidth, imageHeight)) {
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.TRUE;
     }
 
     public List<String> errors() {
-        return type.getValidator().errors();
+        List<String> errors = new ArrayList<String>();
+        for (SegmentationValidator validator: type.getValidators()) {
+            errors.addAll(validator.errors());
+        }
+        return errors;
     }
 }

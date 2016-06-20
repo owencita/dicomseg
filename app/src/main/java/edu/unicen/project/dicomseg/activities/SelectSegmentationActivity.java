@@ -12,6 +12,8 @@ import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class SelectSegmentationActivity extends AppCompatActivity {
 
+    private SegmentationType segmentationType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +25,20 @@ public class SelectSegmentationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", SegmentationType.IVUS);
+                returnIntent.putExtra("segmentationType", segmentationType);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                segmentationType = (SegmentationType) data.getSerializableExtra("segmentationType");
+            }
+        }
     }
 
 }
