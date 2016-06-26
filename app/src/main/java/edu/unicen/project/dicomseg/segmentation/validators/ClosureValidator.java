@@ -5,6 +5,7 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class ClosureValidator implements SegmentationValidator {
@@ -21,7 +22,8 @@ public class ClosureValidator implements SegmentationValidator {
      * @return true if the segmentation has closure, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, List<Point> relatedSeg, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, List<Segmentation> relatedSegs, int imageWidth, int imageHeight) {
+        errors = new ArrayList<String>();
         if (!points.isEmpty()) {
             Point start = points.get(0);
             Point end = points.get(points.size()-1);

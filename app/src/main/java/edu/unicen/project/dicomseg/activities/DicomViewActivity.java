@@ -22,10 +22,7 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -44,12 +41,18 @@ public class DicomViewActivity extends Activity {
     private static final String TAG = "DicomViewActivity";
     private GestureDetector gestureDetector;
     private DbHelper dbHelper;
+
     private Path segPath;
     private Path accumSegPath;
     private Paint segPaint;
-    private Segmentation segmentation = new Segmentation();
     private Point inputStart;
     private Point inputEnd;
+
+    private String fileName;
+    private Integer imageNumber;
+    private ImageView imageView;
+
+    private Segmentation segmentation = new Segmentation();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +62,12 @@ public class DicomViewActivity extends Activity {
         gestureDetector = new GestureDetector(this, new GestureListener());
         dbHelper = new DbHelper(getBaseContext());
 
-        final String fileName = (String) getIntent().getSerializableExtra("fileName");
+        fileName = (String) getIntent().getSerializableExtra("fileName");
 
-        final Integer imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
+        imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
         final Bitmap dicomFrame = DicomUtils.getFrame(imageNumber);
 
-        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageBitmap(dicomFrame);
 
         final Bitmap mutableBitmap = dicomFrame.copy(Bitmap.Config.ARGB_8888, true);
@@ -134,7 +137,7 @@ public class DicomViewActivity extends Activity {
             }
         });
 
-        FloatingActionButton segmentImageButton = (FloatingActionButton) findViewById(R.id.menu_segment);
+        final FloatingActionButton segmentImageButton = (FloatingActionButton) findViewById(R.id.menu_segment);
         segmentImageButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -151,13 +154,24 @@ public class DicomViewActivity extends Activity {
 
                 accumSegPath = new Path();
                 segPath = new Path();
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
 
                 segmentation.setImageWidth(dicomFrame.getWidth());
                 segmentation.setImageHeight(dicomFrame.getHeight());
-                // TODO: related seg could be a list, and shouldn't include segmentation.getType() segs
-                // TODO: new method in DbHelper to fo this
-                segmentation.setRelatedSeg(dbHelper.getSegmentation(fileName, imageNumber));
+
+                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
+                segmentation.setRelatedSegmentations(segmentations);
+
+                if (!segmentations.isEmpty()) {
+                    for (Segmentation segmentation: segmentations) {
+                        List<Point> points = segmentation.getPoints();
+                        Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
+                        canvas.drawPath(segPath, segPaint);
+                        view.invalidate();
+                    }
+                }
+
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -170,14 +184,15 @@ public class DicomViewActivity extends Activity {
 
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
-                        imageView.setOnTouchListener(null);
                         TextView textView = (TextView) findViewById(R.id.textView);
+                        textView.setText("");
 
                         if (segmentation.isValid()) {
                             // save segmentation
+                            imageView.setOnTouchListener(null);
                             Gson gson = new Gson();
                             String segmentationPointsString = gson.toJson(segmentation.getPoints());
-                            dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType().getValue(), segmentationPointsString);
+                            dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), segmentationPointsString);
                             textView.setText("");
                             showMenu();
                         } else {
@@ -241,13 +256,16 @@ public class DicomViewActivity extends Activity {
 
                 hideMenu();
 
-                List<Point> points = dbHelper.getSegmentation(fileName, imageNumber);
+                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
 
-                if (points != null) {
-                    segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                    segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
-                    canvas.drawPath(segPath, segPaint);
-                    view.invalidate();
+                if (!segmentations.isEmpty()) {
+                    for (Segmentation segmentation: segmentations) {
+                        List<Point> points = segmentation.getPoints();
+                        segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
+                        canvas.drawPath(segPath, segPaint);
+                        view.invalidate();
+                    }
                 }
 
                 Button doneButton = (Button) findViewById(R.id.done);
@@ -283,8 +301,16 @@ public class DicomViewActivity extends Activity {
                 segmentation.setType((SegmentationType)data.getSerializableExtra("segmentationType"));
             }
         }
-        TextView textView = (TextView) findViewById(R.id.textInfo);
-        textView.setText("Segmenting: " + segmentation.getType().getName());
+
+        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+        textInfo.setText("Segmenting: " + segmentation.getType().getName());
+
+        if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
+            TextView textView = (TextView) findViewById(R.id.textView);
+            textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+            imageView.setOnTouchListener(null);
+            showMenu();
+        }
     }
 
     private void hideMenu() {

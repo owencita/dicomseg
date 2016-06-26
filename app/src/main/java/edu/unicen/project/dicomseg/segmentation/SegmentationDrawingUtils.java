@@ -77,8 +77,9 @@ public class SegmentationDrawingUtils {
 
     public static int getColor() {
         if (COLOR_INDEX < colors.length) {
+            int color = COLOR_INDEX;
             COLOR_INDEX++;
-            return colors[COLOR_INDEX--];
+            return colors[color];
         } else {
             resetColor();
             return colors[COLOR_INDEX];

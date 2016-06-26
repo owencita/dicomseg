@@ -17,11 +17,13 @@ import java.util.List;
 import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
 import edu.unicen.project.dicomseg.contracts.DicomSegmentationContract;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
+import edu.unicen.project.dicomseg.segmentation.Segmentation;
+import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class DbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "NoteReader.db";
+    public static final String DATABASE_NAME = "Dicomseg.db";
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
@@ -227,22 +229,22 @@ public class DbHelper extends SQLiteOpenHelper {
         };
 
         Cursor cursor = db.query(
-            // The table to query
-            DicomSegmentationContract.Segmentation.TABLE_NAME,
-            // The columns to return
-            projection,
-            // The columns for the WHERE clause
-            DicomSegmentationContract.Segmentation.COLUMN_NAME_FILE_NAME + " = ? AND " +
-            DicomSegmentationContract.Segmentation.COLUMN_NAME_STUDY_UID + " = ? AND " +
-            DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID + " = ? AND " +
-            DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER + " = ?",
-            // The values for the WHERE clause
-            new String[] { fileName, DicomUtils.getStudyUID(),
-                    DicomUtils.getSeriesUID(),
-                    Integer.toString(imageNumber) },
-            null, // don't group the rows
-            null, // don't filter by row groups
-            null  // no sort order
+                // The table to query
+                DicomSegmentationContract.Segmentation.TABLE_NAME,
+                // The columns to return
+                projection,
+                // The columns for the WHERE clause
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_STUDY_UID + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER + " = ?",
+                // The values for the WHERE clause
+                new String[]{fileName, DicomUtils.getStudyUID(),
+                        DicomUtils.getSeriesUID(),
+                        Integer.toString(imageNumber)},
+                null, // don't group the rows
+                null, // don't filter by row groups
+                null  // no sort order
         );
 
         String jsonPoints = "";
@@ -260,6 +262,56 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return points;
+    }
+
+    public List<Segmentation> getSegmentations(String fileName, Integer imageNumber) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database will be returned
+        String[] projection = {
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE,
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS,
+        };
+
+        Cursor cursor = db.query(
+                // The table to query
+                DicomSegmentationContract.Segmentation.TABLE_NAME,
+                // The columns to return
+                projection,
+                // The columns for the WHERE clause
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_STUDY_UID + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID + " = ? AND " +
+                        DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER + " = ?",
+                // The values for the WHERE clause
+                new String[] { fileName, DicomUtils.getStudyUID(),
+                        DicomUtils.getSeriesUID(),
+                        Integer.toString(imageNumber) },
+                null, // don't group the rows
+                null, // don't filter by row groups
+                null  // no sort order
+        );
+
+        List<Segmentation> segmentations = new ArrayList<Segmentation>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                Segmentation segmentation = new Segmentation();
+                segmentation.setType(SegmentationType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE))));
+                String jsonPoints = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS));
+                if (jsonPoints != null) {
+                    List<Point> points = new ArrayList<Point>();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+                    points = gson.fromJson(jsonPoints, type);
+                    segmentation.setPoints(points);
+                }
+                segmentations.add(segmentation);
+            } while (cursor.moveToNext());
+        }
+
+        return segmentations;
     }
 
     public void insertGeneralNote(String fileName, Integer imageNumber, String text) {
@@ -304,7 +356,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 values);
     }
 
-    public void insertSegmentation(String fileName, Integer imageNumber, String segType, String points) {
+    public void insertSegmentation(String fileName, Integer imageNumber, SegmentationType segType, String points) {
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -314,7 +366,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER, imageNumber);
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_STUDY_UID, DicomUtils.getStudyUID());
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID, DicomUtils.getSeriesUID());
-        values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE, segType);
+        values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE, segType.toString());
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS, points);
 
         // Insert the new row, returning the primary key value of the new row

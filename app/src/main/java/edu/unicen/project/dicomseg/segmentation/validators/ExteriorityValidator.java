@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.unicen.project.dicomseg.polar.CartesianToPolarCalculator;
+import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class ExteriorityValidator implements SegmentationValidator {
@@ -24,22 +25,27 @@ public class ExteriorityValidator implements SegmentationValidator {
      * @return true if segmentation is outside the other one, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, List<Point> toCompare, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, List<Segmentation> toCompare, int imageWidth, int imageHeight) {
+        errors = new ArrayList<String>();
         if (!points.isEmpty()&&(!toCompare.isEmpty())) {
-            for (Point segPoint: points) {
-                PointF segPointF = CartesianToPolarCalculator.getPolarPoint(segPoint, imageWidth, imageHeight);
-                for (Point externalPoint: toCompare) {
-                    PointF externalPointF = CartesianToPolarCalculator.getPolarPoint(externalPoint, imageWidth, imageHeight);
-                    if ((segPointF.x + TOLERANCE) < externalPointF.x) {
-                        errors.add(SegmentationMessages.EXTERIORITY_ERROR);
-                        return Boolean.FALSE;
-                    } else {
-                        return Boolean.TRUE;
+            for (Segmentation segmentation: toCompare) {
+                // TODO: if segType is {a, b , c}
+                for (Point segPoint : points) {
+                    PointF segPointF = CartesianToPolarCalculator.getPolarPoint(segPoint, imageWidth, imageHeight);
+                    for (Point externalPoint : segmentation.getPoints()) {
+                        PointF externalPointF = CartesianToPolarCalculator.getPolarPoint(externalPoint, imageWidth, imageHeight);
+                        if ((segPointF.x + TOLERANCE) < externalPointF.x) {
+                            errors.add(segmentation.getType().getName() + ": " + SegmentationMessages.EXTERIORITY_ERROR);
+                            break;
+                        }
+                    }
+                    if (!errors.isEmpty()) {
+                        break;
                     }
                 }
             }
         }
-        return Boolean.FALSE;
+        return errors.isEmpty();
     }
 
     @Override

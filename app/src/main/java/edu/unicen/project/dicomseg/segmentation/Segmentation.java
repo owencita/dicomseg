@@ -13,18 +13,26 @@ public class Segmentation {
     private int imageWidth;
     private int imageHeight;
     private List<Point> points = new ArrayList<Point>();
-    private List<Point> relatedSeg;
+    private List<Segmentation> relatedSegmentations;
 
     public SegmentationType getType() {
         return type;
+    }
+
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public List<Segmentation> getRelatedSegmentations() {
+        return relatedSegmentations;
     }
 
     public void setType(SegmentationType type) {
         this.type = type;
     }
 
-    public List<Point> getPoints() {
-        return points;
+    public void setPoints(List<Point> points) {
+        this.points = points;
     }
 
     public void setImageWidth(int imageWidth) {
@@ -35,13 +43,13 @@ public class Segmentation {
         this.imageHeight = imageHeight;
     }
 
-    public void setRelatedSeg(List<Point> relatedSeg) {
-        this.relatedSeg = relatedSeg;
+    public void setRelatedSegmentations(List<Segmentation> relatedSegmentations) {
+        this.relatedSegmentations = relatedSegmentations;
     }
 
     public Boolean isValid() {
         for (SegmentationValidator validator: type.getValidators()) {
-            if (!validator.validate(points, relatedSeg, imageWidth, imageHeight)) {
+            if (!validator.validate(points, relatedSegmentations, imageWidth, imageHeight)) {
                 return Boolean.FALSE;
             }
         }
@@ -54,5 +62,14 @@ public class Segmentation {
             errors.addAll(validator.errors());
         }
         return errors;
+    }
+
+    public Boolean isContained(List<Segmentation> segmentations) {
+        for (Segmentation segmentation: segmentations) {
+            if (segmentation.getType().equals(this.type)) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 }
