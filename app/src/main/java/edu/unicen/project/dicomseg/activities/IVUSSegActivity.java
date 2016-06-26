@@ -17,19 +17,19 @@ public class IVUSSegActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ivusseg);
 
-        Button ivusLU = (Button) findViewById(R.id.ivusSeg);
-        ivusLU.setOnClickListener(new View.OnClickListener() {
+        Button ivusLI = (Button) findViewById(R.id.ivusLI);
+        ivusLI.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", SegmentationType.IVUS_LU);
+                returnIntent.putExtra("segmentationType", SegmentationType.IVUS_LI);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
 
-        Button ivusMA = (Button) findViewById(R.id.ivusSeg);
+        Button ivusMA = (Button) findViewById(R.id.ivusMA);
         ivusMA.setOnClickListener(new View.OnClickListener() {
 
             @Override

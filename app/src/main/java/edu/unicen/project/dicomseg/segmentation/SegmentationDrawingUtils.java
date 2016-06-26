@@ -1,14 +1,12 @@
 package edu.unicen.project.dicomseg.segmentation;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SegmentationDrawingUtils {
@@ -16,7 +14,7 @@ public class SegmentationDrawingUtils {
     private static final float TOUCH_TOLERANCE = 4;
     private static float mX, mY;
     private static final Paint paint = new Paint();
-    private static final List<Integer> colors = Arrays.asList(SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN);
+    private static final int[] colors = { SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN };
     private static int COLOR_INDEX = 0;
 
     public static Paint getPaint(int width, int height, int color) {
@@ -78,12 +76,12 @@ public class SegmentationDrawingUtils {
     }
 
     public static int getColor() {
-        if (COLOR_INDEX < colors.size()) {
+        if (COLOR_INDEX < colors.length) {
             COLOR_INDEX++;
-            return COLOR_INDEX--;
+            return colors[COLOR_INDEX--];
         } else {
             resetColor();
-            return COLOR_INDEX;
+            return colors[COLOR_INDEX];
         }
     }
 

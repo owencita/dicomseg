@@ -10,8 +10,8 @@
     <string name="title_activity_point_note">PointNoteActivity</string>
     <string name="title_activity_select_segmentation">SelectSegmentation</string>
     <string name="button_ivus">IVUS</string>
-    <string name="button_ivusLU">LU (Lumen Border)</string>
-    <string name="button_ivusMA">MA (Media-Adventitia Border)</string>
+    <string name="button_ivusLI">LI (Lumen-Intima)</string>
+    <string name="button_ivusMA">MA (Media-Adventitia)</string>
     <string name="button_seg2">Seg2</string>
     <string name="button_seg3">Seg3</string>
     <string name="done">Done</string>

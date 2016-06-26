@@ -13,7 +13,7 @@ public class Segmentation {
     private int imageWidth;
     private int imageHeight;
     private List<Point> points = new ArrayList<Point>();
-    private Segmentation relatedSeg;
+    private List<Point> relatedSeg;
 
     public SegmentationType getType() {
         return type;
@@ -35,9 +35,13 @@ public class Segmentation {
         this.imageHeight = imageHeight;
     }
 
+    public void setRelatedSeg(List<Point> relatedSeg) {
+        this.relatedSeg = relatedSeg;
+    }
+
     public Boolean isValid() {
         for (SegmentationValidator validator: type.getValidators()) {
-            if (!validator.validate(points, relatedSeg.getPoints(), imageWidth, imageHeight)) {
+            if (!validator.validate(points, relatedSeg, imageWidth, imageHeight)) {
                 return Boolean.FALSE;
             }
         }

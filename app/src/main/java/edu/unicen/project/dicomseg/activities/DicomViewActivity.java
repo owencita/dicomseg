@@ -153,9 +153,11 @@ public class DicomViewActivity extends Activity {
                 segPath = new Path();
                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
 
-                segmentation = new Segmentation();
                 segmentation.setImageWidth(dicomFrame.getWidth());
                 segmentation.setImageHeight(dicomFrame.getHeight());
+                // TODO: related seg could be a list, and shouldn't include segmentation.getType() segs
+                // TODO: new method in DbHelper to fo this
+                segmentation.setRelatedSeg(dbHelper.getSegmentation(fileName, imageNumber));
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -239,13 +241,9 @@ public class DicomViewActivity extends Activity {
 
                 hideMenu();
 
-                String jsonPoints = dbHelper.getSegmentation(fileName, imageNumber);
+                List<Point> points = dbHelper.getSegmentation(fileName, imageNumber);
 
-                if (jsonPoints != null) {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Point>>() {}.getType();
-                    List<Point> points = gson.fromJson(jsonPoints, type);
-
+                if (points != null) {
                     segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
                     segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
                     canvas.drawPath(segPath, segPaint);
@@ -285,6 +283,8 @@ public class DicomViewActivity extends Activity {
                 segmentation.setType((SegmentationType)data.getSerializableExtra("segmentationType"));
             }
         }
+        TextView textView = (TextView) findViewById(R.id.textInfo);
+        textView.setText("Segmenting: " + segmentation.getType().getName());
     }
 
     private void hideMenu() {

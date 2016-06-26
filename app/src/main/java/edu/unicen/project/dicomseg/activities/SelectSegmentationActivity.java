@@ -24,10 +24,8 @@ public class SelectSegmentationActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", segmentationType);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                Intent intent = new Intent(v.getContext(), IVUSSegActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -37,6 +35,10 @@ public class SelectSegmentationActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 segmentationType = (SegmentationType) data.getSerializableExtra("segmentationType");
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("segmentationType", segmentationType);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         }
     }

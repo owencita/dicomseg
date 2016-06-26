@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Point;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,7 +217,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return points;
     }
 
-    public String getSegmentation(String fileName, Integer imageNumber) {
+    public List<Point> getSegmentation(String fileName, Integer imageNumber) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -241,13 +245,18 @@ public class DbHelper extends SQLiteOpenHelper {
             null  // no sort order
         );
 
-        String points = "";
+        String jsonPoints = "";
+        List<Point> points = null;
 
         if (cursor.getCount() > 0 ) {
             cursor.moveToFirst();
-            points = cursor.getString(
-                    cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS)
-            );
+            jsonPoints = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS));
+        }
+
+        if (jsonPoints != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+            points = gson.fromJson(jsonPoints, type);
         }
 
         return points;

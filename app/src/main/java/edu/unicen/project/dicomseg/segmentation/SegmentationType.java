@@ -10,19 +10,25 @@ import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator
 
 public enum SegmentationType {
 
-    IVUS_LU("ivus-lu", Arrays.asList(new ClosureValidator(), new ExteriorityValidator())),
-    IVUS_MA("ivus-ma", Arrays.asList(new ClosureValidator(), new InteriorityValidator()));
+    IVUS_LI("ivus-li", "IVUS LI (Lumen-Intima)", Arrays.asList(new ClosureValidator(), new ExteriorityValidator())),
+    IVUS_MA("ivus-ma", "IVUS MA (Media-Adventitia)", Arrays.asList(new ClosureValidator(), new InteriorityValidator()));
 
     private String value;
+    private String name;
     private List<SegmentationValidator> validators;
 
-    SegmentationType(String value, List<SegmentationValidator> validators) {
+    SegmentationType(String value, String name, List<SegmentationValidator> validators) {
         this.value = value;
+        this.name = name;
         this.validators = validators;
     }
 
     public String getValue() {
         return value;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<SegmentationValidator> getValidators() {
