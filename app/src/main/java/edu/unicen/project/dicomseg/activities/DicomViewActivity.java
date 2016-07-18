@@ -175,33 +175,52 @@ public class DicomViewActivity extends Activity {
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
+                Button clearButton = (Button) findViewById(R.id.clear);
+                clearButton.setVisibility(View.VISIBLE);
 
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Button doneButton = (Button) findViewById(R.id.done);
-                        doneButton.setVisibility(View.GONE);
-
-                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
+                        Button clearButton = (Button) findViewById(R.id.clear);
                         TextView textView = (TextView) findViewById(R.id.textView);
-                        textView.setText("");
 
                         if (segmentation.isValid()) {
-                            // save segmentation
+                            // hide done, clear buttons, messages and clear canvas
+                            doneButton.setVisibility(View.GONE);
+                            clearButton.setVisibility(View.GONE);
+                            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                            textView.setText("");
                             imageView.setOnTouchListener(null);
+                            // save segmentation
                             Gson gson = new Gson();
                             String segmentationPointsString = gson.toJson(segmentation.getPoints());
                             dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), segmentationPointsString);
-                            textView.setText("");
                             showMenu();
                         } else {
+                            // show validation error
                             StringBuffer sb = new StringBuffer();
-                            for (String error: segmentation.errors()) {
+                            for (String error : segmentation.errors()) {
                                 sb.append(error + "\n\r");
                             }
                             textView.setText(sb.toString());
                         }
+                    }
+                });
+
+                clearButton.setOnClickListener(new View.OnClickListener() {
+                    // clear canvas and reset path
+                    @Override
+                    public void onClick(View view) {
+                        TextView textView = (TextView) findViewById(R.id.textView);
+                        textView.setText("");
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        inputStart = null;
+                        inputEnd = null;
+                        previousPathAdded.set(false);
+                        accumSegPath = new Path();
+                        segPath = new Path();
+                        segmentation.clearPoints();
                     }
                 });
 
@@ -299,17 +318,16 @@ public class DicomViewActivity extends Activity {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 segmentation.setType((SegmentationType)data.getSerializableExtra("segmentationType"));
+                TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                textInfo.setText("Segmenting: " + segmentation.getType().getName());
+
+                if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
+                    TextView textView = (TextView) findViewById(R.id.textView);
+                    textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+                    imageView.setOnTouchListener(null);
+                    showMenu();
+                }
             }
-        }
-
-        TextView textInfo = (TextView) findViewById(R.id.textInfo);
-        textInfo.setText("Segmenting: " + segmentation.getType().getName());
-
-        if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
-            TextView textView = (TextView) findViewById(R.id.textView);
-            textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
-            imageView.setOnTouchListener(null);
-            showMenu();
         }
     }
 

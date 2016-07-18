@@ -12,7 +12,7 @@ import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class ExteriorityValidator implements SegmentationValidator {
 
-    private static final int TOLERANCE = 8;
+    private static final int TOLERANCE = 9;
     private static List<String> errors = new ArrayList<String>();
 
     /**
@@ -30,15 +30,21 @@ public class ExteriorityValidator implements SegmentationValidator {
         if (!points.isEmpty()&&(!toCompare.isEmpty())) {
             for (Segmentation segmentation: toCompare) {
                 // TODO: if segType is {a, b , c}
-                for (Point segPoint : points) {
-                    PointF segPointF = CartesianToPolarCalculator.getPolarPoint(segPoint, imageWidth, imageHeight);
-                    for (Point externalPoint : segmentation.getPoints()) {
-                        PointF externalPointF = CartesianToPolarCalculator.getPolarPoint(externalPoint, imageWidth, imageHeight);
-                        if ((segPointF.x + TOLERANCE) < externalPointF.x) {
-                            errors.add(segmentation.getType().getName() + ": " + SegmentationMessages.EXTERIORITY_ERROR);
+                List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
+                List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentation.getPoints(), imageWidth, imageHeight);
+
+                for (PointF polarPoint : polarPoints) {
+                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segPolarPoints, polarPoint.y);
+
+                    if (sameDegreePoints.size() == 2) {
+                        PointF segInfPoint = sameDegreePoints.get(0);
+                        PointF segSupPoint = sameDegreePoints.get(1);
+                        if ((polarPoint.x < segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
+                            errors.add(SegmentationMessages.EXTERIORITY_ERROR + " " + segmentation.getType().getName());
                             break;
                         }
                     }
+
                     if (!errors.isEmpty()) {
                         break;
                     }

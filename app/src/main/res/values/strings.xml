@@ -15,5 +15,6 @@
     <string name="button_seg2">Seg2</string>
     <string name="button_seg3">Seg3</string>
     <string name="done">Done</string>
+    <string name="clear">Clear</string>
     <string name="title_activity_ivusseg">IVUSSegActivity</string>
 </resources>

@@ -35,6 +35,10 @@ public class Segmentation {
         this.points = points;
     }
 
+    public void clearPoints() {
+        this.points = new ArrayList<Point>();
+    }
+
     public void setImageWidth(int imageWidth) {
         this.imageWidth = imageWidth;
     }
