@@ -11,22 +11,22 @@ import java.util.List;
 
 public class SegmentationDrawingUtils {
 
+    private static final int STROKE_WIDTH = 512;
+    private static final int STROKE_FACTOR = 5;
     private static final float TOUCH_TOLERANCE = 4;
     private static float mX, mY;
     private static final Paint paint = new Paint();
     private static final int[] colors = { SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN };
     private static int COLOR_INDEX = 0;
 
-    public static Paint getPaint(int width, int height, int color) {
+    public static Paint getPaint(int width, int color) {
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        // TODO: scale stroke according to the image size
-        paint.setStrokeWidth(8);
-
+        paint.setStrokeWidth(((float)STROKE_FACTOR / STROKE_WIDTH) * width);
         return paint;
     }
 

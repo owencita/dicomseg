@@ -165,13 +165,13 @@ public class DicomViewActivity extends Activity {
                     for (Segmentation segmentation: segmentations) {
                         List<Point> points = segmentation.getPoints();
                         Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
+                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                         canvas.drawPath(segPath, segPaint);
                         view.invalidate();
                     }
                 }
 
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
 
                 Button doneButton = (Button) findViewById(R.id.done);
                 doneButton.setVisibility(View.VISIBLE);
@@ -281,7 +281,7 @@ public class DicomViewActivity extends Activity {
                     for (Segmentation segmentation: segmentations) {
                         List<Point> points = segmentation.getPoints();
                         segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), dicomFrame.getHeight(), SegmentationDrawingUtils.getColor());
+                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                         canvas.drawPath(segPath, segPaint);
                         view.invalidate();
                     }

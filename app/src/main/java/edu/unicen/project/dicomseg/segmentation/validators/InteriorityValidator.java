@@ -12,7 +12,6 @@ import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class InteriorityValidator implements SegmentationValidator {
 
-    private static final int TOLERANCE = 8;
     private static List<String> errors = new ArrayList<String>();
 
     /**
