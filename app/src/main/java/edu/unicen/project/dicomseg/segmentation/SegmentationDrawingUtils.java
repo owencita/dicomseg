@@ -12,10 +12,12 @@ import java.util.List;
 public class SegmentationDrawingUtils {
 
     private static final int STROKE_WIDTH = 512;
-    private static final int STROKE_FACTOR = 5;
+    private static final int LINE_STROKE_FACTOR = 5;
+    private static final int POINT_STROKE_FACTOR = 8;
     private static final float TOUCH_TOLERANCE = 4;
     private static float mX, mY;
     private static final Paint paint = new Paint();
+    private static final Paint notePointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final int[] colors = { SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN };
     private static int COLOR_INDEX = 0;
 
@@ -26,8 +28,18 @@ public class SegmentationDrawingUtils {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(((float)STROKE_FACTOR / STROKE_WIDTH) * width);
+        paint.setStrokeWidth(((float)LINE_STROKE_FACTOR / STROKE_WIDTH) * width);
         return paint;
+    }
+
+    public static Paint getPaintForPointNote() {
+        notePointPaint.setColor(SegmentationColors.BLUE);
+        notePointPaint.setStyle(Paint.Style.FILL);
+        return notePointPaint;
+    }
+
+    public static float getRadiusForPointNote(int width) {
+        return ((float)POINT_STROKE_FACTOR / STROKE_WIDTH) * width;
     }
 
     public static Point setPathFromTouchEvent(Path path, Canvas canvas, View view, MotionEvent event, int x, int y) {

@@ -1,5 +1,7 @@
 package edu.unicen.project.dicomseg.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,6 +45,9 @@ public class PointNoteActivity extends AppCompatActivity {
                     mDbHelper.updatePointNote(editText.getText().toString(), fileName, imageNumber, x, y);
                 }
 
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("refreshPointNotes", Boolean.TRUE);
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -52,8 +57,9 @@ public class PointNoteActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: refresh screen after new point note is added
-                view.invalidate();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("refreshPointNotes", Boolean.FALSE);
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });

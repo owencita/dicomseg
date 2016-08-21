@@ -31,7 +31,6 @@ import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
-import edu.unicen.project.dicomseg.segmentation.SegmentationColors;
 import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
@@ -52,6 +51,9 @@ public class DicomViewActivity extends Activity {
     private Integer imageNumber;
     private ImageView imageView;
 
+    private Bitmap dicomFrame;
+    private Canvas canvas;
+
     private Segmentation segmentation = new Segmentation();
 
     @Override
@@ -65,7 +67,7 @@ public class DicomViewActivity extends Activity {
         fileName = (String) getIntent().getSerializableExtra("fileName");
 
         imageNumber = (Integer) getIntent().getSerializableExtra("imageNumber");
-        final Bitmap dicomFrame = DicomUtils.getFrame(imageNumber);
+        dicomFrame = DicomUtils.getFrame(imageNumber);
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageBitmap(dicomFrame);
@@ -73,7 +75,7 @@ public class DicomViewActivity extends Activity {
         final Bitmap mutableBitmap = dicomFrame.copy(Bitmap.Config.ARGB_8888, true);
         final ImageView mutableImageView = (ImageView) findViewById(R.id.mutableImageView);
         mutableImageView.setImageBitmap(mutableBitmap);
-        final Canvas canvas = new Canvas(mutableBitmap);
+        canvas = new Canvas(mutableBitmap);
 
         mutableImageView.bringToFront();
         imageView.invalidate();
@@ -93,22 +95,13 @@ public class DicomViewActivity extends Activity {
         pointNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
-                menu.hideMenu(true);
+                hideMenu();
+                TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                textInfo.setText("Adding point note");
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText("Tap the image point where you want to add a note");
 
-                List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
-
-                for (Point point : pointList) {
-                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                    paint.setColor(SegmentationColors.BLUE);
-                    paint.setStyle(Paint.Style.FILL);
-                    // TODO: scale circle accordingly (to the image, which is automatically scaled to fit screen)
-                    canvas.drawCircle(point.x, point.y, 8, paint);
-                }
-
-                view.invalidate();
+                refreshPointNote(canvas, dicomFrame);
 
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -124,7 +117,7 @@ public class DicomViewActivity extends Activity {
                             intent.putExtra("imageNumber", imageNumber);
                             intent.putExtra("x", x);
                             intent.putExtra("y", y);
-                            view.getContext().startActivity(intent);
+                            startActivityForResult(intent, 1);
 
                             return true;
                         } else {
@@ -132,8 +125,6 @@ public class DicomViewActivity extends Activity {
                         }
                     }
                 });
-
-                // TODO: refresh screen to draw point notes after a new point note is created/updated
             }
         });
 
@@ -317,18 +308,39 @@ public class DicomViewActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                segmentation.setType((SegmentationType)data.getSerializableExtra("segmentationType"));
-                TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                textInfo.setText("Segmenting: " + segmentation.getType().getName());
+                SegmentationType segType = (SegmentationType)data.getSerializableExtra("segmentationType");
+                if (segType != null) {
+                    segmentation.setType(segType);
+                    TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                    textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
-                if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
-                    TextView textView = (TextView) findViewById(R.id.textView);
-                    textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
-                    imageView.setOnTouchListener(null);
-                    showMenu();
+                    if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
+                        TextView textView = (TextView) findViewById(R.id.textView);
+                        textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+                        imageView.setOnTouchListener(null);
+                        showMenu();
+                    }
+                }
+                Boolean refreshView = (Boolean)data.getSerializableExtra("refreshPointNotes");
+                if (refreshView) {
+                    refreshPointNote(canvas, dicomFrame);
                 }
             }
         }
+    }
+
+    private void refreshPointNote(Canvas canvas, Bitmap dicomFrame) {
+
+        List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
+
+        for (Point point : pointList) {
+            Paint paint = SegmentationDrawingUtils.getPaintForPointNote();
+            float radius = SegmentationDrawingUtils.getRadiusForPointNote(dicomFrame.getWidth());
+            canvas.drawCircle(point.x, point.y, radius, paint);
+        }
+
+        ImageView view = (ImageView) findViewById(R.id.imageView);
+        view.invalidate();
     }
 
     private void hideMenu() {
