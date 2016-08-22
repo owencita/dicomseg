@@ -13,6 +13,8 @@ import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 
 public class PointNoteActivity extends AppCompatActivity {
 
+    public static final String TAG = "PointNoteActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,7 @@ public class PointNoteActivity extends AppCompatActivity {
                 }
 
                 Intent returnIntent = new Intent();
+                returnIntent.putExtra("activity", TAG);
                 returnIntent.putExtra("refreshPointNotes", Boolean.TRUE);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
@@ -58,12 +61,21 @@ public class PointNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
+                returnIntent.putExtra("activity", TAG);
                 returnIntent.putExtra("refreshPointNotes", Boolean.FALSE);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("activity", TAG);
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
     }
 
 }

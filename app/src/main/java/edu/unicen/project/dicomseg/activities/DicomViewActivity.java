@@ -287,6 +287,8 @@ public class DicomViewActivity extends Activity {
                         Button doneButton = (Button) findViewById(R.id.done);
                         doneButton.setVisibility(View.GONE);
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                        textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
                         showMenu();
                     }
                 });
@@ -306,26 +308,47 @@ public class DicomViewActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                SegmentationType segType = (SegmentationType)data.getSerializableExtra("segmentationType");
-                if (segType != null) {
-                    segmentation.setType(segType);
-                    TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                    textInfo.setText("Segmenting: " + segmentation.getType().getName());
+        switch (requestCode) {
+            case 1:
+                String activity = (String) data.getSerializableExtra("activity");
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        switch (activity) {
+                            case SelectSegmentationActivity.TAG:
+                                SegmentationType segType = (SegmentationType) data.getSerializableExtra("segmentationType");
+                                if (segType != null) {
+                                    segmentation.setType(segType);
+                                    TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                    textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
-                    if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
-                        TextView textView = (TextView) findViewById(R.id.textView);
-                        textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
-                        imageView.setOnTouchListener(null);
-                        showMenu();
-                    }
+                                    if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
+                                        TextView textView = (TextView) findViewById(R.id.textView);
+                                        textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+                                        imageView.setOnTouchListener(null);
+                                        showMenu();
+                                    }
+                                }
+                            break;
+                            case PointNoteActivity.TAG:
+                                Boolean refreshView = (Boolean) data.getSerializableExtra("refreshPointNotes");
+                                if ((refreshView != null) && (refreshView)) {
+                                    refreshPointNote(canvas, dicomFrame);
+                                }
+                            break;
+                        }
+                    break;
+                    case Activity.RESULT_CANCELED:
+                        switch (activity) {
+                            case SelectSegmentationActivity.TAG:
+                                Button doneButton = (Button) findViewById(R.id.done);
+                                Button clearButton = (Button) findViewById(R.id.clear);
+                                doneButton.setVisibility(View.GONE);
+                                clearButton.setVisibility(View.GONE);
+                                showMenu();
+                            break;
+                        }
                 }
-                Boolean refreshView = (Boolean)data.getSerializableExtra("refreshPointNotes");
-                if (refreshView) {
-                    refreshPointNote(canvas, dicomFrame);
-                }
-            }
+            break;
         }
     }
 

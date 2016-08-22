@@ -12,6 +12,7 @@ import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
 public class SelectSegmentationActivity extends AppCompatActivity {
 
+    public static final String TAG = "SelectSegmentationActivity";
     private SegmentationType segmentationType;
 
     @Override
@@ -33,14 +34,23 @@ public class SelectSegmentationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
+            Intent returnIntent = new Intent();
             if (resultCode == Activity.RESULT_OK) {
                 segmentationType = (SegmentationType) data.getSerializableExtra("segmentationType");
-                Intent returnIntent = new Intent();
                 returnIntent.putExtra("segmentationType", segmentationType);
+                returnIntent.putExtra("activity", TAG);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("activity", TAG);
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
     }
 
 }

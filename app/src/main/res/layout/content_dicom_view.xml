@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_dicom_view"
     tools:context="edu.unicen.project.dicomseg.activities.DicomViewActivity">
 
-    <TextView android:text="Press + to display options"
+    <TextView android:text="@string/dicomview_textinfo_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textInfo" />
