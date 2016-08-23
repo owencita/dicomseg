@@ -11,7 +11,11 @@ import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator
 public enum SegmentationType {
 
     IVUS_LI("ivus-li", "IVUS LI (Lumen-Intima)", Arrays.asList(new ClosureValidator(), new InteriorityValidator())),
-    IVUS_MA("ivus-ma", "IVUS MA (Media-Adventitia)", Arrays.asList(new ClosureValidator(), new ExteriorityValidator()));
+    IVUS_MA("ivus-ma", "IVUS MA (Media-Adventitia)", Arrays.asList(new ClosureValidator(), new ExteriorityValidator())),
+    // TODO: replace InteriorityValidator -> SelectablePoleInteriorityValidator
+    // TODO: replace ExteriorityValidator -> SelectablePoleExteriorityValidator
+    INNER_SELECTABLE_POLE("selectable-pole", "Inner Selectable Pole Segmentation", Arrays.asList(new ClosureValidator(), new InteriorityValidator())),
+    OUTER_SELECTABLE_POLE("selectable-pole", "Outer Selectable Pole Segmentation", Arrays.asList(new ClosureValidator(), new ExteriorityValidator()));
 
     private String value;
     private String name;

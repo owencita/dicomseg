@@ -4,34 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="edu.unicen.project.dicomseg.activities.SelectSegmentation">
+    tools:context="edu.unicen.project.dicomseg.activities.SelectablePoleSegActivity">
 
-    <include layout="@layout/content_select_segmentation" />
+    <include layout="@layout/content_selectable_pole_seg" />
 
-    <LinearLayout android:id="@+id/select_seg"
+    <LinearLayout android:id="@+id/select_selectablepoleseg"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:orientation="vertical">
 
-        <Button android:id="@+id/ivusSeg"
-            android:text="@string/button_ivus"
+        <Button android:id="@+id/innerSelectablePole"
+            android:text="@string/button_innerSelectablePole"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/buttons"/>
 
-        <Button android:id="@+id/selectablePole"
-            android:text="@string/button_selectablePole"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/buttons"/>
-
-        <Button android:id="@+id/seg3"
-            android:text="@string/button_seg3"
+        <Button android:id="@+id/outerSelectablePole"
+            android:text="@string/button_outerSelectablePole"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

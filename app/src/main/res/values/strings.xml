@@ -1,21 +1,48 @@
 <resources>
+
+    <!-- Application -->
     <string name="app_name">DICOM Segmentation</string>
     <string name="action_settings">Settings</string>
+
+    <!-- FileChooserActivity -->
     <string name="title_activity_file_chooser">FileChooserActivity</string>
-    <string name="title_activity_dicom_view">DicomViewActivity</string>
+
+    <!-- SelectDicomImageActivity -->
     <string name="title_activity_select_dicom_image">SelectDicomImageActivity</string>
+
+    <!-- NotesActivity -->
     <string name="title_activity_notes">NotesActivity</string>
-    <string name="button_ok">OK</string>
-    <string name="button_cancel">Cancel</string>
+
+    <!-- PointNoteActivity -->
     <string name="title_activity_point_note">PointNoteActivity</string>
+
+    <!-- DicomViewActivity -->
+    <string name="title_activity_dicom_view">DicomViewActivity</string>
+    <string name="dicomview_textinfo_default">Press + to display options</string>
+
+    <!-- SelectSegmentationActivity -->
     <string name="title_activity_select_segmentation">SelectSegmentation</string>
+    <string name="label_activity_select_segmentation">Select segmentation type</string>
     <string name="button_ivus">IVUS</string>
+    <string name="button_selectablePole">Selectable Pole</string>
+    <string name="button_seg3">Seg3</string>
+
+    <!-- IVUSSegActivity -->
+    <string name="title_activity_ivusseg">IVUSSegActivity</string>
+    <string name="label_activity_ivusseg">Select IVUS segmentation type</string>
     <string name="button_ivusLI">LI (Lumen-Intima)</string>
     <string name="button_ivusMA">MA (Media-Adventitia)</string>
-    <string name="button_seg2">Seg2</string>
-    <string name="button_seg3">Seg3</string>
+
+    <!-- SelectablePoleSegActivity -->
+    <string name="title_activity_selectable_pole_seg">SelectablePoleSegActivity</string>
+    <string name="label_activity_selectable_pole_seg">Select selectable pole segmentation type</string>
+    <string name="button_innerSelectablePole">Inner Selectable Pole</string>
+    <string name="button_outerSelectablePole">Outer Selectable Pole</string>
+
+    <!-- Buttons -->
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="clear">Clear</string>
-    <string name="title_activity_ivusseg">IVUSSegActivity</string>
-    <string name="dicomview_textinfo_default">Press + to display options</string>
+
 </resources>

@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_select_segmentation"
     tools:context="edu.unicen.project.dicomseg.activities.SelectSegmentation">
 
-    <TextView android:text="Select segmentation type"
+    <TextView android:text="@string/label_activity_select_segmentation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
