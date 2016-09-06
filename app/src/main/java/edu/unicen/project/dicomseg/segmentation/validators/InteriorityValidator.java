@@ -27,19 +27,19 @@ public class InteriorityValidator implements SegmentationValidator {
     public Boolean validate(List<Point> points, List<Segmentation> toCompare, int imageWidth, int imageHeight) {
         errors = new ArrayList<String>();
         if (!points.isEmpty()&&(!toCompare.isEmpty())) {
-            for (Segmentation segmentation: toCompare) {
-                // TODO: if segType is {a, b , c}
+            for (Segmentation segmentationToCompare: toCompare) {
+
                 List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
-                List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentation.getPoints(), imageWidth, imageHeight);
+                List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentationToCompare.getPoints(), imageWidth, imageHeight);
 
                 for (PointF polarPoint : polarPoints) {
-                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segPolarPoints, polarPoint.y);
+                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
 
                     if (sameDegreePoints.size() == 2) {
                         PointF segInfPoint = sameDegreePoints.get(0);
                         PointF segSupPoint = sameDegreePoints.get(1);
                         if ((polarPoint.x > segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
-                            errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + segmentation.getType().getName());
+                            errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + segmentationToCompare.getType().getName());
                             break;
                         }
                     }

@@ -36,6 +36,13 @@ public class CartesianToPolarCalculator {
         return polarPoints;
     }
 
+    /**
+     * Returns the closest to 'degress' points from a list of polar points.
+     *
+     * @param points The list of polar points to get the closest to 'degree' points from
+     * @param degrees The degrees to compare
+     * @return
+     */
     public static List<PointF> getClosestDegreePoints(List<PointF> points, Float degrees) {
 
         List<PointF> closestDegrees = new ArrayList<PointF>();
@@ -46,16 +53,15 @@ public class CartesianToPolarCalculator {
                 supDegrees.add(point);
             }
         }
+
+        // From all superior (close to 'degree') points, pick the one with shortest 'distance'
         int minIndex = 0;
-        if (supDegrees.size() > 1) {
-            List<Float> closeDistance = new ArrayList<Float>();
-            for (PointF point: supDegrees) {
-                closeDistance.add(point.x);
+        if (!supDegrees.isEmpty()) {
+            if (supDegrees.size() > 1) {
+                minIndex = supDegrees.indexOf(Collections.min(supDegrees, new PolarPointDistanceComparator()));
             }
-            // TODO: min is returning -1 so it crashes for this scenario
-            minIndex = supDegrees.indexOf(Collections.min(closeDistance));
+            closestDegrees.add(supDegrees.get(minIndex));
         }
-        closestDegrees.add(supDegrees.get(minIndex));
 
         List<PointF> infDegrees = new ArrayList<PointF>();
         for (PointF point: points) {
@@ -63,16 +69,15 @@ public class CartesianToPolarCalculator {
                 infDegrees.add(point);
             }
         }
+
+        // From all inferior (close to 'degree') points, pick the one with shortest 'distance'
         minIndex = 0;
-        if (infDegrees.size() > 1) {
-            List<Float> closeDistance = new ArrayList<Float>();
-            for (PointF point: infDegrees) {
-                closeDistance.add(point.x);
+        if (!infDegrees.isEmpty()) {
+            if (infDegrees.size() > 1) {
+                minIndex = infDegrees.indexOf(Collections.min(infDegrees, new PolarPointDistanceComparator()));
             }
-            // TODO: min is returning -1 so it crashes for this scenario
-            minIndex = infDegrees.indexOf(Collections.min(closeDistance));
+            closestDegrees.add(infDegrees.get(minIndex));
         }
-        closestDegrees.add(infDegrees.get(minIndex));
 
         return closestDegrees;
     }

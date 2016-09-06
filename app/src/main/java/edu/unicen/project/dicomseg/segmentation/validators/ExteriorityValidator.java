@@ -27,19 +27,19 @@ public class ExteriorityValidator implements SegmentationValidator {
     public Boolean validate(List<Point> points, List<Segmentation> toCompare, int imageWidth, int imageHeight) {
         errors = new ArrayList<String>();
         if (!points.isEmpty()&&(!toCompare.isEmpty())) {
-            for (Segmentation segmentation: toCompare) {
-                // TODO: if segType is {a, b , c}
-                List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
-                List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentation.getPoints(), imageWidth, imageHeight);
+            for (Segmentation segmentationToCompare: toCompare) {
 
-                for (PointF polarPoint : polarPoints) {
-                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segPolarPoints, polarPoint.y);
+                List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
+                List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentationToCompare.getPoints(), imageWidth, imageHeight);
+
+                for (PointF polarPoint : segPolarPoints) {
+                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
 
                     if (sameDegreePoints.size() == 2) {
                         PointF segInfPoint = sameDegreePoints.get(0);
                         PointF segSupPoint = sameDegreePoints.get(1);
                         if ((polarPoint.x < segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
-                            errors.add(SegmentationMessages.EXTERIORITY_ERROR + " " + segmentation.getType().getName());
+                            errors.add(SegmentationMessages.EXTERIORITY_ERROR + " " + segmentationToCompare.getType().getName());
                             break;
                         }
                     }
