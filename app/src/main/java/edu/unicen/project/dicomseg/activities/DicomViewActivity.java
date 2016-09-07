@@ -182,6 +182,8 @@ public class DicomViewActivity extends Activity {
                             clearButton.setVisibility(View.GONE);
                             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                             textView.setText("");
+                            TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                            textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
                             imageView.setOnTouchListener(null);
                             // save segmentation
                             Gson gson = new Gson();
@@ -325,16 +327,34 @@ public class DicomViewActivity extends Activity {
                                         TextView textView = (TextView) findViewById(R.id.textView);
                                         textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
                                         imageView.setOnTouchListener(null);
-                                        showMenu();
+                                        Button doneButton = (Button) findViewById(R.id.done);
+                                        Button clearButton = (Button) findViewById(R.id.clear);
+                                        doneButton.setVisibility(View.GONE);
+                                        clearButton.setVisibility(View.GONE);
+                                        Button okButton = (Button) findViewById(R.id.ok);
+                                        okButton.setVisibility(View.VISIBLE);
+                                        okButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Button okButton = (Button) findViewById(R.id.ok);
+                                                okButton.setVisibility(View.GONE);
+                                                TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                                textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
+                                                TextView textView = (TextView) findViewById(R.id.textView);
+                                                textView.setText("");
+                                                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                                                showMenu();
+                                            }
+                                        });
                                     }
                                 }
-                            break;
+                                break;
                             case PointNoteActivity.TAG:
                                 Boolean refreshView = (Boolean) data.getSerializableExtra("refreshPointNotes");
                                 if ((refreshView != null) && (refreshView)) {
                                     refreshPointNote(canvas, dicomFrame);
                                 }
-                            break;
+                                break;
                         }
                     break;
                     case Activity.RESULT_CANCELED:
