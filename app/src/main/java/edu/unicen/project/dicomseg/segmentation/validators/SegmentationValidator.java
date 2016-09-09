@@ -8,7 +8,7 @@ import edu.unicen.project.dicomseg.segmentation.Segmentation;
 
 public interface SegmentationValidator {
 
-    Boolean validate(List<Point> points, List<Segmentation> toCompare, int imageWidth, int imageHeight);
+    Boolean validate(List<Point> points, Segmentation toCompare, int imageWidth, int imageHeight);
 
     List<String> errors();
 }

@@ -22,7 +22,7 @@ public class ClosureValidator implements SegmentationValidator {
      * @return true if the segmentation has closure, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, List<Segmentation> relatedSegs, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, Segmentation toCompare, int imageWidth, int imageHeight) {
         errors = new ArrayList<String>();
         if (!points.isEmpty()) {
             Point start = points.get(0);

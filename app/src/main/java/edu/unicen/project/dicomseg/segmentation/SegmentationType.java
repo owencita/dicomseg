@@ -19,7 +19,15 @@ public enum SegmentationType {
 
     private String value;
     private String name;
+    private SegmentationType related;
     private List<SegmentationValidator> validators;
+
+    static {
+        IVUS_LI.related = IVUS_MA;
+        IVUS_MA.related = IVUS_LI;
+        INNER_SELECTABLE_POLE.related = OUTER_SELECTABLE_POLE;
+        OUTER_SELECTABLE_POLE.related = INNER_SELECTABLE_POLE;
+    }
 
     SegmentationType(String value, String name, List<SegmentationValidator> validators) {
         this.value = value;
@@ -33,6 +41,10 @@ public enum SegmentationType {
 
     public String getName() {
         return name;
+    }
+
+    public SegmentationType getRelated(){
+        return this.related;
     }
 
     public List<SegmentationValidator> getValidators() {

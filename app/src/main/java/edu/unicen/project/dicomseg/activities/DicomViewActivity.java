@@ -34,6 +34,7 @@ import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationDrawingUtils;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
+import edu.unicen.project.dicomseg.segmentation.SegmentationUtils;
 
 public class DicomViewActivity extends Activity {
 
@@ -149,25 +150,12 @@ public class DicomViewActivity extends Activity {
                 segmentation.setImageWidth(dicomFrame.getWidth());
                 segmentation.setImageHeight(dicomFrame.getHeight());
 
-                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
-                segmentation.setRelatedSegmentations(segmentations);
 
-                if (!segmentations.isEmpty()) {
-                    for (Segmentation segmentation: segmentations) {
-                        List<Point> points = segmentation.getPoints();
-                        Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
-                        canvas.drawPath(segPath, segPaint);
-                        view.invalidate();
-                    }
-                }
-
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
 
                 Button doneButton = (Button) findViewById(R.id.done);
-                doneButton.setVisibility(View.VISIBLE);
+                //doneButton.setVisibility(View.VISIBLE);
                 Button clearButton = (Button) findViewById(R.id.clear);
-                clearButton.setVisibility(View.VISIBLE);
+                //clearButton.setVisibility(View.VISIBLE);
 
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -317,18 +305,43 @@ public class DicomViewActivity extends Activity {
                     case Activity.RESULT_OK:
                         switch (activity) {
                             case SelectSegmentationActivity.TAG:
+
+                                // Draw existing segmentations in the same frame
+                                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
+                                //segmentation.setRelatedSegmentations(segmentations);
+
+                                if (!segmentations.isEmpty()) {
+                                    for (Segmentation segmentation: segmentations) {
+                                        List<Point> points = segmentation.getPoints();
+                                        Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+                                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
+                                        canvas.drawPath(segPath, segPaint);
+                                        ImageView view = (ImageView) findViewById(R.id.imageView);
+                                        view.invalidate();
+                                    }
+                                }
+
+                                Button doneButton = (Button) findViewById(R.id.done);
+                                doneButton.setVisibility(View.VISIBLE);
+                                Button clearButton = (Button) findViewById(R.id.clear);
+                                clearButton.setVisibility(View.VISIBLE);
+
+                                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                                 SegmentationType segType = (SegmentationType) data.getSerializableExtra("segmentationType");
                                 if (segType != null) {
                                     segmentation.setType(segType);
                                     TextView textInfo = (TextView) findViewById(R.id.textInfo);
                                     textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
-                                    if (segmentation.isContained(segmentation.getRelatedSegmentations())) {
+                                    Segmentation relatedSeg = SegmentationUtils.getRelatedSegmentation(segmentations, segmentation.getType());
+                                    segmentation.setRelatedSegmentation(relatedSeg);
+
+                                    if (segmentation.isContained(segmentations)) {
                                         TextView textView = (TextView) findViewById(R.id.textView);
                                         textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
                                         imageView.setOnTouchListener(null);
-                                        Button doneButton = (Button) findViewById(R.id.done);
-                                        Button clearButton = (Button) findViewById(R.id.clear);
+                                        //Button doneButton = (Button) findViewById(R.id.done);
+                                        //Button clearButton = (Button) findViewById(R.id.clear);
                                         doneButton.setVisibility(View.GONE);
                                         clearButton.setVisibility(View.GONE);
                                         Button okButton = (Button) findViewById(R.id.ok);

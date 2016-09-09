@@ -24,29 +24,27 @@ public class InteriorityValidator implements SegmentationValidator {
      * @return true if segmentation is inside the other one, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, List<Segmentation> toCompare, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, Segmentation toCompare, int imageWidth, int imageHeight) {
         errors = new ArrayList<String>();
-        if (!points.isEmpty()&&(!toCompare.isEmpty())) {
-            for (Segmentation segmentationToCompare: toCompare) {
+        if (!points.isEmpty() && (toCompare != null)) {
 
-                List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
-                List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(segmentationToCompare.getPoints(), imageWidth, imageHeight);
+            List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
+            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), imageWidth, imageHeight);
 
-                for (PointF polarPoint : polarPoints) {
-                    List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
+            for (PointF polarPoint : polarPoints) {
+                List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
 
-                    if (sameDegreePoints.size() == 2) {
-                        PointF segInfPoint = sameDegreePoints.get(0);
-                        PointF segSupPoint = sameDegreePoints.get(1);
-                        if ((polarPoint.x > segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
-                            errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + segmentationToCompare.getType().getName());
-                            break;
-                        }
-                    }
-
-                    if (!errors.isEmpty()) {
+                if (sameDegreePoints.size() == 2) {
+                    PointF segInfPoint = sameDegreePoints.get(0);
+                    PointF segSupPoint = sameDegreePoints.get(1);
+                    if ((polarPoint.x > segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
+                        errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + toCompare.getType().getName());
                         break;
                     }
+                }
+
+                if (!errors.isEmpty()) {
+                    break;
                 }
             }
         }

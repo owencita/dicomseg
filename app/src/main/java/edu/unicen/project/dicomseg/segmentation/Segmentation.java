@@ -13,7 +13,7 @@ public class Segmentation {
     private int imageWidth;
     private int imageHeight;
     private List<Point> points = new ArrayList<Point>();
-    private List<Segmentation> relatedSegmentations;
+    private Segmentation relatedSegmentation;
 
     public SegmentationType getType() {
         return type;
@@ -23,8 +23,8 @@ public class Segmentation {
         return points;
     }
 
-    public List<Segmentation> getRelatedSegmentations() {
-        return relatedSegmentations;
+    public Segmentation getRelatedSegmentation() {
+        return relatedSegmentation;
     }
 
     public void setType(SegmentationType type) {
@@ -47,16 +47,21 @@ public class Segmentation {
         this.imageHeight = imageHeight;
     }
 
-    public void setRelatedSegmentations(List<Segmentation> relatedSegmentations) {
-        this.relatedSegmentations = relatedSegmentations;
+    public void setRelatedSegmentation(Segmentation relatedSegmentation) {
+        this.relatedSegmentation = relatedSegmentation;
     }
 
     public Boolean isValid() {
         for (SegmentationValidator validator: type.getValidators()) {
-            if (!validator.validate(points, relatedSegmentations, imageWidth, imageHeight)) {
+            if (!validator.validate(points, relatedSegmentation, imageWidth, imageHeight)) {
                 return Boolean.FALSE;
             }
         }
+
+        if ((relatedSegmentation != null) && !relatedSegmentation.isValid()) {
+            return Boolean.FALSE;
+        }
+
         return Boolean.TRUE;
     }
 
