@@ -98,11 +98,14 @@ public class DicomViewActivity extends Activity {
             public void onClick(View view) {
                 hideMenu();
                 TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                textInfo.setText("Adding point note");
+                textInfo.setText(getResources().getString(R.string.pointnote_adding));
                 TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText("Tap the image point where you want to add a note");
+                textView.setText(getResources().getString(R.string.pointnote_tap_to_add));
 
-                refreshPointNote(canvas, dicomFrame);
+                refreshPointNote();
+
+                Button okButton = (Button) findViewById(R.id.ok);
+                okButton.setVisibility(View.VISIBLE);
 
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -126,6 +129,17 @@ public class DicomViewActivity extends Activity {
                         }
                     }
                 });
+
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Button okButton = (Button) findViewById(R.id.ok);
+                        okButton.setVisibility(View.GONE);
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        imageView.setOnTouchListener(null);
+                        showMenu();
+                    }
+                });
             }
         });
 
@@ -147,16 +161,7 @@ public class DicomViewActivity extends Activity {
                 accumSegPath = new Path();
                 segPath = new Path();
 
-                segmentation.setImageWidth(dicomFrame.getWidth());
-                segmentation.setImageHeight(dicomFrame.getHeight());
-
-
-
                 Button doneButton = (Button) findViewById(R.id.done);
-                //doneButton.setVisibility(View.VISIBLE);
-                Button clearButton = (Button) findViewById(R.id.clear);
-                //clearButton.setVisibility(View.VISIBLE);
-
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -164,31 +169,34 @@ public class DicomViewActivity extends Activity {
                         Button clearButton = (Button) findViewById(R.id.clear);
                         TextView textView = (TextView) findViewById(R.id.textView);
 
-                        if (segmentation.isValid()) {
-                            // hide done, clear buttons, messages and clear canvas
-                            doneButton.setVisibility(View.GONE);
-                            clearButton.setVisibility(View.GONE);
-                            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                            textView.setText("");
-                            TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                            textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
-                            imageView.setOnTouchListener(null);
-                            // save segmentation
-                            Gson gson = new Gson();
-                            String segmentationPointsString = gson.toJson(segmentation.getPoints());
-                            dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), segmentationPointsString);
-                            showMenu();
-                        } else {
-                            // show validation error
-                            StringBuffer sb = new StringBuffer();
-                            for (String error : segmentation.errors()) {
-                                sb.append(error + "\n\r");
+                        if (!segmentation.getPoints().isEmpty()) {
+                            if (segmentation.isValid()) {
+                                // hide done, clear buttons, messages and clear canvas
+                                doneButton.setVisibility(View.GONE);
+                                clearButton.setVisibility(View.GONE);
+                                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                                imageView.setOnTouchListener(null);
+                                // save segmentation
+                                Gson gson = new Gson();
+                                String pointsString = gson.toJson(segmentation.getPoints());
+                                String poleString = gson.toJson(segmentation.getPole());
+                                dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, poleString);
+                                showMenu();
+                            } else {
+                                // show validation error
+                                StringBuffer sb = new StringBuffer();
+                                for (String error : segmentation.errors()) {
+                                    sb.append(error + "\n\r");
+                                }
+                                textView.setText(sb.toString());
                             }
-                            textView.setText(sb.toString());
+                        } else {
+                            showMenu();
                         }
                     }
                 });
 
+                Button clearButton = (Button) findViewById(R.id.clear);
                 clearButton.setOnClickListener(new View.OnClickListener() {
                     // clear canvas and reset path
                     @Override
@@ -264,21 +272,20 @@ public class DicomViewActivity extends Activity {
                         segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
                         segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                         canvas.drawPath(segPath, segPaint);
+                        drawPoint(segmentation.getPole().x, segmentation.getPole().y);
                         view.invalidate();
                     }
                 }
 
-                Button doneButton = (Button) findViewById(R.id.done);
-                doneButton.setVisibility(View.VISIBLE);
+                Button okButton = (Button) findViewById(R.id.ok);
+                okButton.setVisibility(View.VISIBLE);
 
-                doneButton.setOnClickListener(new View.OnClickListener() {
+                okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Button doneButton = (Button) findViewById(R.id.done);
-                        doneButton.setVisibility(View.GONE);
+                        Button okButton = (Button) findViewById(R.id.ok);
+                        okButton.setVisibility(View.GONE);
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                        TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                        textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
                         showMenu();
                     }
                 });
@@ -307,8 +314,7 @@ public class DicomViewActivity extends Activity {
                             case SelectSegmentationActivity.TAG:
 
                                 // Draw existing segmentations in the same frame
-                                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
-                                //segmentation.setRelatedSegmentations(segmentations);
+                                final List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
 
                                 if (!segmentations.isEmpty()) {
                                     for (Segmentation segmentation: segmentations) {
@@ -316,34 +322,31 @@ public class DicomViewActivity extends Activity {
                                         Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
                                         Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                                         canvas.drawPath(segPath, segPaint);
+                                        drawPoint(segmentation.getPole().x, segmentation.getPole().y);
                                         ImageView view = (ImageView) findViewById(R.id.imageView);
                                         view.invalidate();
                                     }
                                 }
 
-                                Button doneButton = (Button) findViewById(R.id.done);
-                                doneButton.setVisibility(View.VISIBLE);
-                                Button clearButton = (Button) findViewById(R.id.clear);
-                                clearButton.setVisibility(View.VISIBLE);
-
                                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                                 SegmentationType segType = (SegmentationType) data.getSerializableExtra("segmentationType");
-                                if (segType != null) {
-                                    segmentation.setType(segType);
-                                    TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                                    textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
+                                if (segType != null) {
+
+                                    segmentation.setType(segType);
                                     Segmentation relatedSeg = SegmentationUtils.getRelatedSegmentation(segmentations, segmentation.getType());
                                     segmentation.setRelatedSegmentation(relatedSeg);
 
                                     if (segmentation.isContained(segmentations)) {
+                                        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                        textInfo.setText("");
                                         TextView textView = (TextView) findViewById(R.id.textView);
                                         textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+
                                         imageView.setOnTouchListener(null);
-                                        //Button doneButton = (Button) findViewById(R.id.done);
-                                        //Button clearButton = (Button) findViewById(R.id.clear);
-                                        doneButton.setVisibility(View.GONE);
-                                        clearButton.setVisibility(View.GONE);
+
+                                        hideDoneAndClearButtons();
+
                                         Button okButton = (Button) findViewById(R.id.ok);
                                         okButton.setVisibility(View.VISIBLE);
                                         okButton.setOnClickListener(new View.OnClickListener() {
@@ -351,21 +354,118 @@ public class DicomViewActivity extends Activity {
                                             public void onClick(View view) {
                                                 Button okButton = (Button) findViewById(R.id.ok);
                                                 okButton.setVisibility(View.GONE);
-                                                TextView textInfo = (TextView) findViewById(R.id.textInfo);
-                                                textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
-                                                TextView textView = (TextView) findViewById(R.id.textView);
-                                                textView.setText("");
                                                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                                                 showMenu();
                                             }
                                         });
+                                    } else {
+
+                                        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                        textInfo.setText("Segmenting: " + segmentation.getType().getName());
+
+                                        if (!segType.isPoleSelectable()) {
+                                            Point pole = new Point(dicomFrame.getWidth()/2, dicomFrame.getHeight()/2);
+                                            segmentation.setPole(pole);
+                                            showDoneAndClearButtons();
+                                        } else {
+                                            if (relatedSeg == null) {
+                                                TextView textView = (TextView) findViewById(R.id.textView);
+                                                textView.setText(getResources().getString(R.string.dicomview_select_pole));
+
+                                                imageView.setOnTouchListener(new View.OnTouchListener() {
+                                                    @Override
+                                                    public boolean onTouch(View view, MotionEvent event) {
+                                                        if (gestureDetector.onTouchEvent(event)) {
+
+                                                            float[] coords = getCoordsForCanvas(event, imageView);
+                                                            int x = (int) coords[0];
+                                                            int y = (int) coords[1];
+
+                                                            Point pole = new Point(x, y);
+                                                            segmentation.setPole(pole);
+
+                                                            drawPoint(x, y);
+
+                                                            imageView.setOnTouchListener(null);
+
+                                                            Button okButton = (Button) findViewById(R.id.ok);
+                                                            okButton.setVisibility(View.VISIBLE);
+
+                                                            return true;
+                                                        } else {
+                                                            return false;
+                                                        }
+                                                    }
+                                                });
+
+                                                Button okButton = (Button) findViewById(R.id.ok);
+                                                okButton.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        TextView textView = (TextView) findViewById(R.id.textView);
+                                                        textView.setText("");
+
+                                                        Button okButton = (Button) findViewById(R.id.ok);
+                                                        okButton.setVisibility(View.GONE);
+                                                        showDoneAndClearButtons();
+
+                                                        final AtomicBoolean previousPathAdded = new AtomicBoolean(false);
+
+                                                        // TODO: move this listener implementation to a variable if possible
+                                                        imageView.setOnTouchListener(new View.OnTouchListener() {
+                                                            @Override
+                                                            public boolean onTouch(View view, MotionEvent event) {
+
+                                                                float[] coords = getCoordsForCanvas(event, imageView);
+                                                                int x = (int) coords[0];
+                                                                int y = (int) coords[1];
+
+                                                                if (inputStart == null) {
+                                                                    inputStart = new Point();
+                                                                    inputStart.x = x;
+                                                                    inputStart.y = y;
+                                                                }
+
+                                                                if ((inputEnd == null) || SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y)) {
+                                                                    // user never touched up or touched up previously
+                                                                    inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                                                    Point point = new Point();
+                                                                    point.x = x;
+                                                                    point.y = y;
+                                                                    segmentation.getPoints().add(point);
+                                                                    canvas.drawPath(segPath, segPaint);
+                                                                    previousPathAdded.set(false);
+                                                                } else {
+                                                                    // user touched up
+                                                                    if ((inputEnd != null) && !previousPathAdded.get()) {
+                                                                        accumSegPath.addPath(segPath);
+                                                                        segPath = new Path();
+                                                                        Point start = segmentation.getPoints().get(0);
+                                                                        segPath.moveTo(start.x, start.y);
+                                                                        previousPathAdded.set(true);
+                                                                        TextView textView = (TextView) findViewById(R.id.textView);
+                                                                        textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                                                    }
+                                                                }
+
+                                                                canvas.drawPath(segPath, segPaint);
+                                                                return true;
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                segmentation.setPole(relatedSeg.getPole());
+                                                showDoneAndClearButtons();
+                                            }
+                                        }
                                     }
                                 }
                                 break;
                             case PointNoteActivity.TAG:
                                 Boolean refreshView = (Boolean) data.getSerializableExtra("refreshPointNotes");
                                 if ((refreshView != null) && (refreshView)) {
-                                    refreshPointNote(canvas, dicomFrame);
+                                    refreshPointNote();
                                 }
                                 break;
                         }
@@ -373,10 +473,7 @@ public class DicomViewActivity extends Activity {
                     case Activity.RESULT_CANCELED:
                         switch (activity) {
                             case SelectSegmentationActivity.TAG:
-                                Button doneButton = (Button) findViewById(R.id.done);
-                                Button clearButton = (Button) findViewById(R.id.clear);
-                                doneButton.setVisibility(View.GONE);
-                                clearButton.setVisibility(View.GONE);
+                                hideDoneAndClearButtons();
                                 showMenu();
                             break;
                         }
@@ -385,16 +482,17 @@ public class DicomViewActivity extends Activity {
         }
     }
 
-    private void refreshPointNote(Canvas canvas, Bitmap dicomFrame) {
-
+    private void refreshPointNote() {
         List<Point> pointList = dbHelper.getAllPointNotes(fileName, imageNumber);
-
         for (Point point : pointList) {
-            Paint paint = SegmentationDrawingUtils.getPaintForPointNote();
-            float radius = SegmentationDrawingUtils.getRadiusForPointNote(dicomFrame.getWidth());
-            canvas.drawCircle(point.x, point.y, radius, paint);
+            drawPoint(point.x, point.y);
         }
+    }
 
+    private void drawPoint(int x, int y) {
+        Paint paint = SegmentationDrawingUtils.getPaintForPoint();
+        float radius = SegmentationDrawingUtils.getRadiusForPoint(dicomFrame.getWidth());
+        canvas.drawCircle(x, y, radius, paint);
         ImageView view = (ImageView) findViewById(R.id.imageView);
         view.invalidate();
     }
@@ -412,9 +510,27 @@ public class DicomViewActivity extends Activity {
     }
 
     private void showMenu() {
+        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+        textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText("");
         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.close(true);
         menu.setVisibility(View.VISIBLE);
+    }
+
+    private void showDoneAndClearButtons() {
+        Button doneButton = (Button) findViewById(R.id.done);
+        doneButton.setVisibility(View.VISIBLE);
+        Button clearButton = (Button) findViewById(R.id.clear);
+        clearButton.setVisibility(View.VISIBLE);
+    }
+
+    private void hideDoneAndClearButtons() {
+        Button doneButton = (Button) findViewById(R.id.done);
+        doneButton.setVisibility(View.GONE);
+        Button clearButton = (Button) findViewById(R.id.clear);
+        clearButton.setVisibility(View.GONE);
     }
 
 }

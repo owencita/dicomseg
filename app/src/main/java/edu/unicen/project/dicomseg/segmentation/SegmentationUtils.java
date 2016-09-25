@@ -6,7 +6,7 @@ public class SegmentationUtils {
 
     public static Segmentation getRelatedSegmentation(List<Segmentation> segmentationList, SegmentationType relatedTo) {
         for (Segmentation segmentation: segmentationList) {
-            if (segmentation.getType().equals(relatedTo)) {
+            if (segmentation.getType().getRelated().equals(relatedTo)) {
                 return segmentation;
             }
         }

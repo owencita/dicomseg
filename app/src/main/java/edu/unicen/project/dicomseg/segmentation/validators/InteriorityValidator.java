@@ -19,17 +19,17 @@ public class InteriorityValidator implements SegmentationValidator {
      *
      * @param points
      * @param toCompare
-     * @param imageWidth
-     * @param imageHeight
+     * @param poleX
+     * @param poleY
      * @return true if segmentation is inside the other one, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, Segmentation toCompare, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, Segmentation toCompare, int poleX, int poleY) {
         errors = new ArrayList<String>();
         if (!points.isEmpty() && (toCompare != null)) {
 
-            List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, imageWidth, imageHeight);
-            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), imageWidth, imageHeight);
+            List<PointF> polarPoints = CartesianToPolarCalculator.getPolarPoints(points, poleX, poleY);
+            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), poleX, poleY);
 
             for (PointF polarPoint : polarPoints) {
                 List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);

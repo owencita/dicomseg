@@ -15,16 +15,19 @@
 
     <!-- PointNoteActivity -->
     <string name="title_activity_point_note">PointNoteActivity</string>
+    <string name="pointnote_adding">Adding point note</string>
+    <string name="pointnote_tap_to_add">Tap the image point where you want to add a note</string>
 
     <!-- DicomViewActivity -->
     <string name="title_activity_dicom_view">DicomViewActivity</string>
     <string name="dicomview_textinfo_default">Press + to display options</string>
+    <string name="dicomview_select_pole">Tap the point to become center of the segmentation</string>
 
     <!-- SelectSegmentationActivity -->
     <string name="title_activity_select_segmentation">SelectSegmentation</string>
     <string name="label_activity_select_segmentation">Select segmentation type</string>
     <string name="button_ivus">IVUS</string>
-    <string name="button_selectablePole">Selectable Pole</string>
+    <string name="button_selectablePole">Brain Tumor</string>
     <string name="button_seg3">Seg3</string>
 
     <!-- IVUSSegActivity -->
@@ -35,9 +38,9 @@
 
     <!-- SelectablePoleSegActivity -->
     <string name="title_activity_selectable_pole_seg">SelectablePoleSegActivity</string>
-    <string name="label_activity_selectable_pole_seg">Select selectable pole segmentation type</string>
-    <string name="button_innerSelectablePole">Inner Selectable Pole</string>
-    <string name="button_outerSelectablePole">Outer Selectable Pole</string>
+    <string name="label_activity_selectable_pole_seg">Select brain tumor segmentation type</string>
+    <string name="button_innerSelectablePole">Tumor Border</string>
+    <string name="button_outerSelectablePole">Necrosis</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>

@@ -10,15 +10,22 @@ import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator
 
 public enum SegmentationType {
 
-    IVUS_LI("ivus-li", "IVUS LI (Lumen-Intima)", Arrays.asList(new ClosureValidator(), new InteriorityValidator())),
-    IVUS_MA("ivus-ma", "IVUS MA (Media-Adventitia)", Arrays.asList(new ClosureValidator(), new ExteriorityValidator())),
-    // TODO: replace InteriorityValidator -> SelectablePoleInteriorityValidator
-    // TODO: replace ExteriorityValidator -> SelectablePoleExteriorityValidator
-    INNER_SELECTABLE_POLE("selectable-pole", "Inner Selectable Pole Segmentation", Arrays.asList(new ClosureValidator(), new InteriorityValidator())),
-    OUTER_SELECTABLE_POLE("selectable-pole", "Outer Selectable Pole Segmentation", Arrays.asList(new ClosureValidator(), new ExteriorityValidator()));
+    IVUS_LI("ivus-li", "IVUS LI (Lumen-Intima)",
+            Arrays.asList(new ClosureValidator(), new InteriorityValidator()),
+            Boolean.FALSE),
+    IVUS_MA("ivus-ma", "IVUS MA (Media-Adventitia)",
+            Arrays.asList(new ClosureValidator(), new ExteriorityValidator()),
+            Boolean.FALSE),
+    INNER_SELECTABLE_POLE("selectable-pole", "Tumor Border",
+            Arrays.asList(new ClosureValidator(), new InteriorityValidator()),
+            Boolean.TRUE),
+    OUTER_SELECTABLE_POLE("selectable-pole", "Necrosis",
+            Arrays.asList(new ClosureValidator(), new ExteriorityValidator()),
+            Boolean.TRUE);
 
     private String value;
     private String name;
+    private Boolean selectablePole;
     private SegmentationType related;
     private List<SegmentationValidator> validators;
 
@@ -29,10 +36,11 @@ public enum SegmentationType {
         OUTER_SELECTABLE_POLE.related = INNER_SELECTABLE_POLE;
     }
 
-    SegmentationType(String value, String name, List<SegmentationValidator> validators) {
+    SegmentationType(String value, String name, List<SegmentationValidator> validators, Boolean selectablePole) {
         this.value = value;
         this.name = name;
         this.validators = validators;
+        this.selectablePole = selectablePole;
     }
 
     public String getValue() {
@@ -49,5 +57,9 @@ public enum SegmentationType {
 
     public List<SegmentationValidator> getValidators() {
         return validators;
+    }
+
+    public Boolean isPoleSelectable() {
+        return selectablePole;
     }
 }

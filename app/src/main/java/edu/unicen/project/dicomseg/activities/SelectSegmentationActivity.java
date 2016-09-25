@@ -29,6 +29,16 @@ public class SelectSegmentationActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+        Button selectablePole = (Button) findViewById(R.id.selectablePole);
+        selectablePole.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SelectablePoleSegActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override

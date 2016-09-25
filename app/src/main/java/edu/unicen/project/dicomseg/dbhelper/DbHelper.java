@@ -59,7 +59,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID + TEXT_TYPE + COMMA_SEP +
                     DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER + INT_TYPE + COMMA_SEP +
                     DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE + TEXT_TYPE + COMMA_SEP +
-                    DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS + TEXT_TYPE +
+                    DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS + TEXT_TYPE + COMMA_SEP +
+                    DicomSegmentationContract.Segmentation.COLUMN_NAME_POLE + TEXT_TYPE +
                     " )";
 
     private static final String GENERAL_NOTE_DELETE_ENTRIES =
@@ -272,6 +273,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String[] projection = {
                 DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE,
                 DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS,
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_POLE,
         };
 
         Cursor cursor = db.query(
@@ -298,15 +300,27 @@ public class DbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Segmentation segmentation = new Segmentation();
+
                 segmentation.setType(SegmentationType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE))));
+
                 String jsonPoints = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS));
                 if (jsonPoints != null) {
-                    List<Point> points = new ArrayList<Point>();
                     Gson gson = new Gson();
                     Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+                    List<Point> points = new ArrayList<Point>();
                     points = gson.fromJson(jsonPoints, type);
                     segmentation.setPoints(points);
                 }
+
+                String jsonPole = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POLE));
+                if (jsonPole != null) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<Point>() {}.getType();
+                    Point point = new Point();
+                    point = gson.fromJson(jsonPole, type);
+                    segmentation.setPole(point);
+                }
+
                 segmentations.add(segmentation);
             } while (cursor.moveToNext());
         }
@@ -356,7 +370,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 values);
     }
 
-    public void insertSegmentation(String fileName, Integer imageNumber, SegmentationType segType, String points) {
+    public void insertSegmentation(String fileName, Integer imageNumber, SegmentationType segType, String points, String pole) {
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -368,6 +382,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID, DicomUtils.getSeriesUID());
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE, segType.toString());
         values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS, points);
+        values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_POLE, pole);
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;

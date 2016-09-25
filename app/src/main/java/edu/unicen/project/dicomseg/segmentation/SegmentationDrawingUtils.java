@@ -32,13 +32,13 @@ public class SegmentationDrawingUtils {
         return paint;
     }
 
-    public static Paint getPaintForPointNote() {
+    public static Paint getPaintForPoint() {
         notePointPaint.setColor(SegmentationColors.BLUE);
         notePointPaint.setStyle(Paint.Style.FILL);
         return notePointPaint;
     }
 
-    public static float getRadiusForPointNote(int width) {
+    public static float getRadiusForPoint(int width) {
         return ((float)POINT_STROKE_FACTOR / STROKE_WIDTH) * width;
     }
 

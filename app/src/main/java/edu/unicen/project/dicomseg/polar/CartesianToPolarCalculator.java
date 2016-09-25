@@ -13,9 +13,7 @@ public class CartesianToPolarCalculator {
     private static final Integer DEGREE_TOLERANCE = 2;
     private static final String TAG = "PolarCalculator";
 
-    public static PointF getPolarPoint(Point point, int width, int height) {
-        int poleX = width / 2;
-        int poleY = height / 2;
+    public static PointF getPolarPoint(Point point, int poleX, int poleY) {
         Log.i(TAG, "Punto Cartesiano: (" + point.x + "," + point.y + ")");
         PointF polarPoint = new PointF();
         int xSh = point.x - poleX;
@@ -49,7 +47,7 @@ public class CartesianToPolarCalculator {
 
         List<PointF> supDegrees = new ArrayList<PointF>();
         for (PointF point: points) {
-            if (point.y <= (degrees + DEGREE_TOLERANCE)&&(point.y >= degrees)) {
+            if ((point.y <= (degrees + DEGREE_TOLERANCE))&&(point.y >= degrees)) {
                 supDegrees.add(point);
             }
         }
