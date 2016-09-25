@@ -1,9 +1,12 @@
 package edu.unicen.project.dicomseg.segmentation;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,11 +16,11 @@ public class SegmentationDrawingUtils {
 
     private static final int STROKE_WIDTH = 512;
     private static final int LINE_STROKE_FACTOR = 5;
-    private static final int POINT_STROKE_FACTOR = 8;
+    private static final int POINT_STROKE_FACTOR = 7;
     private static final float TOUCH_TOLERANCE = 4;
     private static float mX, mY;
     private static final Paint paint = new Paint();
-    private static final Paint notePointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final Paint notePointPaint = new Paint();
     private static final int[] colors = { SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN };
     private static int COLOR_INDEX = 0;
 

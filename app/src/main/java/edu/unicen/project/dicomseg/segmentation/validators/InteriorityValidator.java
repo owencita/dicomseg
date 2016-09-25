@@ -32,14 +32,22 @@ public class InteriorityValidator implements SegmentationValidator {
             List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), poleX, poleY);
 
             for (PointF polarPoint : polarPoints) {
-                List<PointF> sameDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
+                List<PointF> closestDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
 
-                if (sameDegreePoints.size() == 2) {
-                    PointF segInfPoint = sameDegreePoints.get(0);
-                    PointF segSupPoint = sameDegreePoints.get(1);
-                    if ((polarPoint.x > segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
-                        errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + toCompare.getType().getName());
-                        break;
+                if (!closestDegreePoints.isEmpty()) {
+                    if (closestDegreePoints.size() == 2) {
+                        PointF segInfPoint = closestDegreePoints.get(0);
+                        PointF segSupPoint = closestDegreePoints.get(1);
+                        if ((polarPoint.x > segInfPoint.x) && (polarPoint.x > segSupPoint.x)) {
+                            errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + toCompare.getType().getName());
+                            break;
+                        }
+                    } else {
+                        PointF onlyClosePoint = closestDegreePoints.get(0);
+                        if (polarPoint.x > onlyClosePoint.x) {
+                            errors.add(SegmentationMessages.INTERIORITY_ERROR + " " + toCompare.getType().getName());
+                            break;
+                        }
                     }
                 }
 

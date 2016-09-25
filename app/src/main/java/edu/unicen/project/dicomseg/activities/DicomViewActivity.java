@@ -55,6 +55,8 @@ public class DicomViewActivity extends Activity {
     private Bitmap dicomFrame;
     private Canvas canvas;
 
+    private Point selectablePole;
+
     private Segmentation segmentation = new Segmentation();
 
     @Override
@@ -198,18 +200,23 @@ public class DicomViewActivity extends Activity {
 
                 Button clearButton = (Button) findViewById(R.id.clear);
                 clearButton.setOnClickListener(new View.OnClickListener() {
-                    // clear canvas and reset path
+                    // clear canvas from newly drawn segmentation and reset path
                     @Override
                     public void onClick(View view) {
-                        TextView textView = (TextView) findViewById(R.id.textView);
-                        textView.setText("");
-                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                         inputStart = null;
                         inputEnd = null;
                         previousPathAdded.set(false);
                         accumSegPath = new Path();
                         segPath = new Path();
                         segmentation.clearPoints();
+
+                        TextView textView = (TextView) findViewById(R.id.textView);
+                        textView.setText("");
+
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+                        drawSegmentationsOnFrame();
+                        view.invalidate();
                     }
                 });
 
@@ -264,18 +271,8 @@ public class DicomViewActivity extends Activity {
 
                 hideMenu();
 
-                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
-
-                if (!segmentations.isEmpty()) {
-                    for (Segmentation segmentation: segmentations) {
-                        List<Point> points = segmentation.getPoints();
-                        segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
-                        canvas.drawPath(segPath, segPaint);
-                        drawPoint(segmentation.getPole().x, segmentation.getPole().y);
-                        view.invalidate();
-                    }
-                }
+                drawSegmentationsOnFrame();
+                view.invalidate();
 
                 Button okButton = (Button) findViewById(R.id.ok);
                 okButton.setVisibility(View.VISIBLE);
@@ -365,6 +362,7 @@ public class DicomViewActivity extends Activity {
 
                                         if (!segType.isPoleSelectable()) {
                                             Point pole = new Point(dicomFrame.getWidth()/2, dicomFrame.getHeight()/2);
+                                            selectablePole = null;
                                             segmentation.setPole(pole);
                                             showDoneAndClearButtons();
                                         } else {
@@ -381,8 +379,8 @@ public class DicomViewActivity extends Activity {
                                                             int x = (int) coords[0];
                                                             int y = (int) coords[1];
 
-                                                            Point pole = new Point(x, y);
-                                                            segmentation.setPole(pole);
+                                                            selectablePole = new Point(x, y);
+                                                            segmentation.setPole(selectablePole);
 
                                                             drawPoint(x, y);
 
@@ -531,6 +529,24 @@ public class DicomViewActivity extends Activity {
         doneButton.setVisibility(View.GONE);
         Button clearButton = (Button) findViewById(R.id.clear);
         clearButton.setVisibility(View.GONE);
+    }
+
+    private void drawSegmentationsOnFrame() {
+        List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
+
+        if (!segmentations.isEmpty()) {
+            for (Segmentation segmentation: segmentations) {
+                List<Point> points = segmentation.getPoints();
+                segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
+                canvas.drawPath(segPath, segPaint);
+                drawPoint(segmentation.getPole().x, segmentation.getPole().y);
+            }
+        }
+
+        if (selectablePole != null) {
+            drawPoint(selectablePole.x, selectablePole.y);
+        }
     }
 
 }
