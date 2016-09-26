@@ -28,7 +28,7 @@
     <string name="label_activity_select_segmentation">Select segmentation type</string>
     <string name="button_ivus">IVUS</string>
     <string name="button_selectablePole">Brain Tumor</string>
-    <string name="button_seg3">Seg3</string>
+    <string name="button_retinography">Retinography</string>
 
     <!-- IVUSSegActivity -->
     <string name="title_activity_ivusseg">IVUSSegActivity</string>
@@ -41,6 +41,12 @@
     <string name="label_activity_selectable_pole_seg">Select brain tumor segmentation type</string>
     <string name="button_innerSelectablePole">Tumor Border</string>
     <string name="button_outerSelectablePole">Necrosis</string>
+
+    <!-- RetinographySegActivity -->
+    <string name="title_activity_retinography_seg">RetinographySegActivity</string>
+    <string name="label_activity_retinography_seg">Select retinography segmentation type</string>
+    <string name="button_opticdisc">Optic Disc</string>
+    <string name="button_vessels">Vessels</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>

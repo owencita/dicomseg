@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Code to drop note table (uncomment when needed)
-        //getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
+        getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

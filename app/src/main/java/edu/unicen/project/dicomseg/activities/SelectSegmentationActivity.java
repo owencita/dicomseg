@@ -39,6 +39,16 @@ public class SelectSegmentationActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+        Button retinography = (Button) findViewById(R.id.retinography);
+        retinography.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RetinographySegActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override

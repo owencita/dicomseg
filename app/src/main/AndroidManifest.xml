@@ -60,6 +60,11 @@
             android:label="@string/title_activity_selectable_pole_seg"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".activities.RetinographySegActivity"
+            android:label="@string/title_activity_retinography_seg"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
