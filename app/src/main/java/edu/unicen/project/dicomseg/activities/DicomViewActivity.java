@@ -248,8 +248,8 @@ public class DicomViewActivity extends Activity {
                             if ((inputEnd != null) && !previousPathAdded.get()) {
                                 accumSegPath.addPath(segPath);
                                 segPath = new Path();
-                                Point end = segmentation.getPoints().get(segmentation.getPoints().size()-1);
-                                segPath.moveTo(end.x, end.y);
+                                Point start = segmentation.getPoints().get(0);
+                                segPath.moveTo(start.x, start.y);
                                 previousPathAdded.set(true);
                                 TextView textView = (TextView) findViewById(R.id.textView);
                                 textView.setText(SegmentationMessages.CONTINUITY_ERROR);
@@ -311,20 +311,7 @@ public class DicomViewActivity extends Activity {
                             case SelectSegmentationActivity.TAG:
 
                                 // Draw existing segmentations in the same frame
-                                final List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
-
-                                /*if (!segmentations.isEmpty()) {
-                                    for (Segmentation segmentation: segmentations) {
-                                        List<Point> points = segmentation.getPoints();
-                                        Path segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                                        Paint segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
-                                        canvas.drawPath(segPath, segPaint);
-                                        drawPoint(segmentation.getPole().x, segmentation.getPole().y);
-                                        ImageView view = (ImageView) findViewById(R.id.imageView);
-                                        view.invalidate();
-                                    }
-                                }*/
-                                drawSegmentationsOnFrame();
+                                final List<Segmentation> segmentations = drawSegmentationsOnFrame();
 
                                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                                 SegmentationType segType = (SegmentationType) data.getSerializableExtra("segmentationType");
@@ -334,6 +321,7 @@ public class DicomViewActivity extends Activity {
                                     segmentation.setType(segType);
                                     Segmentation relatedSeg = SegmentationUtils.getRelatedSegmentation(segmentations, segmentation.getType());
                                     segmentation.setRelatedSegmentation(relatedSeg);
+                                    segmentation.clearPoints();
 
                                     if (segmentation.isContained(segmentations) && !segmentation.getType().allowsRepeats()) {
                                         TextView textInfo = (TextView) findViewById(R.id.textInfo);
@@ -439,10 +427,8 @@ public class DicomViewActivity extends Activity {
                                                                     if ((inputEnd != null) && !previousPathAdded.get()) {
                                                                         accumSegPath.addPath(segPath);
                                                                         segPath = new Path();
-                                                                        //Point start = segmentation.getPoints().get(0);
-                                                                        //segPath.moveTo(start.x, start.y);
-                                                                        Point end = segmentation.getPoints().get(segmentation.getPoints().size());
-                                                                        segPath.moveTo(end.x, end.y);
+                                                                        Point start = segmentation.getPoints().get(0);
+                                                                        segPath.moveTo(start.x, start.y);
                                                                         previousPathAdded.set(true);
                                                                         TextView textView = (TextView) findViewById(R.id.textView);
                                                                         textView.setText(SegmentationMessages.CONTINUITY_ERROR);
@@ -534,12 +520,13 @@ public class DicomViewActivity extends Activity {
         clearButton.setVisibility(View.GONE);
     }
 
-    private void drawSegmentationsOnFrame() {
+    private List<Segmentation> drawSegmentationsOnFrame() {
         List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
 
         if (!segmentations.isEmpty()) {
             for (Segmentation segmentation: segmentations) {
                 List<Point> points = segmentation.getPoints();
+                segPath.moveTo(points.get(0).x, points.get(0).y);
                 segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                 canvas.drawPath(segPath, segPaint);
@@ -554,6 +541,8 @@ public class DicomViewActivity extends Activity {
                 drawPoint(selectablePole.x, selectablePole.y);
             }
         }
+
+        return segmentations;
     }
 
 }
