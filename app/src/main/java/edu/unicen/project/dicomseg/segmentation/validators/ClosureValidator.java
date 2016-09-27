@@ -17,12 +17,12 @@ public class ClosureValidator implements SegmentationValidator {
      * Validates closure on a segmentation
      *
      * @param points
-     * @param imageWidth
-     * @param imageHeight
+     * @param refX
+     * @param refY
      * @return true if the segmentation has closure, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, Segmentation toCompare, int imageWidth, int imageHeight) {
+    public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
         errors = new ArrayList<String>();
         if (!points.isEmpty()) {
             Point start = points.get(0);

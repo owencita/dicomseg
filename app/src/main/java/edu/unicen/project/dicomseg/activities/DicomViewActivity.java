@@ -55,7 +55,7 @@ public class DicomViewActivity extends Activity {
     private Bitmap dicomFrame;
     private Canvas canvas;
 
-    private Point selectablePole;
+    private Point referencePoint;
 
     private Segmentation segmentation = new Segmentation();
 
@@ -181,8 +181,8 @@ public class DicomViewActivity extends Activity {
                                 // save segmentation
                                 Gson gson = new Gson();
                                 String pointsString = gson.toJson(segmentation.getPoints());
-                                String poleString = gson.toJson(segmentation.getPole());
-                                dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, poleString);
+                                String referencePointString = gson.toJson(segmentation.getReferencePoint());
+                                dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, referencePointString);
                                 showMenu();
                             } else {
                                 // show validation error
@@ -349,15 +349,16 @@ public class DicomViewActivity extends Activity {
                                         TextView textInfo = (TextView) findViewById(R.id.textInfo);
                                         textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
-                                        if (!segType.isPoleSelectable()) {
+                                        if (!segType.isReferencePointSelectable()) {
                                             Point pole = new Point(dicomFrame.getWidth()/2, dicomFrame.getHeight()/2);
-                                            selectablePole = null;
-                                            segmentation.setPole(pole);
+                                            referencePoint = null;
+                                            segmentation.setReferencePoint(pole);
                                             showDoneAndClearButtons();
                                         } else {
                                             if (relatedSeg == null) {
                                                 TextView textView = (TextView) findViewById(R.id.textView);
-                                                textView.setText(getResources().getString(R.string.dicomview_select_pole));
+                                                textView.setText(getResources().getString(R.string.dicomview_select_reference_point) + " "
+                                                                + segmentation.getType().getReferencePointHint());
 
                                                 imageView.setOnTouchListener(new View.OnTouchListener() {
                                                     @Override
@@ -368,8 +369,8 @@ public class DicomViewActivity extends Activity {
                                                             int x = (int) coords[0];
                                                             int y = (int) coords[1];
 
-                                                            selectablePole = new Point(x, y);
-                                                            segmentation.setPole(selectablePole);
+                                                            referencePoint = new Point(x, y);
+                                                            segmentation.setReferencePoint(referencePoint);
 
                                                             drawPoint(x, y);
 
@@ -442,7 +443,7 @@ public class DicomViewActivity extends Activity {
                                                     }
                                                 });
                                             } else {
-                                                segmentation.setPole(relatedSeg.getPole());
+                                                segmentation.setReferencePoint(relatedSeg.getReferencePoint());
                                                 showDoneAndClearButtons();
                                             }
                                         }
@@ -526,19 +527,18 @@ public class DicomViewActivity extends Activity {
         if (!segmentations.isEmpty()) {
             for (Segmentation segmentation: segmentations) {
                 List<Point> points = segmentation.getPoints();
-                segPath.moveTo(points.get(0).x, points.get(0).y);
                 segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
                 segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                 canvas.drawPath(segPath, segPaint);
-                if (segmentation.getType().isPoleDrawable()) {
-                    drawPoint(segmentation.getPole().x, segmentation.getPole().y);
+                if (segmentation.getType().isReferencePointDrawable()) {
+                    drawPoint(segmentation.getReferencePoint().x, segmentation.getReferencePoint().y);
                 }
             }
         }
 
-        if ((segmentation.getType() != null) && (segmentation.getType().isPoleDrawable())) {
-            if (selectablePole != null) {
-                drawPoint(selectablePole.x, selectablePole.y);
+        if ((segmentation.getType() != null) && (segmentation.getType().isReferencePointDrawable())) {
+            if (referencePoint != null) {
+                drawPoint(referencePoint.x, referencePoint.y);
             }
         }
 

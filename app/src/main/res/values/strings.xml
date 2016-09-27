@@ -21,7 +21,7 @@
     <!-- DicomViewActivity -->
     <string name="title_activity_dicom_view">DicomViewActivity</string>
     <string name="dicomview_textinfo_default">Press + to display options</string>
-    <string name="dicomview_select_pole">Tap the point to become center of the segmentation</string>
+    <string name="dicomview_select_reference_point">Tap a reference point for this segmentation</string>
 
     <!-- SelectSegmentationActivity -->
     <string name="title_activity_select_segmentation">SelectSegmentation</string>
@@ -29,6 +29,7 @@
     <string name="button_ivus">IVUS</string>
     <string name="button_selectablePole">Brain Tumor</string>
     <string name="button_retinography">Retinography</string>
+    <string name="button_carotid">Carotid</string>
 
     <!-- IVUSSegActivity -->
     <string name="title_activity_ivusseg">IVUSSegActivity</string>
@@ -47,6 +48,12 @@
     <string name="label_activity_retinography_seg">Select retinography segmentation type</string>
     <string name="button_opticdisc">Optic Disc</string>
     <string name="button_vessels">Vessels</string>
+
+    <!-- CarotidSegActivity -->
+    <string name="title_activity_carotid_seg">CarotidSegActivity</string>
+    <string name="label_activity_carotid_seg">Select carotid segmentation type</string>
+    <string name="button_anteriorLI">LI (Lumen-Intima) Anterior</string>
+    <string name="button_posteriorLI">LI (Lumen-Intima) Posterior</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>

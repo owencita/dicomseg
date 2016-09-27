@@ -10,7 +10,7 @@ import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator
 public class Segmentation {
 
     private SegmentationType type;
-    private Point pole;
+    private Point referencePoint;
     private List<Point> points = new ArrayList<Point>();
     private Segmentation relatedSegmentation;
 
@@ -38,12 +38,12 @@ public class Segmentation {
         this.points = new ArrayList<Point>();
     }
 
-    public Point getPole() {
-        return pole;
+    public Point getReferencePoint() {
+        return referencePoint;
     }
 
-    public void setPole(Point pole) {
-        this.pole = pole;
+    public void setReferencePoint(Point referencePoint) {
+        this.referencePoint = referencePoint;
     }
 
     public void setRelatedSegmentation(Segmentation relatedSegmentation) {
@@ -52,7 +52,7 @@ public class Segmentation {
 
     public Boolean isValid() {
         for (SegmentationValidator validator: type.getValidators()) {
-            if (!validator.validate(points, relatedSegmentation, pole.x, pole.y)) {
+            if (!validator.validate(points, relatedSegmentation, referencePoint.x, referencePoint.y)) {
                 return Boolean.FALSE;
             }
         }

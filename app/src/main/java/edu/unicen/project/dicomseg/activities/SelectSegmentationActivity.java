@@ -49,6 +49,16 @@ public class SelectSegmentationActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+        Button carotid = (Button) findViewById(R.id.carotid);
+        carotid.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CarotidSegActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override

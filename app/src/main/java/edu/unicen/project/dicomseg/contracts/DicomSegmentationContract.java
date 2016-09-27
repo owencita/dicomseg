@@ -15,6 +15,6 @@ public class DicomSegmentationContract {
         public static final String COLUMN_NAME_IMAGE_NUMBER = "imagenumber";
         public static final String COLUMN_NAME_SEG_TYPE = "segmentationtype";
         public static final String COLUMN_NAME_POINTS = "points";
-        public static final String COLUMN_NAME_POLE = "pole";
+        public static final String COLUMN_NAME_REFERENCE_POINT = "referencePoint";
     }
 }

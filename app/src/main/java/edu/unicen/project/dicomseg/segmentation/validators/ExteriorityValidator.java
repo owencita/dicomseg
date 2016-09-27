@@ -19,17 +19,17 @@ public class ExteriorityValidator implements SegmentationValidator {
      *
      * @param points
      * @param toCompare
-     * @param poleX
-     * @param poleY
+     * @param refX
+     * @param refY
      * @return true if segmentation is outside the other one, false otherwise
      */
     @Override
-    public Boolean validate(List<Point> points, Segmentation toCompare, int poleX, int poleY) {
+    public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
         errors = new ArrayList<String>();
         if (!points.isEmpty() && (toCompare != null)) {
 
-            List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(points, poleX, poleY);
-            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), poleX, poleY);
+            List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(points, refX, refY);
+            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), refX, refY);
 
             for (PointF polarPoint : segPolarPoints) {
                 List<PointF> closestDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);

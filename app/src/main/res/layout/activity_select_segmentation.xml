@@ -36,6 +36,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@drawable/buttons"/>
+
+        <Button android:id="@+id/carotid"
+            android:text="@string/button_carotid"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttons"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
