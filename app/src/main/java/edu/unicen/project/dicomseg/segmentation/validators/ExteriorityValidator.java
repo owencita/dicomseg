@@ -6,7 +6,7 @@ import android.graphics.PointF;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.unicen.project.dicomseg.polar.CartesianToPolarCalculator;
+import edu.unicen.project.dicomseg.coordinatesystem.CartesianToPolarCalculator;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 

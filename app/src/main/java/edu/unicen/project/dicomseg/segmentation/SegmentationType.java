@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.unicen.project.dicomseg.segmentation.validators.AboveValidator;
-import edu.unicen.project.dicomseg.segmentation.validators.BelowValidator;
+import edu.unicen.project.dicomseg.segmentation.validators.AboveLineValidator;
+import edu.unicen.project.dicomseg.segmentation.validators.BelowLineValidator;
 import edu.unicen.project.dicomseg.segmentation.validators.ClosureValidator;
 import edu.unicen.project.dicomseg.segmentation.validators.ExteriorityValidator;
 import edu.unicen.project.dicomseg.segmentation.validators.InteriorityValidator;
@@ -32,11 +32,11 @@ public enum SegmentationType {
             new ArrayList<SegmentationValidator>(),
             Boolean.FALSE, Boolean.FALSE, Boolean.TRUE),
     CAROTID_LI_ANTERIOR("Carotid Anterior LI",
-            new ArrayList<SegmentationValidator>(Arrays.asList(new AboveValidator())),
-            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new AboveLineValidator())),
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE),
     CAROTID_LI_POSTERIOR("Carotid Posterior LI",
-            new ArrayList<SegmentationValidator>(Arrays.asList(new BelowValidator())),
-            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+            new ArrayList<SegmentationValidator>(Arrays.asList(new BelowLineValidator())),
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
 
     private String name;
     private Boolean selectableReferencePoint;

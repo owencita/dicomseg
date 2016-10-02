@@ -1,4 +1,4 @@
-package edu.unicen.project.dicomseg.polar;
+package edu.unicen.project.dicomseg.coordinatesystem;
 
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -35,7 +35,7 @@ public class CartesianToPolarCalculator {
     }
 
     /**
-     * Returns the closest to 'degress' points from a list of polar points.
+     * Returns the closest to 'degrees' points from a list of polar points.
      *
      * @param points The list of polar points to get the closest to 'degree' points from
      * @param degrees The degrees to compare
