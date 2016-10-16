@@ -62,6 +62,15 @@ public class SelectDicomImageActivity extends AppCompatActivity {
             patientAddress.append(" " + patient.getAddress());
         }
 
+        long frameCount = DicomUtils.getFramesCount();
+        TextView frameCountText = (TextView) findViewById(R.id.textViewFrameCount);
+
+        if (frameCount == 0) {
+            frameCountText.setText(String.format((String) frameCountText.getText(), Long.toString(1)));
+        } else {
+            frameCountText.setText(String.format((String) frameCountText.getText(), Long.toString(frameCount)));
+        }
+
         final Button okButton = (Button) findViewById(R.id.okButton);
 
         okButton.setOnClickListener(new View.OnClickListener() {

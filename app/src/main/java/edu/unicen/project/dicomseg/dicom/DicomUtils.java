@@ -121,4 +121,9 @@ public class DicomUtils {
         return dataSet.getString(DicomTags.STUDY_INFO_GROUP, 0, DicomTags.SERIES_INSTANCE_UID, 0);
     }
 
+    public static int getFramesCount() {
+        DataSet dataSet = DicomSegApp.getDataSet();
+        return dataSet.getUnsignedLong(DicomTags.FRAME_INFO_GROUP, 0, DicomTags.NUMBER_OF_FRAMES, 0);
+    }
+
 }
