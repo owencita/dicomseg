@@ -5,12 +5,10 @@ import android.graphics.PointF;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class CartesianToPolarCalculator {
+public class PolarUtils {
 
-    private static final Integer DEGREE_TOLERANCE = 2;
     private static final String TAG = "PolarCalculator";
 
     public static PointF getPolarPoint(Point point, int poleX, int poleY) {
@@ -43,41 +41,36 @@ public class CartesianToPolarCalculator {
      */
     public static List<PointF> getClosestDegreePoints(List<PointF> points, Float degrees) {
 
-        List<PointF> closestDegrees = new ArrayList<PointF>();
+        List<PointF> closest = new ArrayList<PointF>();
 
-        List<PointF> supDegrees = new ArrayList<PointF>();
-        for (PointF point: points) {
-            if ((point.y <= (degrees + DEGREE_TOLERANCE))&&(point.y >= degrees)) {
-                supDegrees.add(point);
+        PointF closestInf = points.get(0);
+        for (PointF p : points) {
+            if (p.y < degrees) {
+                if (p.y > closestInf.y) {
+                    closestInf = p;
+                }
             }
         }
+        closest.add(closestInf);
 
-        // From all superior (close to 'degree') points, pick the one with shortest 'distance'
-        int minIndex = 0;
-        if (!supDegrees.isEmpty()) {
-            if (supDegrees.size() > 1) {
-                minIndex = supDegrees.indexOf(Collections.min(supDegrees, new PolarPointDistanceComparator()));
-            }
-            closestDegrees.add(supDegrees.get(minIndex));
-        }
-
-        List<PointF> infDegrees = new ArrayList<PointF>();
-        for (PointF point: points) {
-            if (point.y > (degrees - DEGREE_TOLERANCE)&&(point.y < degrees)) {
-                infDegrees.add(point);
+        PointF closestSup = null;//points.get(points.size()-1);
+        for (PointF p : points) {
+            if (p.y > degrees) {
+                if (closestSup == null || p.y < closestSup.y) {
+                    closestSup = p;
+                }
             }
         }
-
-        // From all inferior (close to 'degree') points, pick the one with shortest 'distance'
-        minIndex = 0;
-        if (!infDegrees.isEmpty()) {
-            if (infDegrees.size() > 1) {
-                minIndex = infDegrees.indexOf(Collections.min(infDegrees, new PolarPointDistanceComparator()));
-            }
-            closestDegrees.add(infDegrees.get(minIndex));
+        if (closestSup != null) {
+            closest.add(closestSup);
         }
 
-        return closestDegrees;
+        return closest;
+    }
+
+    public static float getInterpolatedDistance(PointF inf, PointF sup, float degrees) {
+        float slope = (sup.x - inf.x)/(sup.y - inf.y);
+        return slope * (degrees - inf.y) + inf.x;
     }
 
     private static double getDistance(int x, int y) {

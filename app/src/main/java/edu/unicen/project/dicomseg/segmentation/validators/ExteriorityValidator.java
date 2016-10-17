@@ -1,66 +1,16 @@
 package edu.unicen.project.dicomseg.segmentation.validators;
 
-import android.graphics.Point;
-import android.graphics.PointF;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.unicen.project.dicomseg.coordinatesystem.CartesianToPolarCalculator;
-import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
+import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
-public class ExteriorityValidator implements SegmentationValidator {
+public class ExteriorityValidator extends AbstractCircumferenceValidator {
 
-    private static List<String> errors = new ArrayList<String>();
-
-    /**
-     * Validates outter segmentation
-     *
-     * @param points
-     * @param toCompare
-     * @param refX
-     * @param refY
-     * @return true if segmentation is outside the other one, false otherwise
-     */
     @Override
-    public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
-        errors = new ArrayList<String>();
-        if (!points.isEmpty() && (toCompare != null)) {
-
-            List<PointF> segPolarPoints = CartesianToPolarCalculator.getPolarPoints(points, refX, refY);
-            List<PointF> segToComparePolarPoints = CartesianToPolarCalculator.getPolarPoints(toCompare.getPoints(), refX, refY);
-
-            for (PointF polarPoint : segPolarPoints) {
-                List<PointF> closestDegreePoints = CartesianToPolarCalculator.getClosestDegreePoints(segToComparePolarPoints, polarPoint.y);
-
-                if (!closestDegreePoints.isEmpty()) {
-                    if (closestDegreePoints.size() == 2) {
-                        PointF segInfPoint = closestDegreePoints.get(0);
-                        PointF segSupPoint = closestDegreePoints.get(1);
-                        if ((polarPoint.x < segInfPoint.x) && (polarPoint.x < segSupPoint.x)) {
-                            errors.add(SegmentationMessages.EXTERIORITY_ERROR + " " + toCompare.getType().getName());
-                            break;
-                        }
-                    } else {
-                        PointF onlyClosePoint = closestDegreePoints.get(0);
-                        if (polarPoint.x < onlyClosePoint.x) {
-                            errors.add(SegmentationMessages.EXTERIORITY_ERROR + " " + toCompare.getType().getName());
-                            break;
-                        }
-                    }
-                }
-
-                if (!errors.isEmpty()) {
-                    break;
-                }
-            }
+    public Boolean compare(float interpolatedDistance, float distance, SegmentationType segType) {
+        if (distance < interpolatedDistance) {
+            errors.add(String.format(SegmentationMessages.EXTERIORITY_ERROR, segType.getName()));
+            return Boolean.FALSE;
         }
-        return errors.isEmpty();
-    }
-
-    @Override
-    public List<String> errors() {
-        return errors;
+        return Boolean.TRUE;
     }
 }
