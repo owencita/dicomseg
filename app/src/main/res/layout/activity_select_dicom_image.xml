@@ -110,6 +110,15 @@
             android:layout_toRightOf="@+id/centerPoint"
             android:background="@drawable/buttons"/>
 
+        <TextView android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="380dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/select_frame_errors"
+            android:textStyle="bold"
+            android:textColor="@color/errorColor"/>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -9,5 +9,6 @@ public class SegmentationMessages {
     public static final String EXISTING_SEGMENTATION_ERROR = "A segmentation of this type already exists for this frame";
     public static final String NOT_ABOVE_ERROR = "All segmentation points must be above";
     public static final String NOT_BELOW_ERROR = "All segmentation points must be below";
+    public static final String FRAME_NUMBER_OUT_OF_RANGE = "The entered number is out of range";
 
 }

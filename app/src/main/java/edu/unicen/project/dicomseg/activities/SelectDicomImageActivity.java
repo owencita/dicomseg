@@ -16,10 +16,13 @@ import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.app.DicomSegApp;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.models.Patient;
+import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class SelectDicomImageActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectDicomImageActivity";
+
+    private long frameCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class SelectDicomImageActivity extends AppCompatActivity {
             patientAddress.append(" " + patient.getAddress());
         }
 
-        long frameCount = DicomUtils.getFramesCount();
+        frameCount = DicomUtils.getFramesCount();
         TextView frameCountText = (TextView) findViewById(R.id.textViewFrameCount);
 
         if (frameCount == 0) {
@@ -77,11 +80,20 @@ public class SelectDicomImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final EditText editText = (EditText) findViewById(R.id.imageNumber);
+
                 String imageNumber = editText.getText().toString();
-                Intent intent = new Intent(view.getContext(), DicomViewActivity.class);
-                intent.putExtra("imageNumber", new Integer(imageNumber));
-                intent.putExtra("fileName", dicomFile.getAbsolutePath());
-                view.getContext().startActivity(intent);
+                Integer realImageNumber = new Integer(imageNumber) - 1;
+
+                TextView errors = (TextView) findViewById(R.id.select_frame_errors);
+                if ((realImageNumber < 0)||(realImageNumber > frameCount)) {
+                    errors.setText(SegmentationMessages.FRAME_NUMBER_OUT_OF_RANGE);
+                } else {
+                    errors.setText("");
+                    Intent intent = new Intent(view.getContext(), DicomViewActivity.class);
+                    intent.putExtra("imageNumber", realImageNumber);
+                    intent.putExtra("fileName", dicomFile.getAbsolutePath());
+                    view.getContext().startActivity(intent);
+                }
             }
         });
 
