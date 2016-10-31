@@ -164,6 +164,8 @@ public class DicomViewActivity extends Activity {
                 segPath = new Path();
 
                 Button doneButton = (Button) findViewById(R.id.done);
+                doneButton.setEnabled(false);
+
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -193,6 +195,7 @@ public class DicomViewActivity extends Activity {
                                 textView.setText(sb.toString());
                             }
                         } else {
+                            doneButton.setEnabled(false);
                             showMenu();
                         }
                     }
@@ -216,6 +219,10 @@ public class DicomViewActivity extends Activity {
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         drawSegmentationsOnFrame();
+
+                        Button doneButton = (Button) findViewById(R.id.done);
+                        doneButton.setEnabled(false);
+
                         view.invalidate();
                     }
                 });
@@ -223,6 +230,11 @@ public class DicomViewActivity extends Activity {
                 imageView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
+
+                        Button doneButton = (Button) findViewById(R.id.done);
+                        if (!doneButton.isEnabled()) {
+                            doneButton.setEnabled(true);
+                        }
 
                         float[] coords = getCoordsForCanvas(event, imageView);
                         int x = (int) coords[0];
@@ -403,6 +415,11 @@ public class DicomViewActivity extends Activity {
                                                         imageView.setOnTouchListener(new View.OnTouchListener() {
                                                             @Override
                                                             public boolean onTouch(View view, MotionEvent event) {
+
+                                                                Button doneButton = (Button) findViewById(R.id.done);
+                                                                if (!doneButton.isEnabled()) {
+                                                                    doneButton.setEnabled(true);
+                                                                }
 
                                                                 float[] coords = getCoordsForCanvas(event, imageView);
                                                                 int x = (int) coords[0];
