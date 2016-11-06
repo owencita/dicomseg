@@ -40,6 +40,18 @@ public class CarotidSegActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button posteriorMA = (Button) findViewById(R.id.posteriorMA);
+        posteriorMA.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("segmentationType", SegmentationType.CAROTID_MA_POSTERIOR);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 
 }

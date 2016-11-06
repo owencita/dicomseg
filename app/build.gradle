@@ -31,6 +31,8 @@ dependencies {
     compile 'com.github.clans:fab:1.6.3'
     compile files('libs/imebra_android_jni.jar')
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.guava:guava:20.0'
+
     /* ImageJ2 beta version */
     //compile 'net.imagej:imagej-plugins-commands:0.7.0'
     //compile 'net.imglib2:imglib2-realtransform:2.0.0-beta-32'

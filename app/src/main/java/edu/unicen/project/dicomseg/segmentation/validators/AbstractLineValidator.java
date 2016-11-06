@@ -17,7 +17,6 @@ public abstract class AbstractLineValidator implements SegmentationValidator {
 
     @Override
     public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
-        errors = new ArrayList<String>();
         if (!points.isEmpty() && (toCompare != null)) {
             for (Point p: points) {
                 List<Point> closestPoints = CartesianUtils.getClosestPoints(toCompare.getPoints(), p.x);
@@ -39,6 +38,11 @@ public abstract class AbstractLineValidator implements SegmentationValidator {
     @Override
     public List<String> errors() {
         return errors;
+    }
+
+    @Override
+    public void resetErrors() {
+        errors = new ArrayList<String>();
     }
 }
 

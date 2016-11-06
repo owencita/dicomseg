@@ -331,8 +331,8 @@ public class DicomViewActivity extends Activity {
                                 if (segType != null) {
 
                                     segmentation.setType(segType);
-                                    Segmentation relatedSeg = SegmentationUtils.getRelatedSegmentation(segmentations, segmentation.getType());
-                                    segmentation.setRelatedSegmentation(relatedSeg);
+                                    List<Segmentation> relatedSegs = SegmentationUtils.getRelatedSegmentations(segmentations, segmentation.getType());
+                                    segmentation.setExistingRelatedSegmentations(relatedSegs);
                                     segmentation.clearPoints();
 
                                     if (segmentation.isContained(segmentations) && !segmentation.getType().allowsRepeats()) {
@@ -367,7 +367,7 @@ public class DicomViewActivity extends Activity {
                                             segmentation.setReferencePoint(pole);
                                             showDoneAndClearButtons();
                                         } else {
-                                            if (relatedSeg == null) {
+                                            if (relatedSegs.isEmpty()) {
                                                 TextView textView = (TextView) findViewById(R.id.textView);
                                                 textView.setText(getResources().getString(R.string.dicomview_select_reference_point) + " "
                                                                 + segmentation.getType().getReferencePointHint());
@@ -460,7 +460,7 @@ public class DicomViewActivity extends Activity {
                                                     }
                                                 });
                                             } else {
-                                                segmentation.setReferencePoint(relatedSeg.getReferencePoint());
+                                                segmentation.setReferencePoint(relatedSegs);
                                                 showDoneAndClearButtons();
                                             }
                                         }

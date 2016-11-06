@@ -23,8 +23,8 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/buttons"/>
 
-        <Button android:id="@+id/selectablePole"
-            android:text="@string/button_selectablePole"
+        <Button android:id="@+id/brainTumor"
+            android:text="@string/button_braintumor"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

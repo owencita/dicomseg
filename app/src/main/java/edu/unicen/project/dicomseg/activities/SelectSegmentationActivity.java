@@ -30,12 +30,12 @@ public class SelectSegmentationActivity extends AppCompatActivity {
             }
         });
 
-        Button selectablePole = (Button) findViewById(R.id.selectablePole);
-        selectablePole.setOnClickListener(new View.OnClickListener() {
+        Button brainTumor = (Button) findViewById(R.id.brainTumor);
+        brainTumor.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SelectablePoleSegActivity.class);
+                Intent intent = new Intent(v.getContext(), BrainTumorSegActivity.class);
                 startActivityForResult(intent, 1);
             }
         });

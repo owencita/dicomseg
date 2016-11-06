@@ -18,7 +18,6 @@ public abstract class AbstractCircumferenceValidator implements SegmentationVali
 
     @Override
     public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
-        errors = new ArrayList<String>();
         if (!points.isEmpty() && (toCompare != null)) {
             List<PointF> polarPoints = PolarUtils.getPolarPoints(points, refX, refY);
             List<PointF> toComparePolarPoints = PolarUtils.getPolarPoints(toCompare.getPoints(), refX, refY);
@@ -43,6 +42,11 @@ public abstract class AbstractCircumferenceValidator implements SegmentationVali
     @Override
     public List<String> errors() {
         return errors;
+    }
+
+    @Override
+    public void resetErrors() {
+        errors = new ArrayList<String>();
     }
 
 }

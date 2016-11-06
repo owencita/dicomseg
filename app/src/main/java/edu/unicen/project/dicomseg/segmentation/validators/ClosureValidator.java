@@ -23,7 +23,6 @@ public class ClosureValidator implements SegmentationValidator {
      */
     @Override
     public Boolean validate(List<Point> points, Segmentation toCompare, int refX, int refY) {
-        errors = new ArrayList<String>();
         if (!points.isEmpty()) {
             Point start = points.get(0);
             Point end = points.get(points.size()-1);
@@ -40,5 +39,10 @@ public class ClosureValidator implements SegmentationValidator {
     @Override
     public List<String> errors() {
         return errors;
+    }
+
+    @Override
+    public void resetErrors() {
+        errors = new ArrayList<String>();
     }
 }

@@ -70,7 +70,7 @@ public class PolarUtils {
 
     public static float getInterpolatedDistance(PointF inf, PointF sup, float degrees) {
         float slope = (sup.x - inf.x)/(sup.y - inf.y);
-        return slope * (degrees - inf.y) + inf.x;
+        return slope * (degrees - inf.y) + sup.x;
     }
 
     private static double getDistance(int x, int y) {

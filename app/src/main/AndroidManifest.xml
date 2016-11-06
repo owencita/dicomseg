@@ -56,7 +56,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".activities.SelectablePoleSegActivity"
+            android:name=".activities.BrainTumorSegActivity"
             android:label="@string/title_activity_selectable_pole_seg"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

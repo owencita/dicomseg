@@ -27,7 +27,7 @@
     <string name="title_activity_select_segmentation">SelectSegmentation</string>
     <string name="label_activity_select_segmentation">Select segmentation type</string>
     <string name="button_ivus">IVUS</string>
-    <string name="button_selectablePole">Brain Tumor</string>
+    <string name="button_braintumor">Brain Tumor</string>
     <string name="button_retinography">Retinography</string>
     <string name="button_carotid">Carotid</string>
 
@@ -37,11 +37,11 @@
     <string name="button_ivusLI">LI (Lumen-Intima)</string>
     <string name="button_ivusMA">MA (Media-Adventitia)</string>
 
-    <!-- SelectablePoleSegActivity -->
-    <string name="title_activity_selectable_pole_seg">SelectablePoleSegActivity</string>
-    <string name="label_activity_selectable_pole_seg">Select brain tumor segmentation type</string>
-    <string name="button_innerSelectablePole">Tumor Border</string>
-    <string name="button_outerSelectablePole">Necrosis</string>
+    <!-- BrainTumorSegActivity -->
+    <string name="title_activity_selectable_pole_seg">BrainTumorSegActivity</string>
+    <string name="label_activity_brain_tumor_seg">Select brain tumor segmentation type</string>
+    <string name="button_brainTumorNecrosis">Necrosis</string>
+    <string name="button_brainTumorBorder">Tumor Border</string>
 
     <!-- RetinographySegActivity -->
     <string name="title_activity_retinography_seg">RetinographySegActivity</string>
@@ -50,10 +50,11 @@
     <string name="button_vessels">Vessels</string>
 
     <!-- CarotidSegActivity -->
-    <string name="title_activity_carotid_seg">CarotidSegActivity</string>
+    <string name="title_activity_carotid_seg">Carot|idSegActivity</string>
     <string name="label_activity_carotid_seg">Select carotid segmentation type</string>
-    <string name="button_anteriorLI">LI (Lumen-Intima) Anterior</string>
-    <string name="button_posteriorLI">LI (Lumen-Intima) Posterior</string>
+    <string name="button_carotid_anteriorLI">LI (Lumen-Intima) Anterior</string>
+    <string name="button_carotid_posteriorLI">LI (Lumen-Intima) Posterior</string>
+    <string name="button_carotid_ma_posterior">MA (Media-Adventitia) Posterior</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>

@@ -10,32 +10,32 @@ import android.widget.Button;
 import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
-public class SelectablePoleSegActivity extends AppCompatActivity {
+public class BrainTumorSegActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selectable_pole_seg);
+        setContentView(R.layout.activity_brain_tumor_seg);
 
-        Button innerSelectablePole = (Button) findViewById(R.id.innerSelectablePole);
-        innerSelectablePole.setOnClickListener(new View.OnClickListener() {
+        Button necrosis = (Button) findViewById(R.id.brainTumorNecrosis);
+        necrosis.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", SegmentationType.INNER_SELECTABLE_POLE);
+                returnIntent.putExtra("segmentationType", SegmentationType.BRAIN_TUMOR_NECROSIS);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
 
-        Button outerSelectablePole = (Button) findViewById(R.id.outerSelectablePole);
-        outerSelectablePole.setOnClickListener(new View.OnClickListener() {
+        Button border = (Button) findViewById(R.id.brainTumorBorder);
+        border.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("segmentationType", SegmentationType.OUTER_SELECTABLE_POLE);
+                returnIntent.putExtra("segmentationType", SegmentationType.BRAIN_TUMOR_BORDER);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

@@ -4,27 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="edu.unicen.project.dicomseg.activities.SelectablePoleSegActivity">
+    tools:context="edu.unicen.project.dicomseg.activities.BrainTumorSegActivity">
 
-    <include layout="@layout/content_selectable_pole_seg" />
+    <include layout="@layout/content_brain_tumor_seg" />
 
-    <LinearLayout android:id="@+id/select_selectablepoleseg"
+    <LinearLayout android:id="@+id/select_braintumorseg"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:orientation="vertical">
 
-        <Button android:id="@+id/innerSelectablePole"
-            android:text="@string/button_innerSelectablePole"
+        <Button android:id="@+id/brainTumorNecrosis"
+            android:text="@string/button_brainTumorNecrosis"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/buttons"/>
 
-        <Button android:id="@+id/outerSelectablePole"
-            android:text="@string/button_outerSelectablePole"
+        <Button android:id="@+id/brainTumorBorder"
+            android:text="@string/button_brainTumorBorder"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
