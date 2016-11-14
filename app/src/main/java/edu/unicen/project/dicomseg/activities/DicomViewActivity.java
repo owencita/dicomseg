@@ -181,10 +181,8 @@ public class DicomViewActivity extends Activity {
                                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                                 imageView.setOnTouchListener(null);
                                 // save segmentation
-                                Gson gson = new Gson();
-                                String pointsString = gson.toJson(segmentation.getPoints());
-                                String referencePointString = gson.toJson(segmentation.getReferencePoint());
-                                dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, referencePointString);
+                                saveSegmentation();
+                                // show menu
                                 showMenu();
                             } else {
                                 // show validation error
@@ -196,7 +194,7 @@ public class DicomViewActivity extends Activity {
                             }
                         } else {
                             doneButton.setEnabled(false);
-                            showMenu();
+                            textView.setText(SegmentationMessages.EMPTY_SEGMENTATION_ERROR);
                         }
                     }
                 });
@@ -258,13 +256,22 @@ public class DicomViewActivity extends Activity {
                         } else {
                             // user touched up
                             if ((inputEnd != null) && !previousPathAdded.get()) {
-                                accumSegPath.addPath(segPath);
-                                segPath = new Path();
-                                Point start = segmentation.getPoints().get(0);
-                                segPath.moveTo(start.x, start.y);
-                                previousPathAdded.set(true);
-                                TextView textView = (TextView) findViewById(R.id.textView);
-                                textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                if (!segmentation.getType().allowsRepeats()) {
+                                    accumSegPath.addPath(segPath);
+                                    segPath = new Path();
+                                    Point start = segmentation.getPoints().get(0);
+                                    segPath.moveTo(start.x, start.y);
+                                    previousPathAdded.set(true);
+                                    TextView textView = (TextView) findViewById(R.id.textView);
+                                    textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                } else {
+                                    inputStart = null;
+                                    inputEnd = null;
+                                    saveSegmentation();
+                                    segPath = new Path();
+                                    SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                    segmentation.clearPoints();
+                                }
                             }
                         }
 
@@ -443,13 +450,22 @@ public class DicomViewActivity extends Activity {
                                                                 } else {
                                                                     // user touched up
                                                                     if ((inputEnd != null) && !previousPathAdded.get()) {
-                                                                        accumSegPath.addPath(segPath);
-                                                                        segPath = new Path();
-                                                                        Point start = segmentation.getPoints().get(0);
-                                                                        segPath.moveTo(start.x, start.y);
-                                                                        previousPathAdded.set(true);
-                                                                        TextView textView = (TextView) findViewById(R.id.textView);
-                                                                        textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                                                        if (!segmentation.getType().allowsRepeats()) {
+                                                                            accumSegPath.addPath(segPath);
+                                                                            segPath = new Path();
+                                                                            Point start = segmentation.getPoints().get(0);
+                                                                            segPath.moveTo(start.x, start.y);
+                                                                            previousPathAdded.set(true);
+                                                                            TextView textView = (TextView) findViewById(R.id.textView);
+                                                                            textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                                                        } else {
+                                                                            inputStart = null;
+                                                                            inputEnd = null;
+                                                                            saveSegmentation();
+                                                                            segPath = new Path();
+                                                                            SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                                                            segmentation.clearPoints();
+                                                                        }
                                                                     }
                                                                 }
 
@@ -560,6 +576,14 @@ public class DicomViewActivity extends Activity {
         }
 
         return segmentations;
+    }
+
+    private void saveSegmentation() {
+        Gson gson = new Gson();
+        String pointsString = gson.toJson(segmentation.getPoints());
+        String referencePointString = gson.toJson(segmentation.getReferencePoint());
+        dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, referencePointString);
+
     }
 
 }
