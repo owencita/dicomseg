@@ -289,9 +289,7 @@ public class DicomViewActivity extends Activity {
             public void onClick(View view) {
 
                 hideMenu();
-
                 drawSegmentationsOnFrame();
-                view.invalidate();
 
                 Button okButton = (Button) findViewById(R.id.ok);
                 okButton.setVisibility(View.VISIBLE);
@@ -332,11 +330,11 @@ public class DicomViewActivity extends Activity {
                                 // Draw existing segmentations in the same frame
                                 final List<Segmentation> segmentations = drawSegmentationsOnFrame();
 
-                                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
                                 SegmentationType segType = (SegmentationType) data.getSerializableExtra("segmentationType");
 
                                 if (segType != null) {
 
+                                    segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segType.getColor());
                                     segmentation.setType(segType);
                                     List<Segmentation> relatedSegs = SegmentationUtils.getRelatedSegmentations(segmentations, segmentation.getType());
                                     segmentation.setExistingRelatedSegmentations(relatedSegs);
@@ -561,7 +559,7 @@ public class DicomViewActivity extends Activity {
             for (Segmentation segmentation: segmentations) {
                 List<Point> points = segmentation.getPoints();
                 segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), SegmentationDrawingUtils.getColor());
+                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor());
                 canvas.drawPath(segPath, segPaint);
                 if (segmentation.getType().isReferencePointDrawable()) {
                     drawPoint(segmentation.getReferencePoint().x, segmentation.getReferencePoint().y);
@@ -575,6 +573,9 @@ public class DicomViewActivity extends Activity {
             }
         }
 
+        ImageView view = (ImageView) findViewById(R.id.imageView);
+        view.invalidate();
+
         return segmentations;
     }
 
@@ -583,7 +584,6 @@ public class DicomViewActivity extends Activity {
         String pointsString = gson.toJson(segmentation.getPoints());
         String referencePointString = gson.toJson(segmentation.getReferencePoint());
         dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, referencePointString);
-
     }
 
 }

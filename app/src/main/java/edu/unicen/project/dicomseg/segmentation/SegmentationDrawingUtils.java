@@ -1,12 +1,9 @@
 package edu.unicen.project.dicomseg.segmentation;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,8 +18,6 @@ public class SegmentationDrawingUtils {
     private static float mX, mY;
     private static final Paint paint = new Paint();
     private static final Paint notePointPaint = new Paint();
-    private static final int[] colors = { SegmentationColors.BLUE, SegmentationColors.RED, SegmentationColors.YELLOW, SegmentationColors.GREEN };
-    private static int COLOR_INDEX = 0;
 
     public static Paint getPaint(int width, int color) {
         paint.setAntiAlias(true);
@@ -88,21 +83,6 @@ public class SegmentationDrawingUtils {
         } else {
             return false;
         }
-    }
-
-    public static int getColor() {
-        if (COLOR_INDEX < colors.length) {
-            int color = COLOR_INDEX;
-            COLOR_INDEX++;
-            return colors[color];
-        } else {
-            resetColor();
-            return colors[COLOR_INDEX];
-        }
-    }
-
-    public static void resetColor() {
-        COLOR_INDEX = 0;
     }
 
     private static void touch_start(Path path, int x, int y) {
