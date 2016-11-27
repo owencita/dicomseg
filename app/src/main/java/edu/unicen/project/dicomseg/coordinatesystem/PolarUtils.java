@@ -18,7 +18,10 @@ public class PolarUtils {
         int ySh = -point.y + poleY;
         Log.i(TAG, "Punto Trasladado: (" + xSh + "," + ySh + ")");
         polarPoint.x = (float) getDistance(xSh, ySh);
-        polarPoint.y = (float) toDegrees(getAngle(xSh, ySh));
+        double radio = Math.sqrt(xSh * xSh + ySh * ySh);
+        double cos = xSh / radio;
+        double ang = Math.acos(cos);
+        polarPoint.y = (float) toDegrees(getAngle(ang, ySh));
         Log.i(TAG, "Punto Polar: (" + polarPoint.x + "," + toDegrees(polarPoint.y) + "°)");
         return polarPoint;
     }
@@ -79,17 +82,17 @@ public class PolarUtils {
         return Math.sqrt(x2 + y2);
     }
 
-    private static double getAngle(int x, int y) {
-        if (x != 0) {
-            double div = (double) y / x;
-            return Math.atan(div);
-        } else {
-            if (y < 0) {
-                return Math.PI/2;
-            } else {
-                return -Math.PI/2;
-            }
+    private static double getAngle(double ang, int ySh) {
+        if (ang > 0 && ySh < 0) {
+            ang = 2 * Math.PI-ang;
         }
+        if (ang < 0 && ySh > 0) {
+            ang = Math.PI+ang;
+        }
+        if (ang < 0 && ySh < 0) {
+            ang = Math.PI-ang;
+        }
+        return ang;
     }
 
     private static double toDegrees(double radians) {
