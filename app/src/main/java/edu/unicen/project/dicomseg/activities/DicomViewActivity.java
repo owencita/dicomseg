@@ -23,6 +23,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -279,6 +280,18 @@ public class DicomViewActivity extends Activity {
                         return true;
                     }
                 });
+            }
+        });
+
+        FloatingActionButton adjustSegmentationButton = (FloatingActionButton) findViewById(R.id.menu_adjust);
+        adjustSegmentationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), GeneralNoteActivity.class);
+                List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
+                ArrayList<Segmentation> adjustableSegmentations = SegmentationUtils.getAdjustableSegmentations(segmentations);
+                intent.putParcelableArrayListExtra("existingAdjustableSegmentations", adjustableSegmentations);
+                view.getContext().startActivity(intent);
             }
         });
 

@@ -12,39 +12,39 @@ import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator
 public enum SegmentationType {
 
     IVUS_LI("IVUS LI (Lumen-Intima)",
-            Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
             SegmentationColors.BLUE),
     IVUS_MA("IVUS MA (Media-Adventitia)",
-            Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
             SegmentationColors.RED),
     BRAIN_TUMOR_NECROSIS("Necrosis",
-            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
+            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
             SegmentationColors.BLUE),
     BRAIN_TUMOR_BORDER("Tumor Border",
-            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
+            Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
             SegmentationColors.RED),
     OPTIC_DISC("Optic Disc",
-            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
             SegmentationColors.BLUE),
     VESSELS("Vessels",
-            Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
+            Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(),
             SegmentationColors.RED),
     CAROTID_LI_ANTERIOR("Carotid Anterior LI",
-            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(),
             SegmentationColors.BLUE),
     CAROTID_LI_POSTERIOR("Carotid Posterior LI",
-            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(),
             SegmentationColors.RED),
     CAROTID_MA_POSTERIOR("Carotid Posterior MA",
-            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(),
             SegmentationColors.GREEN);
 
@@ -52,8 +52,10 @@ public enum SegmentationType {
     private Boolean selectableReferencePoint;
     private Boolean drawableReferencePoint;
     private Boolean allowsRepeats;
+    private Boolean isAdjustable;
     private List<SegmentationValidator> ownValidators;
     private Integer color;
+
     private ImmutableMap<SegmentationType, List<SegmentationValidator>> related;
     private String referencePointHint;
 
@@ -83,11 +85,13 @@ public enum SegmentationType {
     }
 
     SegmentationType(String name, Boolean selectableReferencePoint, Boolean drawableReferencePoint,
-                     Boolean allowsRepeats, List<SegmentationValidator> ownValidators, Integer color) {
+                     Boolean allowsRepeats, Boolean isAdjustable, List<SegmentationValidator> ownValidators,
+                     Integer color) {
         this.name = name;
         this.selectableReferencePoint = selectableReferencePoint;
         this.drawableReferencePoint = drawableReferencePoint;
         this.allowsRepeats = allowsRepeats;
+        this.isAdjustable = isAdjustable;
         this.ownValidators = ownValidators;
         this.color = color;
     }
@@ -122,5 +126,9 @@ public enum SegmentationType {
 
     public Integer getColor() {
         return color;
+    }
+
+    public Boolean isAdjustable() {
+        return isAdjustable;
     }
 }

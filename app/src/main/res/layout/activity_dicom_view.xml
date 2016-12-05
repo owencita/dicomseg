@@ -67,6 +67,14 @@
             fab:fab_label="Segment Image" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_adjust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_edit"
+            fab:fab_size="mini"
+            fab:fab_label="Adjust Segmentation" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_show_segment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

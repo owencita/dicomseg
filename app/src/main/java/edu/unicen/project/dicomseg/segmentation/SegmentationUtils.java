@@ -24,4 +24,14 @@ public class SegmentationUtils {
         }
         return relatedSegs;
     }
+
+    public static ArrayList<Segmentation> getAdjustableSegmentations(List<Segmentation> segmentations) {
+        ArrayList<Segmentation> adjustableSegs = new ArrayList<Segmentation>();
+        for (Segmentation seg: segmentations) {
+            if (seg.getType().isAdjustable()) {
+                adjustableSegs.add(seg);
+            }
+        }
+        return adjustableSegs;
+    }
 }

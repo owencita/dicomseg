@@ -19,10 +19,6 @@ android {
     }
 }
 
-/*repositories {
-    maven { url "http://maven.imagej.net/content/groups/public" }
-}*/
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -32,9 +28,5 @@ dependencies {
     compile files('libs/imebra_android_jni.jar')
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.google.guava:guava:20.0'
-
-    /* ImageJ2 beta version */
-    //compile 'net.imagej:imagej-plugins-commands:0.7.0'
-    //compile 'net.imglib2:imglib2-realtransform:2.0.0-beta-32'
-    //compile 'net.imagej:imagej:2.0.0-rc-55'
+    compile project(':app:libs:opencv')
 }

@@ -1,6 +1,8 @@
 package edu.unicen.project.dicomseg.segmentation;
 
 import android.graphics.Point;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -11,7 +13,7 @@ import java.util.Set;
 
 import edu.unicen.project.dicomseg.segmentation.validators.SegmentationValidator;
 
-public class Segmentation {
+public class Segmentation implements Parcelable {
 
     private SegmentationType type;
     private Point referencePoint;
@@ -148,5 +150,32 @@ public class Segmentation {
                 }
             }
         }
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(type.getName());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<Segmentation> CREATOR
+            = new Parcelable.Creator<Segmentation>() {
+        public Segmentation createFromParcel(Parcel in) {
+            return new Segmentation(in);
+        }
+
+        public Segmentation[] newArray(int size) {
+            return new Segmentation[size];
+        }
+    };
+
+    private Segmentation(Parcel in) {
+    }
+
+    public Segmentation() {
     }
 }
