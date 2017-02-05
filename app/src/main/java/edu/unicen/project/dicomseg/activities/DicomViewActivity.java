@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.unicen.project.dicomseg.R;
+import edu.unicen.project.dicomseg.app.DicomSegApp;
 import edu.unicen.project.dicomseg.dbhelper.DbHelper;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.listeners.GestureListener;
@@ -287,10 +288,10 @@ public class DicomViewActivity extends Activity {
         adjustSegmentationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), GeneralNoteActivity.class);
+                Intent intent = new Intent(view.getContext(), AdjustSegmentationActivity.class);
                 List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
-                ArrayList<Segmentation> adjustableSegmentations = SegmentationUtils.getAdjustableSegmentations(segmentations);
-                intent.putParcelableArrayListExtra("existingAdjustableSegmentations", adjustableSegmentations);
+                List<Segmentation> adjustableSegmentations = SegmentationUtils.getAdjustableSegmentations(segmentations);
+                DicomSegApp.setAdjutableSegmentations(adjustableSegmentations);
                 view.getContext().startActivity(intent);
             }
         });

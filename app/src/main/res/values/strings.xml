@@ -50,11 +50,15 @@
     <string name="button_vessels">Vessels</string>
 
     <!-- CarotidSegActivity -->
-    <string name="title_activity_carotid_seg">Carot|idSegActivity</string>
+    <string name="title_activity_carotid_seg">CarotidSegActivity</string>
     <string name="label_activity_carotid_seg">Select carotid segmentation type</string>
     <string name="button_carotid_anteriorLI">LI (Lumen-Intima) Anterior</string>
     <string name="button_carotid_posteriorLI">LI (Lumen-Intima) Posterior</string>
     <string name="button_carotid_ma_posterior">MA (Media-Adventitia) Posterior</string>
+
+    <!-- AdjustSegmentationActivity -->
+    <string name="title_activity_adjust_segmentation">AdjustSegmentationActivity</string>
+    <string name="adjustsegmentation_textinfo_default">Select segmentation to adjust:</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>

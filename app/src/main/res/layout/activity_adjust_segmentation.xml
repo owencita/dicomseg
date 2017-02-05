@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="edu.unicen.project.dicomseg.activities.AdjustSegmentation">
+
+    <include layout="@layout/content_adjust_segmentation" />
+
+    <TextView android:text="@string/adjustsegmentation_textinfo_default"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/textInfo" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="30dp">
+
+        <ListView android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
