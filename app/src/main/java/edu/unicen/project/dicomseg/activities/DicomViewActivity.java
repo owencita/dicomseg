@@ -292,6 +292,7 @@ public class DicomViewActivity extends Activity {
                 List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
                 List<Segmentation> adjustableSegmentations = SegmentationUtils.getAdjustableSegmentations(segmentations);
                 DicomSegApp.setAdjutableSegmentations(adjustableSegmentations);
+                DicomSegApp.setDicomFrame(dicomFrame);
                 view.getContext().startActivity(intent);
             }
         });

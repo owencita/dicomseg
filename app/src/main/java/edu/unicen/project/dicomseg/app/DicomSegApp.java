@@ -1,6 +1,7 @@
 package edu.unicen.project.dicomseg.app;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.imebra.dicom.DataSet;
 
@@ -9,13 +10,14 @@ import java.util.List;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
 
 /**
- * DataSet from Imebra library does not implement Serializable (a requirement to pass it along activities)
- * The purpose of this class is to allow DataSet to be used along activities (turning it into a static variable)
+ * These classes of these variables do not implement Serializable (a requirement to pass them along activities)
+ * The purpose of this class is to allow these variables to be used along activities (turning them into static variables)
  */
 public class DicomSegApp extends Application {
 
     private static DataSet dataSet = null;
     private static List<Segmentation> adjutableSegmentations = null;
+    private static Bitmap dicomFrame = null;
 
     public static void setDataSet(DataSet dataSet) {
         DicomSegApp.dataSet = dataSet;
@@ -31,5 +33,13 @@ public class DicomSegApp extends Application {
 
     public static void setAdjutableSegmentations(List<Segmentation> adjutableSegmentations) {
         DicomSegApp.adjutableSegmentations = adjutableSegmentations;
+    }
+
+    public static Bitmap getDicomFrame() {
+        return DicomSegApp.dicomFrame;
+    }
+
+    public static void setDicomFrame(Bitmap dicomFrame) {
+        DicomSegApp.dicomFrame = dicomFrame;
     }
 }
