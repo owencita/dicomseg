@@ -125,7 +125,7 @@ public class Snake {
 			for(int dy=-1;dy<=1;dy++) {
 				for(int dx=-1;dx<=1;dx++) {
 					//p.setLocation(cur.x+dx, cur.y+dy);
-                    p.offset(cur.x+dx, cur.y+dy);
+                    p.set(cur.x+dx, cur.y+dy);
 					e_uniformity[1+dx][1+dy] = f_uniformity(prev,next,p);
 					e_curvature[1+dx][1+dy]  = f_curvature(prev,p,next);
 					e_flow[1+dx][1+dy]       = f_gflow(cur,p);

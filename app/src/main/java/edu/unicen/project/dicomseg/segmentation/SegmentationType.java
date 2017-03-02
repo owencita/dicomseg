@@ -46,7 +46,11 @@ public enum SegmentationType {
     CAROTID_MA_POSTERIOR("Carotid Posterior MA",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(),
-            SegmentationColors.GREEN);
+            SegmentationColors.GREEN),
+    SNAKE("Snake segmentation",
+            Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+            null,
+            SegmentationColors.YELLOW);
 
     private String name;
     private Boolean selectableReferencePoint;

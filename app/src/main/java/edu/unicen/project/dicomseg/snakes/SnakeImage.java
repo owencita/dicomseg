@@ -71,6 +71,7 @@ public class SnakeImage {
         }
 
         Snake snakeInstance = new Snake(W, H, chanel_gradient, chanel_flow, segmentation);
+        snakeInstance.snake();
 
         return snakeInstance.snake;
     }

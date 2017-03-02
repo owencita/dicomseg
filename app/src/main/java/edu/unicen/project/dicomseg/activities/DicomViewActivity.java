@@ -293,7 +293,7 @@ public class DicomViewActivity extends Activity {
                 List<Segmentation> adjustableSegmentations = SegmentationUtils.getAdjustableSegmentations(segmentations);
                 DicomSegApp.setAdjutableSegmentations(adjustableSegmentations);
                 DicomSegApp.setDicomFrame(dicomFrame);
-                view.getContext().startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -502,6 +502,12 @@ public class DicomViewActivity extends Activity {
                                     refreshPointNote();
                                 }
                                 break;
+                            case AdjustSegmentationActivity.TAG:
+                                drawSegmentation(segmentation);
+                                drawSegmentation(DicomSegApp.getSnake());
+                                ImageView view = (ImageView) findViewById(R.id.imageView);
+                                view.invalidate();
+                                break;
                         }
                     break;
                     case Activity.RESULT_CANCELED:
@@ -572,13 +578,7 @@ public class DicomViewActivity extends Activity {
 
         if (!segmentations.isEmpty()) {
             for (Segmentation segmentation: segmentations) {
-                List<Point> points = segmentation.getPoints();
-                segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-                segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor());
-                canvas.drawPath(segPath, segPaint);
-                if (segmentation.getType().isReferencePointDrawable()) {
-                    drawPoint(segmentation.getReferencePoint().x, segmentation.getReferencePoint().y);
-                }
+                drawSegmentation(segmentation);
             }
         }
 
@@ -592,6 +592,16 @@ public class DicomViewActivity extends Activity {
         view.invalidate();
 
         return segmentations;
+    }
+
+    private void drawSegmentation(Segmentation segmentation) {
+        List<Point> points = segmentation.getPoints();
+        segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
+        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor());
+        canvas.drawPath(segPath, segPaint);
+        if (segmentation.getType().isReferencePointDrawable()) {
+            drawPoint(segmentation.getReferencePoint().x, segmentation.getReferencePoint().y);
+        }
     }
 
     private void saveSegmentation() {

@@ -18,6 +18,7 @@ public class DicomSegApp extends Application {
     private static DataSet dataSet = null;
     private static List<Segmentation> adjutableSegmentations = null;
     private static Bitmap dicomFrame = null;
+    private static Segmentation snake = null;
 
     public static void setDataSet(DataSet dataSet) {
         DicomSegApp.dataSet = dataSet;
@@ -41,5 +42,13 @@ public class DicomSegApp extends Application {
 
     public static void setDicomFrame(Bitmap dicomFrame) {
         DicomSegApp.dicomFrame = dicomFrame;
+    }
+
+    public static Segmentation getSnake() {
+        return DicomSegApp.snake;
+    }
+
+    public static void setSnake(Segmentation snake) {
+        DicomSegApp.snake = snake;
     }
 }
