@@ -25,6 +25,8 @@ public class AdjustSegmentationActivity extends AppCompatActivity {
     private ListedSegmentationArrayAdapter adapter;
     private ListView listView;
 
+    private SnakeImage snake = new SnakeImage();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,7 @@ public class AdjustSegmentationActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Segmentation segmentation = (Segmentation) listView.getItemAtPosition(position);
 
-                List<Point> snakePoints = SnakeImage.snakeImage(DicomSegApp.getDicomFrame(), segmentation.getPoints());
+                List<Point> snakePoints = snake.snakeImage(DicomSegApp.getDicomFrame(), segmentation.getPoints());
 
                 Segmentation segmentationSnake = new Segmentation();
                 segmentationSnake.setType(SegmentationType.SNAKE);
