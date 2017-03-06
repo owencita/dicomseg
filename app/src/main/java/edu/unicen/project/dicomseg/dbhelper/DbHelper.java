@@ -436,4 +436,25 @@ public class DbHelper extends SQLiteOpenHelper {
                 selectionArgs);
     }
 
+    public void updateSegmentation(String fileName, Integer imageNumber, SegmentationType segType, String points) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS, points);
+
+        // Which row to update, based on the ID
+        String selection = DicomSegmentationContract.Segmentation.COLUMN_NAME_FILE_NAME + " = ? AND " +
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER + " = ? AND " +
+                DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE + " = ?";
+
+        String[] selectionArgs = { fileName, Integer.toString(imageNumber), segType.toString() };
+
+        int count = db.update(
+                DicomSegmentationContract.Segmentation.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+    }
+
 }

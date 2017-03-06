@@ -294,6 +294,29 @@ public class DicomViewActivity extends Activity {
                 DicomSegApp.setAdjutableSegmentations(adjustableSegmentations);
                 DicomSegApp.setDicomFrame(dicomFrame);
                 startActivityForResult(intent, 1);
+
+                Button keepButton = (Button) findViewById(R.id.keepAdjustment);
+                keepButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        segmentation.setPoints(DicomSegApp.getSnake().getPoints());
+                        updateSegmentation();
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        hideKeepAndCancelButtons();
+                        showMenu();
+                    }
+                });
+
+                Button cancelButton = (Button) findViewById(R.id.cancel);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DicomSegApp.setSnake(null);
+                        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                        hideKeepAndCancelButtons();
+                        showMenu();
+                    }
+                });
             }
         });
 
@@ -505,6 +528,8 @@ public class DicomViewActivity extends Activity {
                             case AdjustSegmentationActivity.TAG:
                                 drawSegmentation(segmentation);
                                 drawSegmentation(DicomSegApp.getSnake());
+                                hideMenu();
+                                showKeepAndCancelButtons();
                                 ImageView view = (ImageView) findViewById(R.id.imageView);
                                 view.invalidate();
                                 break;
@@ -573,6 +598,20 @@ public class DicomViewActivity extends Activity {
         clearButton.setVisibility(View.GONE);
     }
 
+    private void showKeepAndCancelButtons() {
+        Button keepButton = (Button) findViewById(R.id.keepAdjustment);
+        keepButton.setVisibility(View.VISIBLE);
+        Button cancelButton = (Button) findViewById(R.id.cancel);
+        cancelButton.setVisibility(View.VISIBLE);
+    }
+
+    private void hideKeepAndCancelButtons() {
+        Button keepButton = (Button) findViewById(R.id.keepAdjustment);
+        keepButton.setVisibility(View.GONE);
+        Button cancelButton = (Button) findViewById(R.id.cancel);
+        cancelButton.setVisibility(View.GONE);
+    }
+
     private List<Segmentation> drawSegmentationsOnFrame() {
         List<Segmentation> segmentations = dbHelper.getSegmentations(fileName, imageNumber);
 
@@ -609,6 +648,12 @@ public class DicomViewActivity extends Activity {
         String pointsString = gson.toJson(segmentation.getPoints());
         String referencePointString = gson.toJson(segmentation.getReferencePoint());
         dbHelper.insertSegmentation(fileName, imageNumber, segmentation.getType(), pointsString, referencePointString);
+    }
+
+    private void updateSegmentation() {
+        Gson gson = new Gson();
+        String pointsString = gson.toJson(segmentation.getPoints());
+        dbHelper.updateSegmentation(fileName, imageNumber, segmentation.getType(), pointsString);
     }
 
 }

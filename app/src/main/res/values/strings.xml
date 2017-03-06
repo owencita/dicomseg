@@ -63,7 +63,8 @@
     <!-- Buttons -->
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
-    <string name="done">Done</string>
-    <string name="clear">Clear</string>
+    <string name="button_done">Done</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_keepAdjustment">Save</string>
 
 </resources>

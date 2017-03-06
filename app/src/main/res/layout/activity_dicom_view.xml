@@ -85,7 +85,7 @@
     </com.github.clans.fab.FloatingActionMenu>
 
     <Button android:id="@+id/done"
-            android:text="@string/done"
+            android:text="@string/button_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
@@ -105,7 +105,28 @@
         android:background="@drawable/buttons" />
 
     <Button android:id="@+id/clear"
-        android:text="@string/clear"
+        android:text="@string/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:background="@drawable/buttons" />
+
+    <Button
+        android:id="@+id/keepAdjustment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="500dp"
+        android:background="@drawable/buttons"
+        android:text="@string/button_keepAdjustment"
+        android:visibility="gone" />
+
+    <Button android:id="@+id/cancel"
+        android:text="@string/button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
