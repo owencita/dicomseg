@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.dbhelper.DbHelper;
+import edu.unicen.project.dicomseg.dbhelper.DbXmlExporter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Code to drop note table (uncomment when needed)
-        getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
+        // Code to drop db (uncomment when needed)
+        //getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_exportDB) {
+            DbHelper dbHelper = new DbHelper(getBaseContext());
+            DbXmlExporter.exportDatabase(dbHelper);
         }
 
         return super.onOptionsItemSelected(item);

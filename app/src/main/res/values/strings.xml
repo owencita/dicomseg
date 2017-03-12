@@ -2,7 +2,7 @@
 
     <!-- Application -->
     <string name="app_name">DICOM Segmentation</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_exportDB">Export Database</string>
 
     <!-- FileChooserActivity -->
     <string name="title_activity_file_chooser">FileChooserActivity</string>
