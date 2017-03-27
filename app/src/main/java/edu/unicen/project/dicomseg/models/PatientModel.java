@@ -1,6 +1,6 @@
 package edu.unicen.project.dicomseg.models;
 
-public class Patient {
+public class PatientModel extends GenericModel {
 
     private String id;
     private String name;

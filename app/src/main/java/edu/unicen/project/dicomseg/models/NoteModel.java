@@ -1,6 +1,6 @@
 package edu.unicen.project.dicomseg.models;
 
-public class Note {
+public class NoteModel extends GenericModel {
 
     private Integer id;
     private String fileName;

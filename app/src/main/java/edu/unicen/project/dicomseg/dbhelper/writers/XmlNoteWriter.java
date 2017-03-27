@@ -1,40 +1,32 @@
-package edu.unicen.project.dicomseg.dbhelper;
+package edu.unicen.project.dicomseg.dbhelper.writers;
 
-import android.os.Environment;
+
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
-import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
-import edu.unicen.project.dicomseg.models.Note;
+import edu.unicen.project.dicomseg.dbhelper.contracts.DicomNoteContract;
+import edu.unicen.project.dicomseg.dbhelper.DbHelper;
+import edu.unicen.project.dicomseg.models.GenericModel;
+import edu.unicen.project.dicomseg.models.NoteModel;
 
-public class DbXmlExporter {
+public class XmlNoteWriter implements IXmlWriter {
 
-    public static void exportDatabase(DbHelper dbHelper) {
-        String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        try {
-            File file = new File(externalStorage + "/dicomsegdb/notes.xml");
-            file.createNewFile();
-            file.setReadable(true);
-            file.setWritable(true);
-            FileWriter notes = new FileWriter(file);
-            List<Note> allNotes = dbHelper.getAllNotes();
-            String notesXml = writeXml(allNotes);
-            if (notesXml != null) {
-                notes.append(notesXml);
-                notes.close();
-            }
-        } catch (IOException e) {
-        }
+    @Override
+    public String getXmlFileName() {
+        return "notes.xml";
     }
 
-    protected static String writeXml(List<Note> notes){
+    @Override
+    public List<GenericModel> getModels(DbHelper dbHelper) {
+        return dbHelper.getAllNotes();
+    }
+
+    @Override
+    public String writeXml(List<GenericModel> notes) {
         String notesXml = null;
         if (!notes.isEmpty()) {
             XmlSerializer serializer = Xml.newSerializer();
@@ -43,7 +35,8 @@ public class DbXmlExporter {
                 serializer.setOutput(writer);
                 serializer.startDocument("UTF-8", true);
                 serializer.startTag("", "notes");
-                for (Note note : notes) {
+                for (GenericModel genericModel : notes) {
+                    NoteModel note = (NoteModel)genericModel;
                     serializer.startTag("", DicomNoteContract.NoteEntry.TABLE_NAME);
                     // id
                     serializer.startTag("", DicomNoteContract.NoteEntry._ID);

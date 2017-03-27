@@ -1,4 +1,4 @@
-package edu.unicen.project.dicomseg.contracts;
+package edu.unicen.project.dicomseg.dbhelper.contracts;
 
 import android.provider.BaseColumns;
 

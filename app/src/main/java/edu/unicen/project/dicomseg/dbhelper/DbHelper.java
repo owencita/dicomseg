@@ -14,10 +14,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.unicen.project.dicomseg.contracts.DicomNoteContract;
-import edu.unicen.project.dicomseg.contracts.DicomSegmentationContract;
+import edu.unicen.project.dicomseg.dbhelper.contracts.DicomNoteContract;
+import edu.unicen.project.dicomseg.dbhelper.contracts.DicomSegmentationContract;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
-import edu.unicen.project.dicomseg.models.Note;
+import edu.unicen.project.dicomseg.models.GenericModel;
+import edu.unicen.project.dicomseg.models.NoteModel;
+import edu.unicen.project.dicomseg.models.PointNoteModel;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
@@ -134,8 +136,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return noteText;
     }
 
-    public List<Note> getAllNotes() {
-        List<Note> notes = new ArrayList<Note>();
+    public List<GenericModel> getAllNotes() {
+        List<GenericModel> notes = new ArrayList<GenericModel>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + DicomNoteContract.NoteEntry.TABLE_NAME, null);
         if (cursor.getCount() > 0 ) {
@@ -147,7 +149,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     String seriesUID = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.NoteEntry.COLUMN_NAME_SERIES_UID));
                     Integer imageNumber = cursor.getInt(cursor.getColumnIndexOrThrow(DicomNoteContract.NoteEntry.COLUMN_NAME_IMAGE_NUMBER));
                     String text = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.NoteEntry.COLUMN_NAME_TEXT));
-                    Note note = new Note();
+                    NoteModel note = new NoteModel();
                     note.setId(id);
                     note.setFileName(fileName);
                     note.setStudyUID(studyUID);
@@ -247,6 +249,36 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return points;
+    }
+
+    public List<GenericModel> getAllPointNotes() {
+        List<GenericModel> pointNotes = new ArrayList<GenericModel>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DicomNoteContract.PointNoteEntry.TABLE_NAME, null);
+        if (cursor.getCount() > 0 ) {
+            if (cursor.moveToFirst()) {
+                while (cursor.isAfterLast() == false) {
+                    String fileName = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_FILE_NAME));
+                    String studyUID = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_STUDY_UID));
+                    String seriesUID = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_SERIES_UID));
+                    Integer imageNumber = cursor.getInt(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_IMAGE_NUMBER));
+                    Integer x = cursor.getInt(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_X));
+                    Integer y = cursor.getInt(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_Y));
+                    String text = cursor.getString(cursor.getColumnIndexOrThrow(DicomNoteContract.PointNoteEntry.COLUMN_NAME_TEXT));
+                    PointNoteModel pointNote = new PointNoteModel();
+                    pointNote.setFileName(fileName);
+                    pointNote.setStudyUID(studyUID);
+                    pointNote.setSeriesUID(seriesUID);
+                    pointNote.setImageNumber(imageNumber);
+                    pointNote.setX(x);
+                    pointNote.setY(y);
+                    pointNote.setText(text);
+                    pointNotes.add(pointNote);
+                    cursor.moveToNext();
+                }
+            }
+        }
+        return pointNotes;
     }
 
     public List<Point> getSegmentation(String fileName, Integer imageNumber) {

@@ -17,7 +17,7 @@ import com.imebra.dicom.VOILUT;
 import java.io.File;
 
 import edu.unicen.project.dicomseg.app.DicomSegApp;
-import edu.unicen.project.dicomseg.models.Patient;
+import edu.unicen.project.dicomseg.models.PatientModel;
 
 /**
  * Utils class to interact with Imebra Library
@@ -81,8 +81,8 @@ public class DicomUtils {
         return renderBitmap;
     }
 
-    public static Patient getPatient() {
-        Patient patient = new Patient();
+    public static PatientModel getPatient() {
+        PatientModel patient = new PatientModel();
         DataSet dataSet = DicomSegApp.getDataSet();
 
         String id = dataSet.getString(DicomTags.PATIENT_INFO_GROUP, 0, DicomTags.PATIENT_ID, 0);

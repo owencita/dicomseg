@@ -15,7 +15,7 @@ import java.io.File;
 import edu.unicen.project.dicomseg.R;
 import edu.unicen.project.dicomseg.app.DicomSegApp;
 import edu.unicen.project.dicomseg.dicom.DicomUtils;
-import edu.unicen.project.dicomseg.models.Patient;
+import edu.unicen.project.dicomseg.models.PatientModel;
 import edu.unicen.project.dicomseg.segmentation.SegmentationMessages;
 
 public class SelectDicomImageActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class SelectDicomImageActivity extends AppCompatActivity {
         DataSet dataSet = DicomUtils.getDataSet(dicomFile);
         DicomSegApp.setDataSet(dataSet);
 
-        Patient patient = DicomUtils.getPatient();
+        PatientModel patient = DicomUtils.getPatient();
 
         if (patient.getId() != null) {
             TextView patientId = (TextView) findViewById(R.id.patientId);
