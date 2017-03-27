@@ -12,6 +12,7 @@ import edu.unicen.project.dicomseg.dbhelper.exporters.IDbExporter;
 import edu.unicen.project.dicomseg.dbhelper.writers.IXmlWriter;
 import edu.unicen.project.dicomseg.dbhelper.writers.XmlNoteWriter;
 import edu.unicen.project.dicomseg.dbhelper.writers.XmlPointNoteWriter;
+import edu.unicen.project.dicomseg.dbhelper.writers.XmlSegmentationWriter;
 import edu.unicen.project.dicomseg.snakes.externalforces.ExternalForcesImpl;
 import edu.unicen.project.dicomseg.snakes.externalforces.IExternalForces;
 
@@ -36,11 +37,14 @@ public class DicomSegModule {
     @Provides
     @Singleton
     List<IXmlWriter> provideWriters() {
+        // add new writers here
         List<IXmlWriter> writers = new ArrayList<IXmlWriter>();
-        IXmlWriter noteWriter = new XmlNoteWriter();
+        XmlNoteWriter noteWriter = new XmlNoteWriter();
         writers.add(noteWriter);
-        IXmlWriter pointNoteWriter = new XmlPointNoteWriter();
+        XmlPointNoteWriter pointNoteWriter = new XmlPointNoteWriter();
         writers.add(pointNoteWriter);
+        XmlSegmentationWriter segmentationWriter = new XmlSegmentationWriter();
+        writers.add(segmentationWriter);
         return writers;
     }
 

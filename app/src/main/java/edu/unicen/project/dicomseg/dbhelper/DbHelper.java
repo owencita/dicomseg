@@ -20,6 +20,7 @@ import edu.unicen.project.dicomseg.dicom.DicomUtils;
 import edu.unicen.project.dicomseg.models.GenericModel;
 import edu.unicen.project.dicomseg.models.NoteModel;
 import edu.unicen.project.dicomseg.models.PointNoteModel;
+import edu.unicen.project.dicomseg.models.SegmentationModel;
 import edu.unicen.project.dicomseg.segmentation.Segmentation;
 import edu.unicen.project.dicomseg.segmentation.SegmentationType;
 
@@ -386,6 +387,53 @@ public class DbHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        return segmentations;
+    }
+
+    public List<GenericModel> getAllSegmentations() {
+        List<GenericModel> segmentations = new ArrayList<GenericModel>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DicomSegmentationContract.Segmentation.TABLE_NAME, null);
+        if (cursor.getCount() > 0 ) {
+            if (cursor.moveToFirst()) {
+                while (cursor.isAfterLast() == false) {
+
+                    String fileName = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_FILE_NAME));
+                    String studyUID = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_STUDY_UID));
+                    String seriesUID = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_SERIES_UID));
+                    Integer imageNumber = cursor.getInt(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_IMAGE_NUMBER));
+                    SegmentationType segmentationType = SegmentationType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_SEG_TYPE)));
+
+                    SegmentationModel segmentation = new SegmentationModel();
+                    segmentation.setFileName(fileName);
+                    segmentation.setStudyUID(studyUID);
+                    segmentation.setSeriesUID(seriesUID);
+                    segmentation.setImageNumber(imageNumber);
+                    segmentation.setSegmentationType(segmentationType);
+
+                    String jsonPoints = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_POINTS));
+                    if (jsonPoints != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ArrayList<Point>>() {}.getType();
+                        List<Point> points = new ArrayList<Point>();
+                        points = gson.fromJson(jsonPoints, type);
+                        segmentation.setPoints(points);
+                    }
+
+                    String jsonPole = cursor.getString(cursor.getColumnIndexOrThrow(DicomSegmentationContract.Segmentation.COLUMN_NAME_REFERENCE_POINT));
+                    if (jsonPole != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<Point>() {}.getType();
+                        Point point = new Point();
+                        point = gson.fromJson(jsonPole, type);
+                        segmentation.setReferencePoint(point);
+                    }
+
+                    segmentations.add(segmentation);
+                    cursor.moveToNext();
+                }
+            }
+        }
         return segmentations;
     }
 

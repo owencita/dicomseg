@@ -34,9 +34,9 @@ public class DbXmlExporter implements IDbExporter {
                 file.setWritable(true);
                 FileWriter notes = new FileWriter(file);
                 List<GenericModel> models = writer.getModels(dbHelper);
-                String notesXml = writer.writeXml(models);
-                if (notesXml != null) {
-                    notes.append(notesXml);
+                String xml = writer.writeXml(models);
+                if (xml != null) {
+                    notes.append(xml);
                     notes.close();
                 }
             } catch (IOException e) {
