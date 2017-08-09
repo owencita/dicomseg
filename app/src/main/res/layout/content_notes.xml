@@ -7,7 +7,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_notes" tools:context="edu.unicen.project.dicomseg.activities.GeneralNoteActivity">
+    tools:showIn="@layout/activity_notes" tools:context="edu.exa.unicen.dicomseg.activities.GeneralNoteActivity">
 
     <TextView android:text="Enter note text:"
         android:layout_width="wrap_content"

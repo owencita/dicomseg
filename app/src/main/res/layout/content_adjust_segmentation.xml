@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_adjust_segmentation"
-    tools:context="edu.unicen.project.dicomseg.activities.AdjustSegmentation">
+    tools:context="edu.exa.unicen.dicomseg.activities.AdjustSegmentation">
 
     <TextView android:text="" android:id="@+id/SegmentationView"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
