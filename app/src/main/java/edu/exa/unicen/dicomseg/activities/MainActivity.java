@@ -1,6 +1,7 @@
 package edu.exa.unicen.dicomseg.activities;
 
 import android.Manifest;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import edu.exa.unicen.dicomseg.R;
 import edu.exa.unicen.dicomseg.dagger.components.MainActivityComponent;
 import edu.exa.unicen.dicomseg.dbhelper.DbHelper;
 import edu.exa.unicen.dicomseg.dbhelper.exporters.IDbExporter;
+import edu.exa.unicen.dicomseg.dialogs.ResetDatabaseDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         MainActivityComponent component = MainActivityComponent.Initializer.init();
         component.inject(this);
-
-        // Code to drop db (uncomment when needed)
-        //getBaseContext().deleteDatabase(DbHelper.DATABASE_NAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,15 +65,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_exportDB) {
-            DbHelper dbHelper = new DbHelper(getBaseContext());
-            dbExporter.exportDatabase(dbHelper);
+        switch (id) {
+            case R.id.action_exportDB:
+                DbHelper dbHelper = new DbHelper(getBaseContext());
+                dbExporter.exportDatabase(dbHelper);
+                break;
+            case R.id.action_resetDB:
+                ResetDatabaseDialog resetDatabaseDialog = new ResetDatabaseDialog();
+                resetDatabaseDialog.show(getSupportFragmentManager(), "");
+                break;
+            case R.id.action_exit:
+                finishAffinity();
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

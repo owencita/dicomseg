@@ -1,8 +1,14 @@
 <resources>
 
-    <!-- Application -->
+    <!-- Main Menu-->
     <string name="app_name">DICOM Segmentation</string>
     <string name="action_exportDB">Export Database</string>
+    <string name="action_resetDB">Reset Database</string>
+    <string name="action_exit">Exit</string>
+
+    <!-- Reset Database Dialog-->
+    <string name="resetDB_title">Reset Database</string>
+    <string name="resetDB_message">Are you sure you want to delete all data from database?</string>
 
     <!-- FileChooserActivity -->
     <string name="title_activity_file_chooser">FileChooserActivity</string>
