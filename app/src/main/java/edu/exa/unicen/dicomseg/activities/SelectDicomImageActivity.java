@@ -84,7 +84,7 @@ public class SelectDicomImageActivity extends AppCompatActivity {
                 String imageNumber = editText.getText().toString();
                 Integer realImageNumber = new Integer(imageNumber) - 1;
 
-                TextView errors = (TextView) findViewById(R.id.select_frame_errors);
+                TextView errors = (TextView) findViewById(R.id.selectFrameErrors);
                 if ((realImageNumber < 0)||(realImageNumber > frameCount)) {
                     errors.setText(SegmentationMessages.FRAME_NUMBER_OUT_OF_RANGE);
                 } else {

@@ -84,55 +84,57 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-    <Button android:id="@+id/done"
-            android:text="@string/button_done"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp">
+
+        <Button android:id="@+id/done"
+                android:text="@string/button_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginLeft="100dp"
+                android:visibility="gone"
+                android:background="@drawable/buttons" />
+
+        <Button android:id="@+id/ok"
+            android:text="@string/button_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="500dp"
-            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom|center"
             android:visibility="gone"
             android:background="@drawable/buttons" />
 
-    <Button android:id="@+id/ok"
-        android:text="@string/button_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="500dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"
-        android:background="@drawable/buttons" />
+        <Button android:id="@+id/clear"
+            android:text="@string/button_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="200dp"
+            android:visibility="gone"
+            android:background="@drawable/buttons" />
 
-    <Button android:id="@+id/clear"
-        android:text="@string/button_clear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="500dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"
-        android:background="@drawable/buttons" />
+        <Button
+            android:id="@+id/keepAdjustment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="100dp"
+            android:background="@drawable/buttons"
+            android:text="@string/button_keepAdjustment"
+            android:visibility="gone" />
 
-    <Button
-        android:id="@+id/keepAdjustment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="500dp"
-        android:background="@drawable/buttons"
-        android:text="@string/button_keepAdjustment"
-        android:visibility="gone" />
+        <Button android:id="@+id/cancel"
+            android:text="@string/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="200dp"
+            android:visibility="gone"
+            android:background="@drawable/buttons" />
 
-    <Button android:id="@+id/cancel"
-        android:text="@string/button_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="500dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"
-        android:background="@drawable/buttons" />
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

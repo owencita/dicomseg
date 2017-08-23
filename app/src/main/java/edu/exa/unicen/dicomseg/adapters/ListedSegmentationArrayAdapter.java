@@ -15,13 +15,13 @@ import edu.exa.unicen.dicomseg.segmentation.Segmentation;
 
 public class ListedSegmentationArrayAdapter extends ArrayAdapter<Segmentation> {
 
-    private Context c;
+    private Context context;
     private int id;
     private List<Segmentation> items;
 
     public ListedSegmentationArrayAdapter(Context context, int textViewResourceId, List<Segmentation> items) {
         super(context, textViewResourceId, items);
-        this.c = context;
+        this.context = context;
         this.id = textViewResourceId;
         this.items = items;
     }
@@ -36,14 +36,14 @@ public class ListedSegmentationArrayAdapter extends ArrayAdapter<Segmentation> {
         View v = convertView;
 
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(id, null);
         }
 
         final Segmentation item = items.get(position);
 
         if (item != null) {
-            TextView segmentationView = (TextView) v.findViewById(R.id.SegmentationView);
+            TextView segmentationView = (TextView) v.findViewById(R.id.segmentationView);
 
             if (segmentationView != null) {
                 segmentationView.setText(item.getType().getName());

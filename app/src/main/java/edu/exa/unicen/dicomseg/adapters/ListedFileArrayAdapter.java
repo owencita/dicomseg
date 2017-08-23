@@ -14,13 +14,13 @@ import edu.exa.unicen.dicomseg.R;
 
 public class ListedFileArrayAdapter extends ArrayAdapter<File> {
 
-    private Context c;
+    private Context context;
     private int id;
     private List<File> items;
 
     public ListedFileArrayAdapter(Context context, int textViewResourceId, List<File> items) {
         super(context, textViewResourceId, items);
-        this.c = context;
+        this.context = context;
         this.id = textViewResourceId;
         this.items = items;
     }
@@ -35,15 +35,15 @@ public class ListedFileArrayAdapter extends ArrayAdapter<File> {
         View v = convertView;
 
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(id, null);
         }
 
         final File item = items.get(position);
 
         if (item != null) {
-            TextView nameView = (TextView) v.findViewById(R.id.NameView);
-            TextView sizeView = (TextView) v.findViewById(R.id.SizeView);
+            TextView nameView = (TextView) v.findViewById(R.id.nameView);
+            TextView sizeView = (TextView) v.findViewById(R.id.sizeView);
 
             if (nameView != null) {
                 nameView.setText(item.getName());

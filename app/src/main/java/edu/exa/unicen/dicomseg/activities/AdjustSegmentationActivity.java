@@ -40,6 +40,7 @@ public class AdjustSegmentationActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Segmentation segmentation = (Segmentation) listView.getItemAtPosition(position);
+                DicomSegApp.setSegmentationToAdjust(segmentation);
 
                 List<Point> snakePoints = snake.snakeImage(DicomSegApp.getDicomFrame(), segmentation.getPoints());
 

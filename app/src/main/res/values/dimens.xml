@@ -1,6 +1,22 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Activities Defaults -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Patient Info -->
+    <dimen name="patient_info_title_margin_top">20dp</dimen>
+    <dimen name="patient_info_title_margin_bottom">10dp</dimen>
+    <dimen name="patient_info_field_margin">2dp</dimen>
+
+    <!-- Select Frame Number -->
+    <dimen name="select_frame_button_margin">10dp</dimen>
+    <dimen name="select_frame_errors_margin">20dp</dimen>
+
+    <!-- Lists -->
+    <dimen name="list_title_text_margin">20dp</dimen>
+    <dimen name="list_item_text_margin">10dp</dimen>
+    <dimen name="list_margin_top">25dp</dimen>
+
 </resources>

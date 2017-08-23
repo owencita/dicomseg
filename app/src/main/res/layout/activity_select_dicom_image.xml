@@ -1,124 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="edu.exa.unicen.dicomseg.activities.SelectDicomImageActivity">
 
-    <TextView android:text="Patient Information:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/textViewPatientInfo"
-        android:textStyle="bold" />
-
-    <TextView android:text="Id:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientId" />
-
-    <TextView android:text="Name:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientName" />
-
-    <TextView android:text="Sex:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientSex" />
-
-    <TextView android:text="Age:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="105dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientAge" />
-
-    <TextView android:text="Birthday:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientBirthday" />
-
-    <TextView android:text="Weight:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="145dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientWeight" />
-
-    <TextView android:text="Address:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="165dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/patientAddress" />
-
-    <RelativeLayout
-
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView android:text="Number of frames: %s"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/textViewFrameCount"
-            android:textStyle="bold"/>
-
-        <TextView android:text="Enter the number of the image you want to display:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/textView"
-            android:textStyle="bold"/>
-
-        <include layout="@layout/content_select_dicom_image" />
-
-        <Button android:id="@+id/okButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_ok"
-            android:layout_marginTop="320dip"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/centerPoint"
-            android:background="@drawable/buttons"/>
-
-        <TextView
-            android:id="@+id/centerPoint"
-            android:text=""
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
-
-        <Button android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_cancel"
-            android:layout_marginTop="320dip"
-            android:layout_toRightOf="@+id/centerPoint"
-            android:background="@drawable/buttons"/>
-
-        <TextView android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="380dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/select_frame_errors"
-            android:textStyle="bold"
-            android:textColor="@color/errorColor"/>
-
-    </RelativeLayout>
+    <include layout="@layout/content_select_dicom_image" />
 
 </android.support.design.widget.CoordinatorLayout>

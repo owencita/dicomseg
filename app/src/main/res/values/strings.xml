@@ -64,7 +64,7 @@
 
     <!-- AdjustSegmentationActivity -->
     <string name="title_activity_adjust_segmentation">AdjustSegmentationActivity</string>
-    <string name="adjustsegmentation_textinfo_default">Select segmentation to adjust:</string>
+    <string name="adjustsegmentation_title">Select segmentation to adjust:</string>
 
     <!-- Buttons -->
     <string name="button_ok">OK</string>
