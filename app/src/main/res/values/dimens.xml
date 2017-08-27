@@ -14,9 +14,13 @@
     <dimen name="select_frame_button_margin">10dp</dimen>
     <dimen name="select_frame_errors_margin">20dp</dimen>
 
-    <!-- Lists -->
+    <!-- Lists (files & segmentations to adjust) -->
     <dimen name="list_title_text_margin">20dp</dimen>
     <dimen name="list_item_text_margin">10dp</dimen>
     <dimen name="list_margin_top">25dp</dimen>
+
+    <!-- Segmentation Types List -->
+    <dimen name="select_segmentation_title_margin_bottom">20dp</dimen>
+    <dimen name="select_segmentation_button_margin_bottom">10dp</dimen>
 
 </resources>

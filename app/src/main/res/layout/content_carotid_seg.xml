@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,9 +12,35 @@
     tools:showIn="@layout/activity_carotid_seg"
     tools:context="edu.exa.unicen.dicomseg.activities.CarotidSegActivity">
 
-    <TextView android:text="@string/label_activity_carotid_seg"
+    <TextView android:id="@+id/textInfoCarotid"
+        android:text="@string/label_activity_carotid_seg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:layout_marginBottom="@dimen/select_segmentation_title_margin_bottom"
+        android:textStyle="bold" />
+
+    <Button android:id="@+id/anteriorLI"
+        android:text="@string/button_carotid_anteriorLI"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
+        android:layout_below="@+id/textInfoCarotid"
+        android:background="@drawable/buttons"/>
+
+    <Button android:id="@+id/posteriorLI"
+        android:text="@string/button_carotid_posteriorLI"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
+        android:layout_below="@+id/anteriorLI"
+        android:background="@drawable/buttons"/>
+
+    <Button android:id="@+id/posteriorMA"
+        android:text="@string/button_carotid_ma_posterior"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
+        android:layout_below="@+id/posteriorLI"
+        android:background="@drawable/buttons"/>
 
 </RelativeLayout>

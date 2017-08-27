@@ -12,6 +12,7 @@
 
     <!-- FileChooserActivity -->
     <string name="title_activity_file_chooser">FileChooserActivity</string>
+    <string name="selectfile_title">Select DICOM file:</string>
 
     <!-- SelectDicomImageActivity -->
     <string name="title_activity_select_dicom_image">SelectDicomImageActivity</string>
