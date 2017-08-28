@@ -21,7 +21,7 @@
 
     <Button android:id="@+id/brainTumorNecrosis"
         android:text="@string/button_brainTumorNecrosis"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/textInfoBrainTumor"
@@ -29,7 +29,7 @@
 
     <Button android:id="@+id/brainTumorBorder"
         android:text="@string/button_brainTumorBorder"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/brainTumorNecrosis"

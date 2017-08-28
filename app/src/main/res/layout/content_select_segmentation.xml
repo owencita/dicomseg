@@ -21,7 +21,7 @@
 
     <Button android:id="@+id/ivusSeg"
         android:text="@string/button_ivus"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/textInfoSelectSegType"
@@ -29,7 +29,7 @@
 
     <Button android:id="@+id/brainTumor"
         android:text="@string/button_braintumor"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/ivusSeg"
@@ -37,7 +37,7 @@
 
     <Button android:id="@+id/retinography"
         android:text="@string/button_retinography"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/brainTumor"
@@ -45,7 +45,7 @@
 
     <Button android:id="@+id/carotid"
         android:text="@string/button_carotid"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/retinography"

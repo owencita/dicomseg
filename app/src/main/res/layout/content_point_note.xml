@@ -10,9 +10,45 @@
     tools:showIn="@layout/activity_point_note"
     tools:context="edu.exa.unicen.dicomseg.activities.PointNoteActivity">
 
-    <TextView android:text="Enter point note text:"
+    <TextView android:id="@+id/textInfoPointNote"
+        android:text="Enter point note text:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:paddingBottom="@dimen/notes_text_padding_bottom"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notes_edit_height"
+        android:scrollbars="vertical"
+        android:gravity="top"
+        android:layout_below="@+id/textInfoPointNote"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/centerPointNotes"
+        android:text=""
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <Button android:id="@+id/okButton"
+        android:text="@string/button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/centerPointNotes"
+        android:layout_below="@+id/noteText"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons"/>
+
+    <Button android:id="@+id/cancelButton"
+        android:text="@string/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/centerPointNotes"
+        android:layout_below="@+id/noteText"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons"/>
 
 </RelativeLayout>

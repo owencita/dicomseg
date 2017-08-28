@@ -4,6 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="button_margin">10dp</dimen>
 
     <!-- Patient Info -->
     <dimen name="patient_info_title_margin_top">20dp</dimen>
@@ -11,7 +12,6 @@
     <dimen name="patient_info_field_margin">2dp</dimen>
 
     <!-- Select Frame Number -->
-    <dimen name="select_frame_button_margin">10dp</dimen>
     <dimen name="select_frame_errors_margin">20dp</dimen>
 
     <!-- Lists (files & segmentations to adjust) -->
@@ -22,5 +22,9 @@
     <!-- Segmentation Types List -->
     <dimen name="select_segmentation_title_margin_bottom">20dp</dimen>
     <dimen name="select_segmentation_button_margin_bottom">10dp</dimen>
+
+    <!-- Notes -->
+    <dimen name="notes_text_padding_bottom">6dp</dimen>
+    <dimen name="notes_edit_height">250dp</dimen>
 
 </resources>

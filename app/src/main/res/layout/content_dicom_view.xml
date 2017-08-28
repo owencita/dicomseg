@@ -1,24 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_dicom_view"
     tools:context="edu.exa.unicen.dicomseg.activities.DicomViewActivity">
 
-    <TextView android:text="@string/dicomview_textinfo_default"
+    <TextView android:id="@+id/textInfoDicomView"
+        android:text="@string/dicomview_textinfo_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textInfo" />
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textStyle="bold" />
 
-    <TextView android:id="@+id/textView"
+    <TextView android:id="@+id/textDetailDicomView"
         android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp" />
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_below="@+id/textInfoDicomView" />
+
+    <ImageView android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_below="@+id/textDetailDicomView" />
+
+    <ImageView android:id="@+id/mutableImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_below="@+id/textDetailDicomView" />
+
+    <TextView
+        android:id="@+id/centerPointDicomView"
+        android:text=""
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <Button android:id="@+id/ok"
+        android:text="@string/button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons" />
+
+    <Button android:id="@+id/done"
+        android:text="@string/button_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_toLeftOf="@+id/centerPointDicomView"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons" />
+
+    <Button android:id="@+id/clear"
+        android:text="@string/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/centerPointDicomView"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons" />
+
+    <Button android:id="@+id/keepAdjustment"
+        android:text="@string/button_keepAdjustment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_toLeftOf="@+id/centerPointDicomView"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons" />
+
+    <Button android:id="@+id/cancel"
+        android:text="@string/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/centerPointDicomView"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons" />
 
 </RelativeLayout>

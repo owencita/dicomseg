@@ -21,7 +21,7 @@
 
     <Button android:id="@+id/ivusLI"
         android:text="@string/button_ivusLI"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/textInfoIvus"
@@ -29,7 +29,7 @@
 
     <Button android:id="@+id/ivusMA"
         android:text="@string/button_ivusMA"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/ivusLI"

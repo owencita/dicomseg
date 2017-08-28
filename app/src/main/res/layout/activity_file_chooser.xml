@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="edu.exa.unicen.dicomseg.activities.FileChooserActivity">
 
-    <TextView android:id="@+id/textInfo"
+    <TextView android:id="@+id/textInfoFileChooser"
         android:text="@string/selectfile_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

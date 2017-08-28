@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_notes" tools:context="edu.exa.unicen.dicomseg.activities.GeneralNoteActivity">
 
-    <TextView android:text="Enter note text:"
+    <TextView
+        android:id="@+id/textInfoNotes"
+        android:text="Enter note text:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:paddingBottom="@dimen/notes_text_padding_bottom"
+        android:textStyle="bold" />
+
+    <EditText android:id="@+id/noteText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notes_edit_height"
+        android:scrollbars="vertical"
+        android:gravity="top"
+        android:layout_below="@+id/textInfoNotes"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/centerPointNotes"
+        android:text=""
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:text="@string/button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/centerPointNotes"
+        android:layout_below="@+id/noteText"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons"/>
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:text="@string/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/centerPointNotes"
+        android:layout_below="@+id/noteText"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/buttons"/>
 
 </RelativeLayout>

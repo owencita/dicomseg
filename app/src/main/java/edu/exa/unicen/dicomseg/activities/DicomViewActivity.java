@@ -100,9 +100,9 @@ public class DicomViewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 hideMenu();
-                TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                TextView textInfo = (TextView) findViewById(R.id.textInfoDicomView);
                 textInfo.setText(getResources().getString(R.string.pointnote_adding));
-                TextView textView = (TextView) findViewById(R.id.textView);
+                TextView textView = (TextView) findViewById(R.id.textInfoDicomView);
                 textView.setText(getResources().getString(R.string.pointnote_tap_to_add));
 
                 refreshPointNote();
@@ -172,7 +172,7 @@ public class DicomViewActivity extends Activity {
                     public void onClick(View view) {
                         Button doneButton = (Button) findViewById(R.id.done);
                         Button clearButton = (Button) findViewById(R.id.clear);
-                        TextView textView = (TextView) findViewById(R.id.textView);
+                        TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
 
                         if (!segmentation.getPoints().isEmpty()) {
                             if (segmentation.isValid()) {
@@ -212,7 +212,7 @@ public class DicomViewActivity extends Activity {
                         segPath = new Path();
                         segmentation.clearPoints();
 
-                        TextView textView = (TextView) findViewById(R.id.textView);
+                        TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                         textView.setText("");
 
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -263,7 +263,7 @@ public class DicomViewActivity extends Activity {
                                     Point start = segmentation.getPoints().get(0);
                                     segPath.moveTo(start.x, start.y);
                                     previousPathAdded.set(true);
-                                    TextView textView = (TextView) findViewById(R.id.textView);
+                                    TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                                     textView.setText(SegmentationMessages.CONTINUITY_ERROR);
                                 } else {
                                     inputStart = null;
@@ -379,9 +379,9 @@ public class DicomViewActivity extends Activity {
                                         segmentation.clearPoints();
 
                                         if (segmentation.isContained(segmentations) && !segmentation.getType().allowsRepeats()) {
-                                            TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                            TextView textInfo = (TextView) findViewById(R.id.textInfoDicomView);
                                             textInfo.setText("");
-                                            TextView textView = (TextView) findViewById(R.id.textView);
+                                            TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                                             textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
 
                                             imageView.setOnTouchListener(null);
@@ -401,7 +401,7 @@ public class DicomViewActivity extends Activity {
                                             });
                                         } else {
 
-                                            TextView textInfo = (TextView) findViewById(R.id.textInfo);
+                                            TextView textInfo = (TextView) findViewById(R.id.textInfoDicomView);
                                             textInfo.setText("Segmenting: " + segmentation.getType().getName());
 
                                             if (!segType.isReferencePointSelectable()) {
@@ -411,7 +411,7 @@ public class DicomViewActivity extends Activity {
                                                 showDoneAndClearButtons();
                                             } else {
                                                 if (relatedSegs.isEmpty()) {
-                                                    TextView textView = (TextView) findViewById(R.id.textView);
+                                                    TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                                                     textView.setText(getResources().getString(R.string.dicomview_select_reference_point) + " "
                                                             + segmentation.getType().getReferencePointHint());
 
@@ -445,7 +445,7 @@ public class DicomViewActivity extends Activity {
                                                     okButton.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
-                                                            TextView textView = (TextView) findViewById(R.id.textView);
+                                                            TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                                                             textView.setText("");
 
                                                             Button okButton = (Button) findViewById(R.id.ok);
@@ -492,7 +492,7 @@ public class DicomViewActivity extends Activity {
                                                                                 Point start = segmentation.getPoints().get(0);
                                                                                 segPath.moveTo(start.x, start.y);
                                                                                 previousPathAdded.set(true);
-                                                                                TextView textView = (TextView) findViewById(R.id.textView);
+                                                                                TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                                                                                 textView.setText(SegmentationMessages.CONTINUITY_ERROR);
                                                                             } else {
                                                                                 inputStart = null;
@@ -576,9 +576,9 @@ public class DicomViewActivity extends Activity {
     }
 
     private void showMenu() {
-        TextView textInfo = (TextView) findViewById(R.id.textInfo);
+        TextView textInfo = (TextView) findViewById(R.id.textInfoDicomView);
         textInfo.setText(getResources().getString(R.string.dicomview_textinfo_default));
-        TextView textView = (TextView) findViewById(R.id.textView);
+        TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
         textView.setText("");
         FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.close(true);

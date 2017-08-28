@@ -21,7 +21,7 @@
 
     <Button android:id="@+id/opticDisc"
         android:text="@string/button_opticdisc"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/textInfoRetinography"
@@ -29,7 +29,7 @@
 
     <Button android:id="@+id/vessels"
         android:text="@string/button_vessels"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/select_segmentation_button_margin_bottom"
         android:layout_below="@+id/opticDisc"

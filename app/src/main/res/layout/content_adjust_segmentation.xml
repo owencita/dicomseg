@@ -23,9 +23,8 @@
         android:textStyle="bold" />
 
     <ListView android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="@dimen/list_margin_top"
-        android:layout_below="@+id/textInfo" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/list_margin_top" />
 
 </RelativeLayout>

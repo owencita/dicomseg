@@ -1,36 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="edu.exa.unicen.dicomseg.activities.GeneralNoteActivity">
 
     <include layout="@layout/content_notes" />
-
-    <EditText
-        android:id="@+id/noteText"
-        android:layout_width="fill_parent"
-        android:layout_height="300dip"
-        android:layout_marginTop="50dip"
-        android:scrollbars="vertical"
-        android:gravity="top"
-        android:inputType="text" />
-
-    <Button android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_ok"
-        android:layout_marginTop="360dip"
-        android:background="@drawable/buttons"/>
-
-    <Button android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_cancel"
-        android:layout_marginTop="360dip"
-        android:layout_marginLeft="100dip"
-        android:background="@drawable/buttons"/>
 
 </android.support.design.widget.CoordinatorLayout>
