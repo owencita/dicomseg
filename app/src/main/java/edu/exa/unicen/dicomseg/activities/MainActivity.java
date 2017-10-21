@@ -1,7 +1,6 @@
 package edu.exa.unicen.dicomseg.activities;
 
 import android.Manifest;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -68,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.action_settings:
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                findViewById(android.R.id.content).getContext().startActivity(intent);
+                break;
             case R.id.action_exportDB:
                 DbHelper dbHelper = new DbHelper(getBaseContext());
                 dbExporter.exportDatabase(dbHelper);

@@ -46,17 +46,19 @@ public class PolarUtils {
 
         List<PointF> closest = new ArrayList<PointF>();
 
-        PointF closestInf = points.get(0);
+        PointF closestInf = null;
         for (PointF p : points) {
             if (p.y < degrees) {
-                if (p.y > closestInf.y) {
+                if (closestInf == null || p.y > closestInf.y) {
                     closestInf = p;
                 }
             }
         }
-        closest.add(closestInf);
+        if (closestInf != null) {
+            closest.add(closestInf);
+        }
 
-        PointF closestSup = null;//points.get(points.size()-1);
+        PointF closestSup = null;
         for (PointF p : points) {
             if (p.y > degrees) {
                 if (closestSup == null || p.y < closestSup.y) {

@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:numeric="decimal"
+        android:defaultValue="@string/pref_default_sc_alpha"
+        android:key="snakes_alpha"
+        android:title="@string/pref_title_sc_alpha" />
+
+    <EditTextPreference
+        android:numeric="decimal"
+        android:defaultValue="@string/pref_default_sc_beta"
+        android:key="snakes_beta"
+        android:title="@string/pref_title_sc_beta" />
+
+    <EditTextPreference
+        android:numeric="decimal"
+        android:defaultValue="@string/pref_default_sc_gamma"
+        android:key="snakes_gamma"
+        android:title="@string/pref_title_sc_gamma" />
+
+    <EditTextPreference
+        android:numeric="decimal"
+        android:defaultValue="@string/pref_default_sc_delta"
+        android:key="snakes_delta"
+        android:title="@string/pref_title_sc_delta" />
+
+</PreferenceScreen>

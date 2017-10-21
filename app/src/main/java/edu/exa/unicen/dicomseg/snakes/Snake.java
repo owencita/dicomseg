@@ -1,6 +1,5 @@
 package edu.exa.unicen.dicomseg.snakes;
 
-//import java.awt.Point;
 import android.graphics.Point;
 
 import com.google.common.collect.Lists;
@@ -40,15 +39,11 @@ public class Snake {
 	// Maximum number of iterations (if no convergence)
 	public int MAXITERATION = 1000;
 
-	// GUI feedback
-	//public boolean SHOWANIMATION = true;
-	//public SnakeGUI SNAKEGUI = null;
-
 	// Coefficients for the 4 energy functions
-	public double alpha = 1.1;
-    public double beta = 1.2;
-    public double gamma = 1.5;
-    public double delta = 3.0;
+	public double alpha;
+    public double beta;
+    public double gamma;
+    public double delta;
 
 	// alpha = coefficient for uniformity (high => force equals distance between points)
 	// beta  = coefficient for curvature  (high => force smooth curvature)
@@ -63,9 +58,14 @@ public class Snake {
 	 * @param flow gradient flow (modulus)
 	 * @param points initial points of the snake
 	 */
-	//public Snake(int width, int height, int[][] gradient, int[][] flow, Point... points) {
-    public Snake(int width, int height, int[][] gradient, int[][] flow, List<Point> points) {
-		//this.snake = new ArrayList<Point>(Arrays.asList(points));
+
+    public Snake(int width, int height, int[][] gradient, int[][] flow, List<Point> points, double[] coefficients) {
+		// set coefficients from preferencies
+		alpha = coefficients[0];
+		beta = coefficients[1];
+		gamma = coefficients[2];
+		delta = coefficients[3];
+
         this.snake = Lists.newArrayList(points);
 		this.gradient = gradient;
 		this.flow = flow;
@@ -78,18 +78,17 @@ public class Snake {
 	 * 
 	 * @return the number of iterations performed
 	 */
-    //public int loop() {
 	public int snake() {
-		int loop=0;
 
-		while (step() && loop<MAXITERATION) {
+		int loop = 0;
+
+		while (step() && loop < MAXITERATION) {
 			// auto adapt the number of points in the snake
-			if (AUTOADAPT && (loop%AUTOADAPT_LOOP) == 0) {
+			if (AUTOADAPT && (loop % AUTOADAPT_LOOP) == 0) {
 				removeOverlappingPoints(AUTOADAPT_MINLEN);
 				addMissingPoints(AUTOADAPT_MAXLEN);
 			}
 			loop++;
-			//if (SHOWANIMATION && SNAKEGUI!=null) SNAKEGUI.display();
 		}
 
 		// rebuild using spline interpolation
@@ -110,21 +109,20 @@ public class Snake {
 		Point p = new Point(0,0);
 
 		// compute length of original snake (used by method: f_uniformity)
-		this.snakelength = getsnakelength();
+		this.snakelength = getSnakeLength();
 
 		// compute the new snake
 		List<Point> newsnake = new ArrayList<Point>(snake.size());
 
 		// for each point of the previous snake
-		for(int i=0;i<snake.size();i++) {
-			Point prev = snake.get((i+snake.size()-1)%snake.size());
+		for(int i=0; i<snake.size(); i++) {
+			Point prev = snake.get((i+snake.size()-1) % snake.size());
 			Point cur  = snake.get(i);
-			Point next = snake.get((i+1)%snake.size());
+			Point next = snake.get((i+1) % snake.size());
 
 			// compute all energies
 			for(int dy=-1;dy<=1;dy++) {
 				for(int dx=-1;dx<=1;dx++) {
-					//p.setLocation(cur.x+dx, cur.y+dy);
                     p.set(cur.x+dx, cur.y+dy);
 					e_uniformity[1+dx][1+dy] = f_uniformity(prev,next,p);
 					e_curvature[1+dx][1+dy]  = f_curvature(prev,p,next);
@@ -140,25 +138,25 @@ public class Snake {
 			normalize(e_inertia);
 
 			// find the point with the minimum sum of energies
-			double emin = Double.MAX_VALUE, e=0;
-			int x=0,y=0;
-			for(int dy=-1;dy<=1;dy++) {
-				for(int dx=-1;dx<=1;dx++) {
+			double emin = Double.MAX_VALUE, e = 0;
+			int x = 0, y = 0;
+			for (int dy=-1; dy<=1; dy++) {
+				for (int dx=-1; dx<=1; dx++) {
 					e = 0;
 					e+= alpha * e_uniformity[1+dx][1+dy]; // internal energy
 					e+= beta  * e_curvature[1+dx][1+dy];  // internal energy
 					e+= gamma * e_flow[1+dx][1+dy];       // external energy
 					e+= delta * e_inertia[1+dx][1+dy];    // external energy
 					
-					if (e<emin) { emin=e; x=cur.x+dx; y=cur.y+dy; }
+					if (e < emin) { emin = e; x = cur.x+dx; y = cur.y+dy; }
 				}
 			}
 
 			// boundary check
-			if (x<1) x=1;
-			if (x>=(this.width-1)) x=this.width-2;
-			if (y<1) y=1;
-			if (y>=(this.height-1)) y=this.height-2;
+			if (x < 1) x = 1;
+			if (x >= (this.width-1)) x = this.width-2;
+			if (y < 1) y = 1;
+			if (y >= (this.height-1)) y = this.height-2;
 
 			// compute the returned value
 			if (x!=cur.x || y!=cur.y) changed=true;
@@ -175,25 +173,25 @@ public class Snake {
 
 	// normalize energy matrix
 	private void normalize(double[][] array3x3) {
-		double sum=0;
-		for(int i=0;i<3;i++)
-			for(int j=0;j<3;j++)
+		double sum = 0;
+		for (int i=0; i<3; i++)
+			for (int j=0; j<3; j++)
 				sum+=Math.abs(array3x3[i][j]);
 
-		if (sum==0) return;
+		if (sum == 0) return;
 
-		for(int i=0;i<3;i++)
-			for(int j=0;j<3;j++)
+		for (int i=0; i<3; i++)
+			for (int j=0; j<3; j++)
 				array3x3[i][j]/=sum;
 	}
 
-	private double getsnakelength() {
+	private double getSnakeLength() {
 		// total length of snake
 		double length=0;
-		for(int i=0;i<snake.size();i++) {
-			Point cur   = snake.get(i);
-			Point next  = snake.get((i+1)%snake.size());
-			length+=distance2D(cur, next);
+		for (int i=0; i<snake.size(); i++) {
+			Point cur = snake.get(i);
+			Point next = snake.get((i+1) % snake.size());
+			length+= distance2D(cur, next);
 		}
 		return length;
 	}
@@ -205,7 +203,6 @@ public class Snake {
 		return Math.sqrt(un);
 	}
 
-
 	// ************************** ENERGY FUNCTIONS **************************
 
 	private double f_uniformity(Point prev, Point next, Point p) {
@@ -213,7 +210,7 @@ public class Snake {
 		double un = distance2D(prev, p);
 
 		// measure of uniformity
-		double avg = snakelength/snake.size();
+		double avg = snakelength / snake.size();
 		double dun = Math.abs(un-avg);
 
 		// elasticity energy
@@ -229,7 +226,7 @@ public class Snake {
 		int vy = p.y-next.y;
 		double vn = Math.sqrt(vx*vx+vy*vy);
 
-		if (un==0 || vn==0) return 0;
+		if (un == 0 || vn == 0) return 0;
 
 		double cx = (vx+ux)/(un*vn);
 		double cy = (vy+uy)/(un*vn);
@@ -262,10 +259,10 @@ public class Snake {
 		// pre-compute length(i) = length of the snake from start to point #i
 		double[] clength = new double[snake.size()+1];
 		clength[0]=0;
-		for(int i=0;i<snake.size();i++) {
-			Point cur   = snake.get(i);
-			Point next  = snake.get((i+1)%snake.size());
-			clength[i+1]=clength[i]+distance2D(cur, next);
+		for (int i=0; i<snake.size(); i++) {
+			Point cur = snake.get(i);
+			Point next = snake.get((i+1) % snake.size());
+			clength[i+1] = clength[i] + distance2D(cur, next);
 		}
 
 		// compute number of points in the new snake
@@ -274,17 +271,17 @@ public class Snake {
 
 		// build a new snake
 		List<Point> newsnake = new ArrayList<Point>(snake.size());
-		for(int i=0,j=0;j<nmb;j++) {
+		for (int i=0,j=0; j<nmb; j++) {
 			// current length in the new snake
 			double dist = (j*total)/nmb;
 
 			// find corresponding interval of points in the original snake
-			while(! (clength[i]<=dist && dist<clength[i+1])) i++;
+			while (!(clength[i] <= dist && dist < clength[i+1])) i++;
 
 			// get points (P-1,P,P+1,P+2) in the original snake
-			Point prev  = snake.get((i+snake.size()-1)%snake.size());
-			Point cur   = snake.get(i);
-			Point next  = snake.get((i+1)%snake.size());
+			Point prev = snake.get((i+snake.size()-1)%snake.size());
+			Point cur = snake.get(i);
+			Point next = snake.get((i+1)%snake.size());
 			Point next2 = snake.get((i+2)%snake.size());
 
 			// do cubic spline interpolation
@@ -296,10 +293,10 @@ public class Snake {
 			double c3 = -1*t3 +3*t2 -3*t + 1;
 			double x = prev.x*c3 + cur.x*c2 + next.x* c1 + next2.x*c0;
 			double y = prev.y*c3 + cur.y*c2 + next.y* c1 + next2.y*c0;
-			Point newpoint = new Point( (int)(0.5+x/6), (int)(0.5+y/6) );
+			Point newPoint = new Point((int)(0.5+x/6), (int)(0.5+y/6));
 
 			// add computed point to the new snake
-			newsnake.add(newpoint);
+			newsnake.add(newPoint);
 		}
 		this.snake = newsnake;
 	}
@@ -307,19 +304,19 @@ public class Snake {
 
 	private void removeOverlappingPoints(int minlen) {
 		// for each point of the snake
-		for(int i=0;i<snake.size();i++) {
+		for (int i=0; i<snake.size(); i++) {
 			Point cur = snake.get(i);
 
 			// check the other points (right half)
-			for(int di=1+snake.size()/2;di>0;di--) {
-				Point end  = snake.get((i+di)%snake.size());
+			for (int di=1+snake.size()/2; di>0; di--) {
+				Point end = snake.get((i+di) % snake.size());
 				double dist = distance2D(cur,end);
 
 				// if the two points are to close...
-				if ( dist>minlen ) continue;
+				if ( dist > minlen ) continue;
 
 				// ... cut the "loop" part og the snake
-				for(int k=0;k<di;k++) snake.remove( (i+1) %snake.size() );
+				for (int k=0; k<di; k++) snake.remove((i+1) % snake.size());
 				break;
 			}
 		}
@@ -327,22 +324,22 @@ public class Snake {
 
 	private void addMissingPoints(int maxlen) {
 		// for each point of the snake
-		for(int i=0;i<snake.size();i++) {
+		for (int i=0; i<snake.size(); i++) {
 			Point prev  = snake.get((i+snake.size()-1)%snake.size());
 			Point cur   = snake.get(i);
-			Point next  = snake.get((i+1)%snake.size());
-			Point next2  = snake.get((i+2)%snake.size());
+			Point next  = snake.get((i+1) % snake.size());
+			Point next2  = snake.get((i+2) % snake.size());
 
 			// if the next point is to far then add a new point
-			if ( distance2D(cur,next)>maxlen ) {
+			if (distance2D(cur,next) > maxlen ) {
 
 				// precomputed Uniform cubic B-spline for t=0.5
 				double c0=0.125/6.0, c1=2.875/6.0, c2=2.875/6.0, c3=0.125/6.0;
 				double x = prev.x*c3 + cur.x*c2 + next.x* c1 + next2.x*c0;
 				double y = prev.y*c3 + cur.y*c2 + next.y* c1 + next2.y*c0;
-				Point newpoint = new Point( (int)(0.5+x), (int)(0.5+y) );
+				Point newPoint = new Point( (int)(0.5+x), (int)(0.5+y) );
 
-				snake.add( i+1 , newpoint ); i--;
+				snake.add(i+1, newPoint); i--;
 			}
 		}
 	}

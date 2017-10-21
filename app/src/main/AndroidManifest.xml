@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.exa.unicen.dicomseg" >
+    package="edu.exa.unicen.dicomseg">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -9,71 +9,64 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.FileChooserActivity"
+            android:name=".activities.FileChooserActivity"
             android:label="@string/title_activity_file_chooser"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.DicomViewActivity"
+            android:name=".activities.DicomViewActivity"
             android:label="@string/title_activity_dicom_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.SelectDicomImageActivity"
+            android:name=".activities.SelectDicomImageActivity"
             android:label="@string/title_activity_select_dicom_image"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.GeneralNoteActivity"
+            android:name=".activities.GeneralNoteActivity"
             android:label="@string/title_activity_notes"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.PointNoteActivity"
+            android:name=".activities.PointNoteActivity"
             android:label="@string/title_activity_point_note"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.SelectSegmentationActivity"
+            android:name=".activities.SelectSegmentationActivity"
             android:label="@string/title_activity_select_segmentation"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.IVUSSegActivity"
+            android:name=".activities.IVUSSegActivity"
             android:label="@string/title_activity_ivusseg"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.BrainTumorSegActivity"
+            android:name=".activities.BrainTumorSegActivity"
             android:label="@string/title_activity_selectable_pole_seg"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.RetinographySegActivity"
+            android:name=".activities.RetinographySegActivity"
             android:label="@string/title_activity_retinography_seg"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.CarotidSegActivity"
+            android:name=".activities.CarotidSegActivity"
             android:label="@string/title_activity_carotid_seg"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu.exa.unicen.dicomseg.activities.AdjustSegmentationActivity"
+            android:name=".activities.AdjustSegmentationActivity"
             android:label="@string/title_activity_adjust_segmentation"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".activities.MainActivity"/>
         </activity>
     </application>
 

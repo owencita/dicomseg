@@ -10,8 +10,10 @@ import java.util.List;
 import edu.exa.unicen.dicomseg.segmentation.Segmentation;
 
 /**
- * These classes of these variables do not implement Serializable (a requirement to pass them along activities)
+ * The classes of these variables do not implement Serializable (a requirement to pass them along activities)
  * The purpose of this class is to allow these variables to be used along activities (turning them into static variables)
+ *
+ * This class also allows to keep track of user settings, to be used outside activity classes
  */
 public class DicomSegApp extends Application {
 
@@ -20,6 +22,9 @@ public class DicomSegApp extends Application {
     private static Bitmap dicomFrame = null;
     private static Segmentation segmentationToAdjust;
     private static Segmentation snake = null;
+
+    // Variables to make setting available outside activity classes
+    private static Integer clousureTolerance = null;
 
     public static void setDataSet(DataSet dataSet) {
         DicomSegApp.dataSet = dataSet;
@@ -59,5 +64,13 @@ public class DicomSegApp extends Application {
 
     public static void setSegmentationToAdjust(Segmentation segmentationToAdjust) {
         DicomSegApp.segmentationToAdjust = segmentationToAdjust;
+    }
+
+    public static Integer getClousureTolerance() {
+        return DicomSegApp.clousureTolerance;
+    }
+
+    public static void setClousureTolerance(Integer clousureTolerance) {
+        DicomSegApp.clousureTolerance = clousureTolerance;
     }
 }

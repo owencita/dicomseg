@@ -5,12 +5,12 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.exa.unicen.dicomseg.app.DicomSegApp;
 import edu.exa.unicen.dicomseg.segmentation.Segmentation;
 import edu.exa.unicen.dicomseg.segmentation.SegmentationMessages;
 
 public class ClosureValidator implements SegmentationValidator {
 
-    private static final int TOLERANCE = 8;
     private static List<String> errors = new ArrayList<String>();
 
     /**
@@ -26,7 +26,7 @@ public class ClosureValidator implements SegmentationValidator {
         if (!points.isEmpty()) {
             Point start = points.get(0);
             Point end = points.get(points.size()-1);
-            if ((Math.abs(start.x - end.x) > TOLERANCE)||(Math.abs(start.y - end.y) > TOLERANCE)) {
+            if ((Math.abs(start.x - end.x) > DicomSegApp.getClousureTolerance())||(Math.abs(start.y - end.y) > DicomSegApp.getClousureTolerance())) {
                 errors.add(SegmentationMessages.CLOSURE_ERROR);
                 return Boolean.FALSE;
             } else {

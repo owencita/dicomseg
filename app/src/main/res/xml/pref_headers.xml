@@ -1,0 +1,13 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:fragment="edu.exa.unicen.dicomseg.activities.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/pref_header_general" />
+
+    <header
+        android:fragment="edu.exa.unicen.dicomseg.activities.SettingsActivity$SnakesCoefficientsPreferenceFragment"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/pref_header_snakes_coefficients" />
+
+</preference-headers>

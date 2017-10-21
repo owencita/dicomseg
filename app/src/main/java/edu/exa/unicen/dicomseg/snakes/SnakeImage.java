@@ -20,14 +20,14 @@ public class SnakeImage {
         component.inject(this);
     }
 
-    public List<Point> snakeImage(Bitmap image, List<Point> segmentation) {
+    public List<Point> snakeImage(Bitmap image, List<Point> segmentation, double[] coefficients) {
 
         externalForces.setChannels(image);
 
         int[][] channelGradient = externalForces.getChannelGradient();
         int[][] channelFlow = externalForces.getChannelFlow();
 
-        Snake snakeInstance = new Snake(image.getWidth(), image.getHeight(), channelGradient, channelFlow, segmentation);
+        Snake snakeInstance = new Snake(image.getWidth(), image.getHeight(), channelGradient, channelFlow, segmentation, coefficients);
         snakeInstance.snake();
 
         return snakeInstance.snake;

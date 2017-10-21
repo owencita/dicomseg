@@ -2,6 +2,7 @@ package edu.exa.unicen.dicomseg.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -175,6 +177,9 @@ public class DicomViewActivity extends Activity {
                         TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
 
                         if (!segmentation.getPoints().isEmpty()) {
+                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String closureTolerance = settings.getString("general_closure_tolerance", getResources().getString(R.string.pref_default_sc_alpha));
+                            DicomSegApp.setClousureTolerance(Integer.parseInt(closureTolerance));
                             if (segmentation.isValid()) {
                                 // hide done, clear buttons, messages and clear canvas
                                 doneButton.setVisibility(View.GONE);
@@ -245,9 +250,9 @@ public class DicomViewActivity extends Activity {
                             inputStart.y = y;
                         }
 
-                        if ((inputEnd == null) || SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y)) {
+                        if ((inputEnd == null) || SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y, getTouchTolerance())) {
                             // user never touched up or touched up previously
-                            inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                            inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                             Point point = new Point();
                             point.x = x;
                             point.y = y;
@@ -270,7 +275,7 @@ public class DicomViewActivity extends Activity {
                                     inputEnd = null;
                                     saveSegmentation();
                                     segPath = new Path();
-                                    SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                    SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                     segmentation.clearPoints();
                                 }
                             }
@@ -372,7 +377,7 @@ public class DicomViewActivity extends Activity {
 
                                     if (segType != null) {
 
-                                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segType.getColor());
+                                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segType.getColor(), getStrokeFactor());
                                         segmentation.setType(segType);
                                         List<Segmentation> relatedSegs = SegmentationUtils.getRelatedSegmentations(segmentations, segmentation.getType());
                                         segmentation.setExistingRelatedSegmentations(relatedSegs);
@@ -474,9 +479,9 @@ public class DicomViewActivity extends Activity {
                                                                         inputStart.y = y;
                                                                     }
 
-                                                                    if ((inputEnd == null) || SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y)) {
+                                                                    if ((inputEnd == null) || SegmentationDrawingUtils.isEnd(inputStart, inputEnd, x, y, getTouchTolerance())) {
                                                                         // user never touched up or touched up previously
-                                                                        inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                                                        inputEnd = SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                                                         Point point = new Point();
                                                                         point.x = x;
                                                                         point.y = y;
@@ -499,7 +504,7 @@ public class DicomViewActivity extends Activity {
                                                                                 inputEnd = null;
                                                                                 saveSegmentation();
                                                                                 segPath = new Path();
-                                                                                SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y);
+                                                                                SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                                                                 segmentation.clearPoints();
                                                                             }
                                                                         }
@@ -637,8 +642,8 @@ public class DicomViewActivity extends Activity {
     private void drawSegmentation(Segmentation segmentation) {
         List<Point> points = segmentation.getPoints();
         if (!points.isEmpty()) {
-            segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas);
-            segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor());
+            segPath = SegmentationDrawingUtils.setPathFromPointList(points, canvas, getTouchTolerance());
+            segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor(), getStrokeFactor());
             canvas.drawPath(segPath, segPaint);
             if (segmentation.getType().isReferencePointDrawable()) {
                 drawPoint(segmentation.getReferencePoint().x, segmentation.getReferencePoint().y);
@@ -657,6 +662,18 @@ public class DicomViewActivity extends Activity {
         Gson gson = new Gson();
         String pointsString = gson.toJson(segmentation.getPoints());
         dbHelper.updateSegmentation(fileName, imageNumber, segmentation.getType(), pointsString);
+    }
+
+    private int getStrokeFactor() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String stroke = settings.getString("general_stroke_thickness", getResources().getString(R.string.pref_default_general_stroke_thickness));
+        return Integer.parseInt(stroke);
+    }
+
+    private float getTouchTolerance() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String stroke = settings.getString("general_continuity_tolerance", getResources().getString(R.string.pref_default_general_stroke_thickness));
+        return Float.parseFloat(stroke);
     }
 
 }

@@ -12,21 +12,20 @@ import java.util.List;
 public class SegmentationDrawingUtils {
 
     private static final int STROKE_WIDTH = 512;
-    private static final int LINE_STROKE_FACTOR = 5;
     private static final int POINT_STROKE_FACTOR = 7;
-    private static final float TOUCH_TOLERANCE = 4;
+
     private static float mX, mY;
     private static final Paint paint = new Paint();
     private static final Paint notePointPaint = new Paint();
 
-    public static Paint getPaint(int width, int color) {
+    public static Paint getPaint(int width, int color, int strokeFactor) {
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(((float)LINE_STROKE_FACTOR / STROKE_WIDTH) * width);
+        paint.setStrokeWidth(((float)strokeFactor / STROKE_WIDTH) * width);
         return paint;
     }
 
@@ -40,7 +39,7 @@ public class SegmentationDrawingUtils {
         return ((float)POINT_STROKE_FACTOR / STROKE_WIDTH) * width;
     }
 
-    public static Point setPathFromTouchEvent(Path path, Canvas canvas, View view, MotionEvent event, int x, int y) {
+    public static Point setPathFromTouchEvent(Path path, Canvas canvas, View view, MotionEvent event, int x, int y, float touchTolerance) {
         Point stop = null;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -48,7 +47,7 @@ public class SegmentationDrawingUtils {
                 view.invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(path, x, y);
+                touch_move(path, x, y, touchTolerance);
                 view.invalidate();
                 break;
             case MotionEvent.ACTION_UP:
@@ -62,23 +61,23 @@ public class SegmentationDrawingUtils {
         return stop;
     }
 
-    public static Path setPathFromPointList(List<Point> points, Canvas canvas) {
+    public static Path setPathFromPointList(List<Point> points, Canvas canvas, float touchTolerance) {
         Path path = new Path();
         Point first = points.get(0);
         touch_start(path, first.x, first.y);
         for (int i=1; i < points.size(); i++) {
             Point point = points.get(i);
-            touch_move(path, point.x, point.y);
+            touch_move(path, point.x, point.y, touchTolerance);
         }
         touch_up(path, canvas);
         return path;
     }
 
-    public static boolean isEnd(Point start, Point end, int x, int y) {
-        if (((x <= start.x + TOUCH_TOLERANCE)&&(x >= start.x - TOUCH_TOLERANCE)&&
-                (y <= start.y + TOUCH_TOLERANCE)&&(y >= start.y - TOUCH_TOLERANCE))
-            ||((x <= end.x + TOUCH_TOLERANCE)&&(x >= end.x - TOUCH_TOLERANCE)&&
-                (y <= end.y + TOUCH_TOLERANCE)&&(y >= end.y - TOUCH_TOLERANCE))) {
+    public static boolean isEnd(Point start, Point end, int x, int y, float touchTolerance) {
+        if (((x <= start.x + touchTolerance) && (x >= start.x - touchTolerance) &&
+                (y <= start.y + touchTolerance) && (y >= start.y - touchTolerance))
+            ||((x <= end.x + touchTolerance) && (x >= end.x - touchTolerance) &&
+                (y <= end.y + touchTolerance) && (y >= end.y - touchTolerance))) {
             return true;
         } else {
             return false;
@@ -92,10 +91,10 @@ public class SegmentationDrawingUtils {
         mY = y;
     }
 
-    private static void touch_move(Path path, int x, int y) {
+    private static void touch_move(Path path, int x, int y, float touchTolerance) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+        if (dx >= touchTolerance || dy >= touchTolerance) {
             path.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
             mX = x;
             mY = y;

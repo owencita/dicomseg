@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:numeric="integer"
+        android:defaultValue="@string/pref_default_general_stroke_thickness"
+        android:key="general_stroke_thickness"
+        android:title="@string/pref_title_general_stroke_thickness" />
+
+    <EditTextPreference
+        android:numeric="decimal"
+        android:defaultValue="@string/pref_default_general_continuity_tolerance"
+        android:key="general_continuity_tolerance"
+        android:title="@string/pref_title_general_continuity_tolerance" />
+
+    <EditTextPreference
+        android:numeric="integer"
+        android:defaultValue="@string/pref_default_general_closure_tolerance"
+        android:key="general_closure_tolerance"
+        android:title="@string/pref_title_general_closure_tolerance" />
+
+</PreferenceScreen>
