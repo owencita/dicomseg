@@ -68,8 +68,7 @@ public class AdjustSegmentationActivity extends AppCompatActivity {
     }
 
     private void fill(List<Segmentation> segmentations) {
-        adapter = new ListedSegmentationArrayAdapter(AdjustSegmentationActivity.this,
-                R.layout.content_adjust_segmentation, segmentations);
+        adapter = new ListedSegmentationArrayAdapter(AdjustSegmentationActivity.this, R.layout.content_adjust_segmentation, segmentations);
         listView.setAdapter(adapter);
     }
 

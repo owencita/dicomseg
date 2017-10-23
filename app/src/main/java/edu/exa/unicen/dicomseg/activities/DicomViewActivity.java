@@ -25,6 +25,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -61,6 +62,7 @@ public class DicomViewActivity extends Activity {
     private Point referencePoint;
 
     private Segmentation segmentation = new Segmentation();
+    private List<Segmentation> allowsRepeatsSegmentations = new ArrayList<Segmentation>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +189,7 @@ public class DicomViewActivity extends Activity {
                                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                                 imageView.setOnTouchListener(null);
                                 // save segmentation
-                                saveSegmentation();
+                                saveSegmentations();
                                 // show menu
                                 showMenu();
                             } else {
@@ -216,6 +218,10 @@ public class DicomViewActivity extends Activity {
                         accumSegPath = new Path();
                         segPath = new Path();
                         segmentation.clearPoints();
+
+                        if (segmentation.getType().allowsRepeats()) {
+                            allowsRepeatsSegmentations = new ArrayList<Segmentation>();
+                        }
 
                         TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
                         textView.setText("");
@@ -273,9 +279,15 @@ public class DicomViewActivity extends Activity {
                                 } else {
                                     inputStart = null;
                                     inputEnd = null;
-                                    saveSegmentation();
+                                    //saveSegmentations();
                                     segPath = new Path();
                                     SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
+                                    Segmentation newSegmentation = new Segmentation();
+                                    newSegmentation.setType(segmentation.getType());
+                                    newSegmentation.setExistingRelatedSegmentations(segmentation.getExistingRelatedSegmentations());
+                                    newSegmentation.setReferencePoint(segmentation.getReferencePoint());
+                                    newSegmentation.setPoints(segmentation.getPoints());
+                                    allowsRepeatsSegmentations.add(newSegmentation);
                                     segmentation.clearPoints();
                                 }
                             }
@@ -502,9 +514,16 @@ public class DicomViewActivity extends Activity {
                                                                             } else {
                                                                                 inputStart = null;
                                                                                 inputEnd = null;
-                                                                                saveSegmentation();
+                                                                                //saveSegmentations();
                                                                                 segPath = new Path();
                                                                                 SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
+                                                                                Segmentation newSegmentation = new Segmentation();
+                                                                                newSegmentation.setType(segmentation.getType());
+                                                                                newSegmentation.setExistingRelatedSegmentations(segmentation.getExistingRelatedSegmentations());
+                                                                                newSegmentation.setReferencePoint(segmentation.getReferencePoint());
+                                                                                newSegmentation.setPoints(segmentation.getPoints());
+                                                                                allowsRepeatsSegmentations.add(newSegmentation);
+                                                                                //SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                                                                 segmentation.clearPoints();
                                                                             }
                                                                         }
@@ -651,7 +670,17 @@ public class DicomViewActivity extends Activity {
         }
     }
 
-    private void saveSegmentation() {
+    private void saveSegmentations() {
+        if (segmentation.getType().allowsRepeats()) {
+            for (Segmentation seg: allowsRepeatsSegmentations) {
+                saveSegmentation(seg);
+            }
+        } else {
+            saveSegmentation(segmentation);
+        }
+    }
+
+    private void saveSegmentation(Segmentation segmentation) {
         Gson gson = new Gson();
         String pointsString = gson.toJson(segmentation.getPoints());
         String referencePointString = gson.toJson(segmentation.getReferencePoint());

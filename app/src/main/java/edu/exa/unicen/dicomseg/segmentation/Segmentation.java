@@ -1,6 +1,5 @@
 package edu.exa.unicen.dicomseg.segmentation;
 
-import android.content.SharedPreferences;
 import android.graphics.Point;
 
 import com.google.common.collect.ImmutableMap;
