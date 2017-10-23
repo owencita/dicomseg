@@ -279,7 +279,6 @@ public class DicomViewActivity extends Activity {
                                 } else {
                                     inputStart = null;
                                     inputEnd = null;
-                                    //saveSegmentations();
                                     segPath = new Path();
                                     SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                     Segmentation newSegmentation = new Segmentation();
@@ -514,7 +513,6 @@ public class DicomViewActivity extends Activity {
                                                                             } else {
                                                                                 inputStart = null;
                                                                                 inputEnd = null;
-                                                                                //saveSegmentations();
                                                                                 segPath = new Path();
                                                                                 SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                                                                 Segmentation newSegmentation = new Segmentation();
@@ -523,7 +521,6 @@ public class DicomViewActivity extends Activity {
                                                                                 newSegmentation.setReferencePoint(segmentation.getReferencePoint());
                                                                                 newSegmentation.setPoints(segmentation.getPoints());
                                                                                 allowsRepeatsSegmentations.add(newSegmentation);
-                                                                                //SegmentationDrawingUtils.setPathFromTouchEvent(segPath, canvas, view, event, x, y, getTouchTolerance());
                                                                                 segmentation.clearPoints();
                                                                             }
                                                                         }

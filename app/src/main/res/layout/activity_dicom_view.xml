@@ -26,40 +26,40 @@
             android:id="@+id/menu_general_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_save"
-            fab:fab_size="mini"
+            android:src="@drawable/icon_note"
+            fab:fab_size="normal"
             fab:fab_label="General Note" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_point_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_mylocation"
-            fab:fab_size="mini"
+            android:src="@drawable/icon_point"
+            fab:fab_size="normal"
             fab:fab_label="Point Note" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_segment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_edit"
-            fab:fab_size="mini"
+            android:src="@drawable/icon_segment"
+            fab:fab_size="normal"
             fab:fab_label="Segment Image" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_adjust"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_edit"
-            fab:fab_size="mini"
+            android:src="@drawable/icon_adjust"
+            fab:fab_size="normal"
             fab:fab_label="Adjust Segmentation" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_show_segment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_agenda"
-            fab:fab_size="mini"
+            android:src="@drawable/icon_show"
+            fab:fab_size="normal"
             fab:fab_label="Show Segmentations" />
 
     </com.github.clans.fab.FloatingActionMenu>
