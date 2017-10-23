@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_note"
             fab:fab_size="normal"
-            fab:fab_label="General Note" />
+            fab:fab_label="@string/float_menu_note" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_point_note"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_point"
             fab:fab_size="normal"
-            fab:fab_label="Point Note" />
+            fab:fab_label="@string/float_menu_point_note" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_segment"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_segment"
             fab:fab_size="normal"
-            fab:fab_label="Segment Image" />
+            fab:fab_label="@string/float_menu_segment" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_adjust"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_adjust"
             fab:fab_size="normal"
-            fab:fab_label="Adjust Segmentation" />
+            fab:fab_label="@string/float_menu_adjust" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_show_segment"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_show"
             fab:fab_size="normal"
-            fab:fab_label="Show Segmentations" />
+            fab:fab_label="@string/float_menu_show" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

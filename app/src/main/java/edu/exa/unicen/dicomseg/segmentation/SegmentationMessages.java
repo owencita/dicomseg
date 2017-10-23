@@ -11,5 +11,6 @@ public class SegmentationMessages {
     public static final String NOT_BELOW_ERROR = "All segmentation points must be below";
     public static final String FRAME_NUMBER_OUT_OF_RANGE = "The entered number is out of range";
     public static final String EMPTY_SEGMENTATION_ERROR = "Empty segmentation";
+    public static final String POINTS_MINIMUM_QUANTITY_ERROR = "Segmentation does not reach minimum required points quantity";
 
 }

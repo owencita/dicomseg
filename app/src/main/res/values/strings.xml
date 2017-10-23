@@ -7,6 +7,13 @@
     <string name="action_resetDB">Reset Database</string>
     <string name="action_exit">Exit</string>
 
+    <!-- Floating Menu -->
+    <string name="float_menu_note">General Note</string>
+    <string name="float_menu_point_note">Point Note</string>
+    <string name="float_menu_segment">Segment</string>
+    <string name="float_menu_adjust">Auto Adjust</string>
+    <string name="float_menu_show">Show</string>
+
     <!-- Reset Database Dialog-->
     <string name="resetDB_title">Reset Database</string>
     <string name="resetDB_message">Are you sure you want to delete all data from database?</string>

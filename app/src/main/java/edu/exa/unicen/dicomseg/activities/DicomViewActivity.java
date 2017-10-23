@@ -672,9 +672,8 @@ public class DicomViewActivity extends Activity {
             for (Segmentation seg: allowsRepeatsSegmentations) {
                 saveSegmentation(seg);
             }
-        } else {
-            saveSegmentation(segmentation);
         }
+        saveSegmentation(segmentation);
     }
 
     private void saveSegmentation(Segmentation segmentation) {

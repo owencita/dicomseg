@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.exa.unicen.dicomseg.segmentation.validators.ClosureValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.PointMinimumQuantityValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.SegmentationValidator;
 
 public enum SegmentationType {
@@ -33,19 +34,19 @@ public enum SegmentationType {
             SegmentationColors.BLUE),
     VESSELS("Vessels",
             Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
             SegmentationColors.RED),
     CAROTID_LI_ANTERIOR("Carotid Anterior LI",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
             SegmentationColors.BLUE),
     CAROTID_LI_POSTERIOR("Carotid Posterior LI",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
             SegmentationColors.RED),
     CAROTID_MA_POSTERIOR("Carotid Posterior MA",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
             SegmentationColors.GREEN),
     SNAKE("Snake segmentation",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
