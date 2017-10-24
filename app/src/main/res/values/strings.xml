@@ -88,11 +88,11 @@
     <!-- General Settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_title_general_stroke_thickness">Stroke Thickness</string>
-    <string name="pref_title_general_continuity_tolerance">Continuity Tolerance</string>
+    <string name="pref_title_general_continuity_factor">Continuity Tolerance</string>
     <string name="pref_title_general_closure_tolerance">Closure Tolerance</string>
 
     <string name="pref_default_general_stroke_thickness">2</string>
-    <string name="pref_default_general_continuity_tolerance">4</string>
+    <string name="pref_default_general_continuity_factor">4</string>
     <string name="pref_default_general_closure_tolerance">8</string>
 
 

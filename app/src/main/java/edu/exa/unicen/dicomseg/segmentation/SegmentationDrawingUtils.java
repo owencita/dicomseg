@@ -13,6 +13,7 @@ public class SegmentationDrawingUtils {
 
     private static final int STROKE_WIDTH = 512;
     private static final int POINT_STROKE_FACTOR = 7;
+    private static final float TOUCH_TOLERANCE = 4;
 
     private static float mX, mY;
     private static final Paint paint = new Paint();
@@ -39,7 +40,7 @@ public class SegmentationDrawingUtils {
         return ((float)POINT_STROKE_FACTOR / STROKE_WIDTH) * width;
     }
 
-    public static Point setPathFromTouchEvent(Path path, Canvas canvas, View view, MotionEvent event, int x, int y, float touchTolerance) {
+    public static Point setPathFromTouchEvent(Path path, Canvas canvas, View view, MotionEvent event, int x, int y) {
         Point stop = null;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -47,7 +48,7 @@ public class SegmentationDrawingUtils {
                 view.invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(path, x, y, touchTolerance);
+                touch_move(path, x, y);
                 view.invalidate();
                 break;
             case MotionEvent.ACTION_UP:
@@ -61,23 +62,23 @@ public class SegmentationDrawingUtils {
         return stop;
     }
 
-    public static Path setPathFromPointList(List<Point> points, Canvas canvas, float touchTolerance) {
+    public static Path setPathFromPointList(List<Point> points, Canvas canvas) {
         Path path = new Path();
         Point first = points.get(0);
         touch_start(path, first.x, first.y);
         for (int i=1; i < points.size(); i++) {
             Point point = points.get(i);
-            touch_move(path, point.x, point.y, touchTolerance);
+            touch_move(path, point.x, point.y);
         }
         touch_up(path, canvas);
         return path;
     }
 
-    public static boolean isEnd(Point start, Point end, int x, int y, float touchTolerance) {
-        if (((x <= start.x + touchTolerance) && (x >= start.x - touchTolerance) &&
-                (y <= start.y + touchTolerance) && (y >= start.y - touchTolerance))
-            ||((x <= end.x + touchTolerance) && (x >= end.x - touchTolerance) &&
-                (y <= end.y + touchTolerance) && (y >= end.y - touchTolerance))) {
+    public static boolean isEnd(Point start, Point end, int x, int y, float continuityFactor) {
+        if (((x <= start.x + continuityFactor) && (x >= start.x - continuityFactor) &&
+                (y <= start.y + continuityFactor) && (y >= start.y - continuityFactor))
+            ||((x <= end.x + continuityFactor) && (x >= end.x - continuityFactor) &&
+                (y <= end.y + continuityFactor) && (y >= end.y - continuityFactor))) {
             return true;
         } else {
             return false;
@@ -91,10 +92,10 @@ public class SegmentationDrawingUtils {
         mY = y;
     }
 
-    private static void touch_move(Path path, int x, int y, float touchTolerance) {
+    private static void touch_move(Path path, int x, int y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
-        if (dx >= touchTolerance || dy >= touchTolerance) {
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             path.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
             mX = x;
             mY = y;

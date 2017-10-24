@@ -8,9 +8,9 @@
 
     <EditTextPreference
         android:numeric="decimal"
-        android:defaultValue="@string/pref_default_general_continuity_tolerance"
-        android:key="general_continuity_tolerance"
-        android:title="@string/pref_title_general_continuity_tolerance" />
+        android:defaultValue="@string/pref_default_general_continuity_factor"
+        android:key="general_continuity_factor"
+        android:title="@string/pref_title_general_continuity_factor" />
 
     <EditTextPreference
         android:numeric="integer"

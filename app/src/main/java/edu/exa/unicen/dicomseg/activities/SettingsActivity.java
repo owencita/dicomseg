@@ -143,7 +143,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
             bindPreferenceSummaryToValue(findPreference("general_stroke_thickness"));
-            bindPreferenceSummaryToValue(findPreference("general_continuity_tolerance"));
+            bindPreferenceSummaryToValue(findPreference("general_continuity_factor"));
             bindPreferenceSummaryToValue(findPreference("general_closure_tolerance"));
         }
 
