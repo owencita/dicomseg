@@ -11,7 +11,7 @@ import edu.exa.unicen.dicomseg.coordinatesystem.PolarUtils;
 import edu.exa.unicen.dicomseg.segmentation.Segmentation;
 import edu.exa.unicen.dicomseg.segmentation.SegmentationType;
 
-public abstract class AbstractCircumferenceValidator implements SegmentationValidator {
+public abstract class AbstractOvalFigureValidator implements SegmentationValidator {
 
     protected static Map<String, String> errors = new HashMap<String, String>();
 
