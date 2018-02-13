@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.exa.unicen.dicomseg.segmentation.validators.ClosureValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.AboveLineValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.BelowLineValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.ClosedFigureValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.ExteriorityValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.InteriorityValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.PointMinimumQuantityValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.SegmentationValidator;
 
@@ -14,23 +18,23 @@ public enum SegmentationType {
 
     IVUS_LI("IVUS LI (Lumen-Intima)",
             Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
             SegmentationColors.BLUE),
     IVUS_MA("IVUS MA (Media-Adventitia)",
             Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
             SegmentationColors.RED),
     BRAIN_TUMOR_NECROSIS("Necrosis",
             Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
             SegmentationColors.BLUE),
     BRAIN_TUMOR_BORDER("Tumor Border",
             Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
             SegmentationColors.RED),
     OPTIC_DISC("Optic Disc",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
             SegmentationColors.BLUE),
     VESSELS("Vessels",
             Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
@@ -38,15 +42,15 @@ public enum SegmentationType {
             SegmentationColors.RED),
     CAROTID_LI_ANTERIOR("Carotid Anterior LI",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
             SegmentationColors.BLUE),
     CAROTID_LI_POSTERIOR("Carotid Posterior LI",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
             SegmentationColors.RED),
     CAROTID_MA_POSTERIOR("Carotid Posterior MA",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(20))),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
             SegmentationColors.GREEN),
     SNAKE("Snake segmentation",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
@@ -66,17 +70,43 @@ public enum SegmentationType {
 
     static {
         /* Relations */
-        IVUS_LI.related = SegmentationRelationMap.IVUS_LI_RELATED;
-        IVUS_MA.related = SegmentationRelationMap.IVUS_MA_RELATED;
-        BRAIN_TUMOR_NECROSIS.related = SegmentationRelationMap.BRAIN_TUMOR_NECROSIS_RELATED;
-        BRAIN_TUMOR_BORDER.related = SegmentationRelationMap.BRAIN_TUMOR_BORDER_RELATED;
+        IVUS_LI.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.IVUS_MA,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new InteriorityValidator())))
+                .build();
+        IVUS_MA.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.IVUS_LI,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new ExteriorityValidator())))
+                .build();
+        BRAIN_TUMOR_NECROSIS.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.BRAIN_TUMOR_BORDER,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new InteriorityValidator())))
+                .build();
+        BRAIN_TUMOR_BORDER.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.BRAIN_TUMOR_NECROSIS,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new ExteriorityValidator())))
+                .build();
         OPTIC_DISC.related = null;
         VESSELS.related = null;
-        CAROTID_LI_ANTERIOR.related = SegmentationRelationMap.CAROTID_LI_ANTERIOR_RELATED;
-        CAROTID_LI_POSTERIOR.related = SegmentationRelationMap.CAROTID_LI_POSTERIOR_RELATED;
-        CAROTID_MA_POSTERIOR.related = SegmentationRelationMap.CAROTID_MA_POSTERIOR_RELATED;
+        CAROTID_LI_ANTERIOR.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.CAROTID_LI_POSTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new AboveLineValidator())))
+                .put(SegmentationType.CAROTID_MA_POSTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new AboveLineValidator())))
+                .build();
+        CAROTID_LI_POSTERIOR.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.CAROTID_LI_ANTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new BelowLineValidator())))
+                .put(SegmentationType.CAROTID_MA_POSTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new AboveLineValidator())))
+                .build();
+        CAROTID_MA_POSTERIOR.related = ImmutableMap.<SegmentationType, List<SegmentationValidator>>builder()
+                .put(SegmentationType.CAROTID_LI_ANTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new BelowLineValidator())))
+                .put(SegmentationType.CAROTID_LI_POSTERIOR,
+                        new ArrayList<SegmentationValidator>(Arrays.asList(new BelowLineValidator())))
+                .build();
 
-        // TODO: review a better way to add this
         /* Hint for reference point */
         IVUS_LI.referencePointHint = "";
         IVUS_MA.referencePointHint = "";

@@ -3,8 +3,9 @@ package edu.exa.unicen.dicomseg.segmentation.validators;
 import android.graphics.Point;
 import android.graphics.PointF;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.exa.unicen.dicomseg.coordinatesystem.PolarUtils;
 import edu.exa.unicen.dicomseg.segmentation.Segmentation;
@@ -12,7 +13,7 @@ import edu.exa.unicen.dicomseg.segmentation.SegmentationType;
 
 public abstract class AbstractCircumferenceValidator implements SegmentationValidator {
 
-    protected static List<String> errors = new ArrayList<String>();
+    protected static Map<String, String> errors = new HashMap<String, String>();
 
     public abstract Boolean compare(float interpolatedY, float distance, SegmentationType segType);
 
@@ -40,13 +41,13 @@ public abstract class AbstractCircumferenceValidator implements SegmentationVali
     }
 
     @Override
-    public List<String> errors() {
+    public Map<String, String> errors() {
         return errors;
     }
 
     @Override
     public void resetErrors() {
-        errors = new ArrayList<String>();
+        errors = new HashMap<String, String>();
     }
 
 }

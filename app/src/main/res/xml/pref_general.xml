@@ -14,8 +14,8 @@
 
     <EditTextPreference
         android:numeric="integer"
-        android:defaultValue="@string/pref_default_general_closure_tolerance"
-        android:key="general_closure_tolerance"
-        android:title="@string/pref_title_general_closure_tolerance" />
+        android:defaultValue="@string/pref_default_general_closed_figure_tolerance"
+        android:key="general_closed_figure_tolerance"
+        android:title="@string/pref_title_general_closed_figure_tolerance" />
 
 </PreferenceScreen>

@@ -11,7 +11,7 @@ import edu.exa.unicen.dicomseg.dbhelper.exporters.DbXmlExporter;
 @Component(modules = {DicomSegModule.class})
 public interface DbExporterComponent {
 
-    void inject(DbXmlExporter snakeImage);
+    void inject(DbXmlExporter dbExporter);
 
     static final class Initializer {
 

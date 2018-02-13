@@ -24,7 +24,7 @@ public class DicomSegApp extends Application {
     private static Segmentation snake = null;
 
     // Variables to make setting available outside activity classes
-    private static Integer clousureTolerance = null;
+    private static Integer closedFigureTolerance = null;
 
     public static void setDataSet(DataSet dataSet) {
         DicomSegApp.dataSet = dataSet;
@@ -66,11 +66,11 @@ public class DicomSegApp extends Application {
         DicomSegApp.segmentationToAdjust = segmentationToAdjust;
     }
 
-    public static Integer getClousureTolerance() {
-        return DicomSegApp.clousureTolerance;
+    public static Integer getClosedFigureTolerance() {
+        return DicomSegApp.closedFigureTolerance;
     }
 
-    public static void setClousureTolerance(Integer clousureTolerance) {
-        DicomSegApp.clousureTolerance = clousureTolerance;
+    public static void setClosedFigureTolerance(Integer closedFigureTolerance) {
+        DicomSegApp.closedFigureTolerance = closedFigureTolerance;
     }
 }

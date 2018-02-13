@@ -8,7 +8,7 @@ public class AboveLineValidator extends AbstractLineValidator {
     @Override
     public Boolean compare(float interpolatedY, int y, SegmentationType segType) {
         if ((float)y > interpolatedY) {
-            errors.add(SegmentationMessages.NOT_ABOVE_ERROR + " " + segType.getName());
+            errors.put(SegmentationMessages.NOT_ABOVE_ERROR, segType.getName());
             return Boolean.FALSE;
         }
         return Boolean.TRUE;

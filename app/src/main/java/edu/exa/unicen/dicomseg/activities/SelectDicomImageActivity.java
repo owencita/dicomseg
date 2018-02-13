@@ -86,7 +86,10 @@ public class SelectDicomImageActivity extends AppCompatActivity {
 
                 TextView errors = (TextView) findViewById(R.id.selectFrameErrors);
                 if ((realImageNumber < 0)||(realImageNumber > frameCount)) {
-                    errors.setText(SegmentationMessages.FRAME_NUMBER_OUT_OF_RANGE);
+                    String packageName = getPackageName();
+                    int stringId = getResources().getIdentifier(SegmentationMessages.FRAME_NUMBER_OUT_OF_RANGE, "string", packageName);
+                    String translatedError = getResources().getString(stringId);
+                    errors.setText(translatedError);
                 } else {
                     errors.setText("");
                     Intent intent = new Intent(view.getContext(), DicomViewActivity.class);

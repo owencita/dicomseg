@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.exa.unicen.dicomseg.R;
@@ -180,8 +181,8 @@ public class DicomViewActivity extends Activity {
 
                         if (!segmentation.getPoints().isEmpty()) {
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            String closureTolerance = settings.getString("general_closure_tolerance", getResources().getString(R.string.pref_default_general_closure_tolerance));
-                            DicomSegApp.setClousureTolerance(Integer.parseInt(closureTolerance));
+                            String closedFigureTolerance = settings.getString("general_closed_figure_tolerance", getResources().getString(R.string.pref_default_general_closed_figure_tolerance));
+                            DicomSegApp.setClosedFigureTolerance(Integer.parseInt(closedFigureTolerance));
                             if (segmentation.isValid()) {
                                 // hide done, clear buttons, messages and clear canvas
                                 doneButton.setVisibility(View.GONE);
@@ -195,14 +196,22 @@ public class DicomViewActivity extends Activity {
                             } else {
                                 // show validation error
                                 StringBuffer sb = new StringBuffer();
-                                for (String error : segmentation.errors()) {
-                                    sb.append(error + "\n\r");
+                                Map<String, String> errors = segmentation.errors();
+                                for (String errorKey : errors.keySet()) {
+                                    String packageName = getPackageName();
+                                    int stringId = getResources().getIdentifier(errorKey, "string", packageName);
+                                    String translatedError = getResources().getString(stringId);
+                                    String formattedError = String.format(translatedError, errors.get(errorKey));
+                                    sb.append(formattedError + "\n\r");
                                 }
                                 textView.setText(sb.toString());
                             }
                         } else {
                             doneButton.setEnabled(false);
-                            textView.setText(SegmentationMessages.EMPTY_SEGMENTATION_ERROR);
+                            String packageName = getPackageName();
+                            int stringId = getResources().getIdentifier(SegmentationMessages.EMPTY_SEGMENTATION_ERROR, "string", packageName);
+                            String translatedError = getResources().getString(stringId);
+                            textView.setText(translatedError);
                         }
                     }
                 });
@@ -229,6 +238,8 @@ public class DicomViewActivity extends Activity {
                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
                         drawSegmentationsOnFrame();
+
+                        segPaint = SegmentationDrawingUtils.getPaint(dicomFrame.getWidth(), segmentation.getType().getColor(), getStrokeFactor());
 
                         Button doneButton = (Button) findViewById(R.id.done);
                         doneButton.setEnabled(false);
@@ -398,7 +409,11 @@ public class DicomViewActivity extends Activity {
                                             TextView textInfo = (TextView) findViewById(R.id.textInfoDicomView);
                                             textInfo.setText("");
                                             TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
-                                            textView.setText(SegmentationMessages.EXISTING_SEGMENTATION_ERROR);
+
+                                            String packageName = getPackageName();
+                                            int stringId = getResources().getIdentifier(SegmentationMessages.EXISTING_SEGMENTATION_ERROR, "string", packageName);
+                                            String translatedError = getResources().getString(stringId);
+                                            textView.setText(translatedError);
 
                                             imageView.setOnTouchListener(null);
 

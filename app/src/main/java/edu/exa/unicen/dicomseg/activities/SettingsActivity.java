@@ -144,7 +144,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
             bindPreferenceSummaryToValue(findPreference("general_stroke_thickness"));
             bindPreferenceSummaryToValue(findPreference("general_continuity_factor"));
-            bindPreferenceSummaryToValue(findPreference("general_closure_tolerance"));
+            bindPreferenceSummaryToValue(findPreference("general_closed_figure_tolerance"));
         }
 
         @Override

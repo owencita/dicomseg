@@ -2,8 +2,9 @@ package edu.exa.unicen.dicomseg.segmentation.validators;
 
 import android.graphics.Point;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.exa.unicen.dicomseg.coordinatesystem.CartesianUtils;
 import edu.exa.unicen.dicomseg.segmentation.Segmentation;
@@ -11,7 +12,7 @@ import edu.exa.unicen.dicomseg.segmentation.SegmentationType;
 
 public abstract class AbstractLineValidator implements SegmentationValidator {
 
-    protected static List<String> errors = new ArrayList<String>();
+    protected static Map<String, String> errors = new HashMap<String, String>();
 
     public abstract Boolean compare(float interpolatedY, int y, SegmentationType segType);
 
@@ -36,13 +37,13 @@ public abstract class AbstractLineValidator implements SegmentationValidator {
     }
 
     @Override
-    public List<String> errors() {
+    public Map<String, String> errors() {
         return errors;
     }
 
     @Override
     public void resetErrors() {
-        errors = new ArrayList<String>();
+        errors = new HashMap<String, String>();
     }
 }
 
