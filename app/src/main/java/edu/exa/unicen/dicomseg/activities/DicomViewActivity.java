@@ -65,6 +65,8 @@ public class DicomViewActivity extends Activity {
     private Segmentation segmentation = new Segmentation();
     private List<Segmentation> allowsRepeatsSegmentations = new ArrayList<Segmentation>();
 
+    private String packageName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,8 @@ public class DicomViewActivity extends Activity {
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageBitmap(dicomFrame);
+
+        packageName = getPackageName();
 
         final Bitmap mutableBitmap = dicomFrame.copy(Bitmap.Config.ARGB_8888, true);
         final ImageView mutableImageView = (ImageView) findViewById(R.id.mutableImageView);
@@ -198,7 +202,6 @@ public class DicomViewActivity extends Activity {
                                 StringBuffer sb = new StringBuffer();
                                 Map<String, String> errors = segmentation.errors();
                                 for (String errorKey : errors.keySet()) {
-                                    String packageName = getPackageName();
                                     int stringId = getResources().getIdentifier(errorKey, "string", packageName);
                                     String translatedError = getResources().getString(stringId);
                                     String formattedError = String.format(translatedError, errors.get(errorKey));
@@ -208,7 +211,6 @@ public class DicomViewActivity extends Activity {
                             }
                         } else {
                             doneButton.setEnabled(false);
-                            String packageName = getPackageName();
                             int stringId = getResources().getIdentifier(SegmentationMessages.EMPTY_SEGMENTATION_ERROR, "string", packageName);
                             String translatedError = getResources().getString(stringId);
                             textView.setText(translatedError);
@@ -286,7 +288,9 @@ public class DicomViewActivity extends Activity {
                                     segPath.moveTo(start.x, start.y);
                                     previousPathAdded.set(true);
                                     TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
-                                    textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                    int stringId = getResources().getIdentifier(SegmentationMessages.CONTINUITY_ERROR, "string", packageName);
+                                    String translatedError = getResources().getString(stringId);
+                                    textView.setText(translatedError);
                                 } else {
                                     inputStart = null;
                                     inputEnd = null;
@@ -410,7 +414,6 @@ public class DicomViewActivity extends Activity {
                                             textInfo.setText("");
                                             TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
 
-                                            String packageName = getPackageName();
                                             int stringId = getResources().getIdentifier(SegmentationMessages.EXISTING_SEGMENTATION_ERROR, "string", packageName);
                                             String translatedError = getResources().getString(stringId);
                                             textView.setText(translatedError);
@@ -524,7 +527,9 @@ public class DicomViewActivity extends Activity {
                                                                                 segPath.moveTo(start.x, start.y);
                                                                                 previousPathAdded.set(true);
                                                                                 TextView textView = (TextView) findViewById(R.id.textDetailDicomView);
-                                                                                textView.setText(SegmentationMessages.CONTINUITY_ERROR);
+                                                                                int stringId = getResources().getIdentifier(SegmentationMessages.CONTINUITY_ERROR, "string", packageName);
+                                                                                String translatedError = getResources().getString(stringId);
+                                                                                textView.setText(translatedError);
                                                                             } else {
                                                                                 inputStart = null;
                                                                                 inputEnd = null;

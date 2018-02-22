@@ -39,7 +39,7 @@ public enum SegmentationType {
     VESSELS("Vessels",
             Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
-            SegmentationColors.RED),
+            SegmentationColors.YELLOW),
     CAROTID_LI_ANTERIOR("Carotid Anterior LI",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
             new ArrayList<SegmentationValidator>(Arrays.asList(new PointMinimumQuantityValidator(5))),
