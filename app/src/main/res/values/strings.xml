@@ -89,11 +89,11 @@
     <string name="pref_header_general">General</string>
     <string name="pref_title_general_stroke_thickness">Stroke Thickness</string>
     <string name="pref_title_general_continuity_factor">Continuity Tolerance</string>
-    <string name="pref_title_general_closed_figure_tolerance">Closed Figure Tolerance</string>
+    <string name="pref_title_general_closed_contour_tolerance">Closed Contour Tolerance</string>
 
     <string name="pref_default_general_stroke_thickness">2</string>
     <string name="pref_default_general_continuity_factor">4</string>
-    <string name="pref_default_general_closed_figure_tolerance">8</string>
+    <string name="pref_default_general_closed_contour_tolerance">8</string>
 
 
     <!-- Snakes Coefficients -->
@@ -110,7 +110,7 @@
 
     <!-- Errors -->
     <string name="empty_segmentation">Empty segmentation</string>
-    <string name="closed_figure_error">This segmentation requires a closed figure</string>
+    <string name="closed_contour_error">This segmentation requires to be a closed contour</string>
     <string name="interiority_error">All segmentation points must be inside %s</string>
     <string name="exteriority_error">All segmentation points must be outside %s</string>
     <string name="continuity_error">Ending or starting point must be matched to continue with segmentation</string>

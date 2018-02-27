@@ -8,7 +8,7 @@ import java.util.List;
 
 import edu.exa.unicen.dicomseg.segmentation.validators.AboveLineValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.BelowLineValidator;
-import edu.exa.unicen.dicomseg.segmentation.validators.ClosedFigureValidator;
+import edu.exa.unicen.dicomseg.segmentation.validators.ClosedContourValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.ExteriorityValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.InteriorityValidator;
 import edu.exa.unicen.dicomseg.segmentation.validators.PointMinimumQuantityValidator;
@@ -18,23 +18,23 @@ public enum SegmentationType {
 
     IVUS_LI("IVUS LI (Lumen-Intima)",
             Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedContourValidator())),
             SegmentationColors.BLUE),
     IVUS_MA("IVUS MA (Media-Adventitia)",
             Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedContourValidator())),
             SegmentationColors.RED),
     BRAIN_TUMOR_NECROSIS("Necrosis",
             Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedContourValidator())),
             SegmentationColors.BLUE),
     BRAIN_TUMOR_BORDER("Tumor Border",
             Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedContourValidator())),
             SegmentationColors.RED),
     OPTIC_DISC("Optic Disc",
             Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
-            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedFigureValidator())),
+            new ArrayList<SegmentationValidator>(Arrays.asList(new ClosedContourValidator())),
             SegmentationColors.BLUE),
     VESSELS("Vessels",
             Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,

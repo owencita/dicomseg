@@ -2,7 +2,7 @@ package edu.exa.unicen.dicomseg.segmentation;
 
 public class SegmentationMessages {
 
-    public static final String CLOSED_FIGURE_ERROR = "closed_figure_error";
+    public static final String CLOSED_CONTOUR_ERROR = "closed_contour_error";
     public static final String INTERIORITY_ERROR = "interiority_error";
     public static final String EXTERIORITY_ERROR = "exteriority_error";
     public static final String CONTINUITY_ERROR = "continuity_error";

@@ -185,8 +185,8 @@ public class DicomViewActivity extends Activity {
 
                         if (!segmentation.getPoints().isEmpty()) {
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            String closedFigureTolerance = settings.getString("general_closed_figure_tolerance", getResources().getString(R.string.pref_default_general_closed_figure_tolerance));
-                            DicomSegApp.setClosedFigureTolerance(Integer.parseInt(closedFigureTolerance));
+                            String closedContourTolerance = settings.getString("general_closed_contour_tolerance", getResources().getString(R.string.pref_default_general_closed_contour_tolerance));
+                            DicomSegApp.setClosedContourTolerance(Integer.parseInt(closedContourTolerance));
                             if (segmentation.isValid()) {
                                 // hide done, clear buttons, messages and clear canvas
                                 doneButton.setVisibility(View.GONE);
